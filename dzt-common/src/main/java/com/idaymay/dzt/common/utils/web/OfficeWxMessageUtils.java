@@ -20,17 +20,18 @@ public class OfficeWxMessageUtils {
 
     /**
      * 企业微信群机器人推送
+     *
      * @param title
      * @param content
      */
-    public static void officeWeixinNotify(String title,String content, String key){
+    public static void officeWeixinNotify(String title, String content, String key) {
         HttpRequest request = HttpUtil.createPost(wechatNotifyUrl + "?key=" + key);
-        String markdown = "# "+title+"\n"+
-                "> "+ StringEscapeUtils.escapeJson(content).replace("},{","},\n> {")+"";
+        String markdown = "# " + title + "\n" +
+                "> " + StringEscapeUtils.escapeJson(content).replace("},{", "},\n> {") + "";
         String body = "{\n" +
                 "        \"msgtype\": \"markdown\",\n" +
                 "        \"markdown\": {\n" +
-                "            \"content\": \""+markdown+"\",\n" +
+                "            \"content\": \"" + markdown + "\",\n" +
                 "            \"mentioned_list\":[\"@all\"]\n" +
                 "        }\n" +
                 "   }";

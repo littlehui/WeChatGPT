@@ -10,7 +10,7 @@ import lombok.Setter;
  * @Date 2021/6/30 16:03
  * @Version 1.0
  **/
-public class SystemException extends RuntimeException{
+public class SystemException extends RuntimeException {
 
     @Setter
     @Getter

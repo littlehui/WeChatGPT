@@ -28,6 +28,6 @@ public class AppIndexControllerTests extends DztAppContextControllerAwareTest {
                 .timestamp("1681033102")
                 .signature("d3d449072c8cde6d1b6ee738e004f86eabe28500")
                 .build();
-        get(wxTokenAuthParam,"/");
+        get(wxTokenAuthParam, "/");
     }
 }

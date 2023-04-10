@@ -8,9 +8,10 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 请求工具封装
+ *
  * @author littlehui
- * @date 2021/11/15 14:43
  * @version 1.0
+ * @date 2021/11/15 14:43
  */
 public class OkHttpUtil {
 
@@ -32,7 +33,7 @@ public class OkHttpUtil {
 
     public static String postJson(String url, String json, Map<String, String> headers) throws IOException {
         RequestBody body = RequestBody.create(json, JSON);
-        Request.Builder builder = new Request.Builder().addHeader("Connection","close");
+        Request.Builder builder = new Request.Builder().addHeader("Connection", "close");
         if (headers != null && headers.size() > 0) {
             for (String headerKey : headers.keySet()) {
                 builder.addHeader(headerKey, headers.get(headerKey));

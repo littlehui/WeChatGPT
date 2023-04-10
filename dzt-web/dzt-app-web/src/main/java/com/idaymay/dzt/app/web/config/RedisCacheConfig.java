@@ -21,17 +21,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * cache标签使用方式如下：默认缓存1分钟。
- *     @Caching(
- *             evict = {
- *                     @CacheEvict(value = "XXX:XX", key = "#XX.bookId + '*'"),
- *                     @CacheEvict(value = "XXX:XX", key = "#XX.id + '*'")
- *             }
- *     )
  *
- *    @Cacheable(value = "GameServiceImpl:findGames", key = "#status" )
- *
+ * @Caching( evict = {
+ * @CacheEvict(value = "XXX:XX", key = "#XX.bookId + '*'"),
+ * @CacheEvict(value = "XXX:XX", key = "#XX.id + '*'")
+ * }
+ * )
+ * @Cacheable(value = "GameServiceImpl:findGames", key = "#status" )
  * @Description TODO
  * @ClassName RedisCacheConfig
  * @Author littlehui
@@ -103,10 +100,10 @@ public class RedisCacheConfig {
         ObjectMapper om = new ObjectMapper();
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig();
         redisCacheConfiguration = redisCacheConfiguration.serializeValuesWith(
-                RedisSerializationContext
-                        .SerializationPair
-                        .fromSerializer(createJackson2JsonRedisSerializer(om))
-        ).entryTtl(Duration.ofSeconds(seconds))
+                        RedisSerializationContext
+                                .SerializationPair
+                                .fromSerializer(createJackson2JsonRedisSerializer(om))
+                ).entryTtl(Duration.ofSeconds(seconds))
                 .computePrefixWith(cacheName ->
                         CACHE_VERSION + ":" + activeProfile.concat(":").concat(cacheName).concat(":"));
         return redisCacheConfiguration;
@@ -123,10 +120,10 @@ public class RedisCacheConfig {
         ObjectMapper om = new ObjectMapper();
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig();
         redisCacheConfiguration = redisCacheConfiguration.serializeValuesWith(
-                RedisSerializationContext
-                        .SerializationPair
-                        .fromSerializer(createJackson2JsonRedisSerializer(om))
-        ).entryTtl(Duration.ofSeconds(defaultCacheTimeOut))
+                        RedisSerializationContext
+                                .SerializationPair
+                                .fromSerializer(createJackson2JsonRedisSerializer(om))
+                ).entryTtl(Duration.ofSeconds(defaultCacheTimeOut))
                 .computePrefixWith(cacheName ->
                         CACHE_VERSION + ":" + activeProfile.concat(":").concat(cacheName).concat(":"));
         return redisCacheConfiguration;

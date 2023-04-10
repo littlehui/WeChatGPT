@@ -2,9 +2,10 @@ package com.idaymay.dzt.common.utils.file.excels;
 
 /**
  * Excel单个Item描述
+ *
  * @author littlehui
- * @date 2021/12/6 16:48
  * @version 1.0
+ * @date 2021/12/6 16:48
  */
 public class ExcelItem {
     /**

@@ -9,6 +9,7 @@
         <module>dzt-service</module>
         <module>dzt-dao</module>
         <module>dzt-bean</module>
+        <module>dzt-message</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -7,6 +7,6 @@ package com.idaymay.dzt.common.enums;
  * @date 2022/8/6 11:23
  */
 public enum PayTypeEnum {
-    ALIPAY_WEB,WXPAY_MOBILE_WEB,WXPAY_WEB,WXPAY_JSAPI,ALIPAY_MOBILE_WEB;
+    ALIPAY_WEB, WXPAY_MOBILE_WEB, WXPAY_WEB, WXPAY_JSAPI, ALIPAY_MOBILE_WEB;
 
 }

@@ -245,7 +245,11 @@
             <artifactId>jedis-lock</artifactId>
             <version>1.0.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.idaymay</groupId>
+            <artifactId>dzt-message</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

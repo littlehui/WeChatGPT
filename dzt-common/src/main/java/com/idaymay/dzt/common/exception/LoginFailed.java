@@ -7,5 +7,5 @@ package com.idaymay.dzt.common.exception;
  * @Date 2021/6/26 21:12
  * @Version 1.0
  **/
-public class LoginFailed extends Exception{
+public class LoginFailed extends Exception {
 }

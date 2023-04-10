@@ -11,12 +11,13 @@ import java.security.SecureRandom;
 
 /**
  * DES 加解密工具
+ *
  * @author littlehui
- * @date 2021/11/15 14:43
  * @version 1.0
+ * @date 2021/11/15 14:43
  */
 public class DesUtil {
- 
+
     private final static String DES = "DES/ECB/PKCS5Padding";
 
     public static void main(String[] args) throws Exception {
@@ -30,7 +31,8 @@ public class DesUtil {
 
     /**
      * Description 根据键值进行加密
-     * @param data 
+     *
+     * @param data
      * @param key  加密键byte数组
      * @return
      * @throws Exception
@@ -41,9 +43,10 @@ public class DesUtil {
         String strs = new String(charArr);
         return strs;
     }
- 
+
     /**
      * Description 根据键值进行解密
+     *
      * @param data
      * @param key  加密键byte数组
      * @return
@@ -52,17 +55,18 @@ public class DesUtil {
      */
     public static String decrypt(String data, String key) throws IOException,
             Exception {
-        if(data == null){
+        if (data == null) {
             return null;
         }
         char[] charArr = data.toCharArray();
         byte[] byteArr = Hex.decodeHex(charArr);
-        byte[] bt = decrypt(byteArr,key.getBytes("UTF-8"));
+        byte[] bt = decrypt(byteArr, key.getBytes("UTF-8"));
         return new String(bt);
     }
- 
+
     /**
      * Description 根据键值进行加密
+     *
      * @param data
      * @param key  加密键byte数组
      * @return
@@ -82,10 +86,11 @@ public class DesUtil {
         cipher.init(Cipher.ENCRYPT_MODE, securekey, sr);
         return cipher.doFinal(data);
     }
-     
-     
+
+
     /**
      * Description 根据键值进行解密
+     *
      * @param data
      * @param key  加密键byte数组
      * @return

@@ -69,7 +69,7 @@ public class RemoveBatchAbleCacheManager extends RedisCacheManager {
     }
 
     public RemoveBatchAbleCacheManager(RedisConnectionFactory redisConnectionFactory, RedisCacheConfiguration cacheConfiguration) {
-        this(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory),cacheConfiguration);
+        this(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory), cacheConfiguration);
     }
 
     //覆盖父类创建RedisCache

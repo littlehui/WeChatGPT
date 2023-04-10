@@ -241,36 +241,36 @@ public class ObjectUtil {
      * @author littlehui
      * @date 2012-9-26 下午03:40:56
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static Map<String, Object> toMap(Object bean) {
         Map<String, Object> returnMap;
         try {
             Class<?> type = bean.getClass();
             returnMap = new HashMap<String, Object>();
             BeanInfo beanInfo = Introspector.getBeanInfo(type);
-            PropertyDescriptor[] propertyDescriptors =  beanInfo.getPropertyDescriptors();
-            for (int i = 0; i< propertyDescriptors.length; i++) {
+            PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+            for (int i = 0; i < propertyDescriptors.length; i++) {
                 PropertyDescriptor descriptor = propertyDescriptors[i];
                 String propertyName = descriptor.getName();
                 if (!propertyName.equals("class")) {
                     Method readMethod = descriptor.getReadMethod();
                     Object result = readMethod.invoke(bean, new Object[0]);
-                    if(ObjectUtil.isValueType(result) || result == null){
+                    if (ObjectUtil.isValueType(result) || result == null) {
                         returnMap.put(propertyName, result);
-                    }else if(ObjectUtil.isCollection(result)){
-                        Collection<?> collectionResult = (Collection<?>)result;
+                    } else if (ObjectUtil.isCollection(result)) {
+                        Collection<?> collectionResult = (Collection<?>) result;
                         Collection collection = (Collection) result.getClass().newInstance();
                         for (Object o : collectionResult) {
-                            if(ObjectUtil.isValueType(o) || o == null){
+                            if (ObjectUtil.isValueType(o) || o == null) {
                                 collection.add(o);
-                            }else{
+                            } else {
                                 collection.add(toMap(o));
                             }
                         }
                         returnMap.put(propertyName, collection);
-                    }else if(result.getClass().isArray()){
+                    } else if (result.getClass().isArray()) {
                         throw new RuntimeException("bean property can't be array");
-                    }else{ //自定义对象
+                    } else { //自定义对象
                         returnMap.put(propertyName, toMap(result));
                     }
                 }
@@ -286,9 +286,8 @@ public class ObjectUtil {
     /**
      * 纠正源对象的值类型，与目标值类型一致.
      *
-     * @param sObj
-     *            源类对象
-     *            目标类型
+     * @param sObj 源类对象
+     *             目标类型
      * @return 纠正后的正确的对象
      * @author qingwu
      * @date 2013-3-29 下午5:16:38
@@ -333,7 +332,8 @@ public class ObjectUtil {
         }
         return rObj;
     }
-    public static <M,T> List<T> convertList(List<M> objList , Converter<M,T> converter) {
+
+    public static <M, T> List<T> convertList(List<M> objList, Converter<M, T> converter) {
         List<T> list = new ArrayList<T>();
         if (objList == null) {
             return list;
@@ -344,7 +344,7 @@ public class ObjectUtil {
         return list;
     }
 
-    public static interface  Converter<H,Q>{
+    public static interface Converter<H, Q> {
         public Q convert(H h);
     }
 

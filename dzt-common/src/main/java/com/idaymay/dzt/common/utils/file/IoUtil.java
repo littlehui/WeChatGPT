@@ -17,11 +17,10 @@ public class IoUtil {
     /**
      * @param inputStream
      * @param targetFile
-     * @param closeStream
-     * 输入流转文件
+     * @param closeStream 输入流转文件
+     * @return java.io.File
      * @author littlehui
      * @date 2021/11/15 16:04
-     * @return java.io.File
      */
     public static File inputStream2File(
             InputStream inputStream, String targetFile, boolean closeStream) throws IOException {
@@ -52,12 +51,13 @@ public class IoUtil {
 
     /**
      * 输入流转String
+     *
      * @param is
      * @param charsetName
      * @param closeStream
+     * @return java.lang.String
      * @author littlehui
      * @date 2021/11/15 16:05
-     * @return java.lang.String
      */
     public static String inputStream2String(InputStream is, String charsetName, boolean closeStream)
             throws IOException {
@@ -83,11 +83,12 @@ public class IoUtil {
 
     /**
      * String转输入流
+     *
      * @param s
      * @param charsetName
+     * @return java.io.ByteArrayInputStream
      * @author littlehui
      * @date 2021/11/15 16:05
-     * @return java.io.ByteArrayInputStream
      */
     public static ByteArrayInputStream string2InputStream(String s, String charsetName)
             throws UnsupportedEncodingException {
@@ -96,10 +97,11 @@ public class IoUtil {
 
     /**
      * 文件路径转文件输入流
+     *
      * @param path
+     * @return java.io.FileInputStream
      * @author littlehui
      * @date 2021/11/15 16:06
-     * @return java.io.FileInputStream
      */
     public static FileInputStream file2InputStream(String path) throws FileNotFoundException {
         return new FileInputStream(path);
@@ -108,10 +110,11 @@ public class IoUtil {
 
     /**
      * 检查目录存不存在，不存在则创建.
+     *
      * @param path
+     * @return void
      * @author littlehui
      * @date 2021/11/15 16:06
-     * @return void
      */
     public static void checkPath(String path) {
         File file = new File(path);
@@ -125,10 +128,11 @@ public class IoUtil {
 
     /**
      * byte数组转输入流
+     *
      * @param buf
+     * @return java.io.InputStream
      * @author littlehui
      * @date 2021/11/15 16:06
-     * @return java.io.InputStream
      */
     public static final InputStream byte2InputStream(byte[] buf) {
         return new ByteArrayInputStream(buf);
@@ -136,10 +140,11 @@ public class IoUtil {
 
     /**
      * 读取输入流并返回byte数组
+     *
      * @param inStream
+     * @return byte[]
      * @author littlehui
      * @date 2021/11/15 16:06
-     * @return byte[]
      */
     public static final byte[] inputStream2byte(InputStream inStream) throws IOException {
         ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
@@ -154,10 +159,11 @@ public class IoUtil {
 
     /**
      * inputStream转输出流
+     *
      * @param in
+     * @return java.io.ByteArrayOutputStream
      * @author littlehui
      * @date 2021/11/15 16:07
-     * @return java.io.ByteArrayOutputStream
      */
     public static ByteArrayOutputStream inputStream2OutputStream(InputStream in) throws Exception {
         ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
@@ -170,10 +176,11 @@ public class IoUtil {
 
     /**
      * string转输出流
+     *
      * @param in
+     * @return java.io.ByteArrayOutputStream
      * @author littlehui
      * @date 2021/11/15 16:07
-     * @return java.io.ByteArrayOutputStream
      */
     public static ByteArrayOutputStream string2OutputStream(String in) throws Exception {
         return inputStream2OutputStream(string2InputStream(in));
@@ -181,10 +188,11 @@ public class IoUtil {
 
     /**
      * String转inputStream
+     *
      * @param in
+     * @return java.io.ByteArrayInputStream
      * @author littlehui
      * @date 2021/11/15 16:07
-     * @return java.io.ByteArrayInputStream
      */
     public static ByteArrayInputStream string2InputStream(String in) {
         ByteArrayInputStream input = new ByteArrayInputStream(in.getBytes());
@@ -193,10 +201,11 @@ public class IoUtil {
 
     /**
      * 读取文件并返回byte数组
+     *
      * @param file
+     * @return byte[]
      * @author littlehui
      * @date 2021/11/15 16:07
-     * @return byte[]
      */
     public static byte[] file2Byte(File file) throws IOException {
         byte[] buffer;
@@ -224,11 +233,12 @@ public class IoUtil {
 
     /**
      * byte数组写入文件
+     *
      * @param bytes
      * @param fileName
+     * @return void
      * @author littlehui
      * @date 2021/11/15 16:08
-     * @return void
      */
     public static void byte2File(byte[] bytes, String fileName) throws IOException {
         BufferedOutputStream bos = null;

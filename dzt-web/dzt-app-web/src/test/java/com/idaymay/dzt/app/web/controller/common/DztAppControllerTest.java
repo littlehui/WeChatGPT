@@ -52,11 +52,11 @@ public class DztAppControllerTest extends BaseControllerTest {
     public void post(Object param, String url) throws Exception {
         javax.servlet.http.Cookie cookie = new javax.servlet.http.Cookie("access_token", accessToken);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(url)
-                .cookie(cookie)
-                .header("game-code", headerGameCode)
-                .header("terminal", terminal)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(GsonUtil.toJson(param)))
+                        .cookie(cookie)
+                        .header("game-code", headerGameCode)
+                        .header("terminal", terminal)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(GsonUtil.toJson(param)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();

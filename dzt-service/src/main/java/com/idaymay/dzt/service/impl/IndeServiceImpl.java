@@ -14,7 +14,7 @@ public class IndeServiceImpl implements IndexService {
 
     @Override
     public String checkIndexSign(WxTokenAuthParam wxTokenAuthParam) {
-        boolean fromWxFlag = wxMpService.checkSignature(wxTokenAuthParam.getTimestamp(), wxTokenAuthParam.getNonce(),wxTokenAuthParam.getSignature());
+        boolean fromWxFlag = wxMpService.checkSignature(wxTokenAuthParam.getTimestamp(), wxTokenAuthParam.getNonce(), wxTokenAuthParam.getSignature());
         if (fromWxFlag) {
             return wxTokenAuthParam.getEchostr();
         } else {

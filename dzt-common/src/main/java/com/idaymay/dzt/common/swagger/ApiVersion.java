@@ -18,6 +18,7 @@ public @interface ApiVersion {
 
     /**
      * 接口版本号(对应swagger中的group)
+     *
      * @return String[]
      */
     String[] group();

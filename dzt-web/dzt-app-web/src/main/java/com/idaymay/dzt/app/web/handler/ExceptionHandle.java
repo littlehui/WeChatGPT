@@ -7,8 +7,6 @@ import com.idaymay.dzt.common.ajax.ResponseFactory;
 import com.idaymay.dzt.common.exception.BusinessException;
 import com.idaymay.dzt.common.exception.ParamException;
 import com.idaymay.dzt.common.exception.SystemException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,6 +14,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
 
@@ -41,7 +41,7 @@ public class ExceptionHandle {
             return ResponseFactory.result(code, message);
         }
         if (e.getCause() != null && e.getCause() instanceof ParamException) {
-            ParamException exception = (ParamException)e.getCause();
+            ParamException exception = (ParamException) e.getCause();
             Integer code = exception.getCode();
             String message = exception.getMessage();
             return ResponseFactory.result(code, message);
@@ -60,7 +60,7 @@ public class ExceptionHandle {
             if (argumentNotValidException.getBindingResult() != null
                     && argumentNotValidException.getBindingResult().getFieldError() != null) {
                 return ResponseFactory.result(ResponseEnum.PARAM_INVALID.getCode(),
-                                argumentNotValidException.getBindingResult().getFieldError().getDefaultMessage());
+                        argumentNotValidException.getBindingResult().getFieldError().getDefaultMessage());
             } else {
                 return ResponseFactory.result(ResponseEnum.PARAM_INVALID.getCode(), argumentNotValidException.getBindingResult().getFieldError().getField() + "参数异常");
             }
@@ -70,7 +70,7 @@ public class ExceptionHandle {
             if (bindException.getBindingResult() != null
                     && bindException.getBindingResult().getFieldError() != null) {
                 return ResponseFactory.result(ResponseEnum.PARAM_INVALID.getCode(),
-                                bindException.getBindingResult().getFieldError().getDefaultMessage());
+                        bindException.getBindingResult().getFieldError().getDefaultMessage());
             }
         }
         if (e instanceof SystemException) {
@@ -98,7 +98,6 @@ public class ExceptionHandle {
     }
 
 
-
     /**
      * 判断是否是Ajax请求
      *
@@ -106,7 +105,7 @@ public class ExceptionHandle {
      * @return
      */
     public static boolean isAjax(HttpServletRequest request) {
-        if (null==request) {
+        if (null == request) {
             return false;
         }
         String rquested = request.getHeader("X-Rquested-With");

@@ -17,12 +17,13 @@ public class PinyinUtil {
 
     /**
      * 获取字符串拼音的第一个字母
+     *
      * @param chinese
+     * @return java.lang.String
      * @author littlehui
      * @date 2021/12/6 16:43
-     * @return java.lang.String
      */
-    public static String toFirstChar(String chinese){
+    public static String toFirstChar(String chinese) {
         String pinyinStr = "";
         char[] newChar = chinese.toCharArray();  //转为单个字符
         HanyuPinyinOutputFormat defaultFormat = new HanyuPinyinOutputFormat();
@@ -37,7 +38,7 @@ public class PinyinUtil {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }else{
+            } else {
                 pinyinStr += newChar[i];
             }
         }
@@ -46,12 +47,13 @@ public class PinyinUtil {
 
     /**
      * 汉字转拼音
+     *
      * @param chinese
+     * @return java.lang.String
      * @author littlehui
      * @date 2021/12/6 16:43
-     * @return java.lang.String
      */
-    public static String toPinyin(String chinese){
+    public static String toPinyin(String chinese) {
         String pinyinStr = "";
         char[] newChar = chinese.toCharArray();
         HanyuPinyinOutputFormat defaultFormat = new HanyuPinyinOutputFormat();
@@ -64,7 +66,7 @@ public class PinyinUtil {
                 } catch (BadHanyuPinyinOutputFormatCombination e) {
                     e.printStackTrace();
                 }
-            }else{
+            } else {
                 pinyinStr += newChar[i];
             }
         }

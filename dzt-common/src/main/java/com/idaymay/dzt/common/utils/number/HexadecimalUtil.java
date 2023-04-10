@@ -16,7 +16,7 @@ public class HexadecimalUtil {
      */
     public static String toHexadecimal36(int number) {
         StringBuilder builder = new StringBuilder();
-        while(number > 0) {
+        while (number > 0) {
             builder.append(char36[number % 36]);
             number = number / 36;
         }

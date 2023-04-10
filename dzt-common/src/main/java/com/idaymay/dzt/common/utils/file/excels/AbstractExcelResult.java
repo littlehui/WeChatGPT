@@ -10,9 +10,10 @@ import java.util.List;
 
 /**
  * Excel返回的对象
+ *
  * @author littlehui
- * @date 2021/12/6 16:47
  * @version 1.0
+ * @date 2021/12/6 16:47
  */
 public abstract class AbstractExcelResult<T> {
 
@@ -27,7 +28,7 @@ public abstract class AbstractExcelResult<T> {
     public AbstractExcelResult(List<T> tLists) {
         T[] tlisArray = (T[]) tLists.toArray(new Object[tLists.size()]);
         String[][] tArrayArray = new String[tLists.size()][];
-        for (int i = 0; i < tlisArray.length; i ++) {
+        for (int i = 0; i < tlisArray.length; i++) {
             String[] needArray = AbstractExcelResult.objectToArrays(tlisArray[i]);
             tArrayArray[i] = needArray;
         }
@@ -39,7 +40,7 @@ public abstract class AbstractExcelResult<T> {
             } else {
                 headerLength = tArrayArray[0].length;
             }
-            excelResult =new ExcelResult(tArrayArray, tlisArray.length, headerLength);
+            excelResult = new ExcelResult(tArrayArray, tlisArray.length, headerLength);
             if (excelResult.getCellCountPerRow() != rowHeaders.length) {
                 throw new ExcelException("头列数和数据列数不匹配：需要" + excelResult.getCellCountPerRow() + "实际：" + rowHeaders.length);
             }
@@ -67,10 +68,10 @@ public abstract class AbstractExcelResult<T> {
         }
         //创建头，第一行
         sheet = this.addHeader(sheet);
-        for (int i=0; i<excelResult.getRowCount(); i++) {
-            HSSFRow row = sheet.createRow(i+1);
+        for (int i = 0; i < excelResult.getRowCount(); i++) {
+            HSSFRow row = sheet.createRow(i + 1);
             HSSFCellStyle hssfCellStyle = workbook.createCellStyle();
-            for (int j=0; j<excelResult.getCellCountPerRow(); j++) {
+            for (int j = 0; j < excelResult.getCellCountPerRow(); j++) {
                 hssfCellStyle.setWrapText(true);
                 hssfCellStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
                 hssfCellStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
@@ -90,7 +91,7 @@ public abstract class AbstractExcelResult<T> {
     private HSSFSheet addHeader(HSSFSheet sheet) {
         //创建一行
         HSSFRow headerRow = sheet.createRow(0);
-        for (int i=0; i<rowHeaders.length; i++) {
+        for (int i = 0; i < rowHeaders.length; i++) {
             HSSFFont hssfFont = sheet.getWorkbook().createFont();
             hssfFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
             HSSFCellStyle hssfCellStyle = sheet.getWorkbook().createCellStyle();
@@ -128,7 +129,8 @@ public abstract class AbstractExcelResult<T> {
         }
         return values.toArray(new String[values.size()]);
     }
-    private static String getMethodName(String fildeName) throws Exception{
+
+    private static String getMethodName(String fildeName) throws Exception {
         byte[] items = fildeName.getBytes();
         items[0] = (byte) ((char) items[0] - 'a' + 'A');
         return new String(items);

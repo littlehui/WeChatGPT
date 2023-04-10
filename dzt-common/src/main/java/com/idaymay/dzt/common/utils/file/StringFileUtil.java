@@ -6,9 +6,10 @@ import java.io.*;
 
 /**
  * TODO
+ *
  * @author littlehui
- * @date 2021/11/15 14:49
  * @version 1.0
+ * @date 2021/11/15 14:49
  */
 public class StringFileUtil {
     /**
@@ -97,29 +98,28 @@ public class StringFileUtil {
 
     /**
      * 读取文件并返回比特数组
+     *
      * @param tradeFile
+     * @return byte[]
      * @author littlehui
      * @date 2021/11/15 16:03
-     * @return byte[]
      */
-    public static byte[] file2byte(File tradeFile){
+    public static byte[] file2byte(File tradeFile) {
         byte[] buffer = null;
-        try
-        {
+        try {
             FileInputStream fis = new FileInputStream(tradeFile);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             byte[] b = new byte[1024];
             int n;
-            while ((n = fis.read(b)) != -1)
-            {
+            while ((n = fis.read(b)) != -1) {
                 bos.write(b, 0, n);
             }
             fis.close();
             bos.close();
             buffer = bos.toByteArray();
-        }catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return buffer;
@@ -127,10 +127,11 @@ public class StringFileUtil {
 
     /**
      * 从ImputStream读取byte数组并返回
+     *
      * @param input
+     * @return byte[]
      * @author littlehui
      * @date 2021/11/15 16:03
-     * @return byte[]
      */
     public static byte[] toByteArray(InputStream input) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -139,17 +140,18 @@ public class StringFileUtil {
         while (-1 != (n = input.read(buffer))) {
             output.write(buffer, 0, n);
         }
-        byte[] result =  output.toByteArray();
+        byte[] result = output.toByteArray();
         output.close();
-        return  result;
+        return result;
     }
 
     /**
      * 判断输入流是否是图片
+     *
      * @param inputStream
+     * @return boolean
      * @author littlehui
      * @date 2021/11/15 16:04
-     * @return boolean
      */
     public static boolean isImage(InputStream inputStream) {
         if (inputStream == null) {

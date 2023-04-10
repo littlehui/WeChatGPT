@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
  * @date 2022/4/13 14:38
  * @return
  */
-public class StringUtil  {
+public class StringUtil {
 
     private static final Pattern chinesePattern = Pattern.compile("[\\u4e00-\\u9fa5]");
 

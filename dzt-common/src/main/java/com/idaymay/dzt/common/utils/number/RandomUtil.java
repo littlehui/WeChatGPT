@@ -3,10 +3,10 @@ package com.idaymay.dzt.common.utils.number;
 import java.util.Random;
 
 /**
- * @ClassName RandomUtil
  * @author littlehui
- * @date 2021/7/18 10:42
  * @version 1.0
+ * @ClassName RandomUtil
+ * @date 2021/7/18 10:42
  **/
 public class RandomUtil {
 

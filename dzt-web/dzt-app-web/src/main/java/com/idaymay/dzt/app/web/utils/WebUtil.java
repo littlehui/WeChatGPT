@@ -1,7 +1,6 @@
 package com.idaymay.dzt.app.web.utils;
 
 import com.idaymay.dzt.common.utils.obj.ObjectUtil;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 

@@ -95,3 +95,6 @@ wx:
       http-proxy-port:
       http-proxy-username:
       http-proxy-password:
+config:
+  openai:
+    apiKey: ${local.app.config.openai.apikey}

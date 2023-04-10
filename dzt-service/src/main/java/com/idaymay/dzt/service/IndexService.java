@@ -6,6 +6,7 @@ public interface IndexService {
 
     /**
      * 公众号配置认证
+     *
      * @param wxTokenAuthParam
      * @return
      */

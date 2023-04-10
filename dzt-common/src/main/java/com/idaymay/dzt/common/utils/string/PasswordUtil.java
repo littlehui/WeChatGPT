@@ -2,9 +2,10 @@ package com.idaymay.dzt.common.utils.string;
 
 /**
  * 密码加解密算法
+ *
  * @author littlehui
- * @date 2021/7/3 16:08
  * @version 1.0
+ * @date 2021/7/3 16:08
  **/
 public class PasswordUtil {
 
@@ -15,10 +16,11 @@ public class PasswordUtil {
 
     /**
      * 密码默认Key加密
+     *
      * @param password
+     * @return java.lang.String
      * @author littlehui
      * @date 2021/11/15 15:36
-     * @return java.lang.String
      */
     public static String encode(String password) {
         try {
@@ -31,10 +33,11 @@ public class PasswordUtil {
 
     /**
      * 默认Key解密
+     *
      * @param encodedPassword
+     * @return java.lang.String
      * @author littlehui
      * @date 2021/11/15 15:38
-     * @return java.lang.String
      */
     public static String decode(String encodedPassword) {
         try {
@@ -44,13 +47,15 @@ public class PasswordUtil {
         }
         return encodedPassword;
     }
+
     /**
      * 通过key进行加密
+     *
      * @param password
      * @param key
+     * @return java.lang.String
      * @author littlehui
      * @date 2021/11/15 15:36
-     * @return java.lang.String
      */
     public static String encode(String password, String key) {
         try {
@@ -63,11 +68,12 @@ public class PasswordUtil {
 
     /**
      * 通过Key进行解密
+     *
      * @param encodedPassword
      * @param key
+     * @return java.lang.String
      * @author littlehui
      * @date 2021/11/15 15:38
-     * @return java.lang.String
      */
     public static String decode(String encodedPassword, String key) {
         try {

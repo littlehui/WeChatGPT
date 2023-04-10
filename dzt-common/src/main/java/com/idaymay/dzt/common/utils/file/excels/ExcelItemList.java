@@ -5,9 +5,10 @@ import java.util.List;
 
 /**
  * Excel行
+ *
  * @author littlehui
- * @date 2021/12/6 16:49
  * @version 1.0
+ * @date 2021/12/6 16:49
  */
 public class ExcelItemList {
     /**
@@ -42,13 +43,14 @@ public class ExcelItemList {
         return this;
     }
 
-    public ExcelItemList addItem(String value , int col) {
-        itemList.add(new ExcelItem(value , col));
+    public ExcelItemList addItem(String value, int col) {
+        itemList.add(new ExcelItem(value, col));
         return this;
     }
 
     /**
      * y轴偏移量
+     *
      * @return
      */
     public int countTotalColOffset() {

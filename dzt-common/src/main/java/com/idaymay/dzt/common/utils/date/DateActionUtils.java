@@ -13,10 +13,11 @@ import java.util.*;
 
 /**
  * TODO
- * @ClassName DateActionUtils
+ *
  * @author littlehui
- * @date 2021/7/27 15:44
  * @version 1.0
+ * @ClassName DateActionUtils
+ * @date 2021/7/27 15:44
  **/
 public class DateActionUtils {
 
@@ -52,12 +53,13 @@ public class DateActionUtils {
 
     /**
      * 转换时间格式
+     *
      * @param date
      * @param oldFormat 旧的时间格式
      * @param newFormat 新的时间格式
+     * @return java.lang.String
      * @author littlehui
      * @date 2021/11/15 15:46
-     * @return java.lang.String
      */
     public static String transformDateFormat(String date, String oldFormat,
                                              String newFormat) {
@@ -70,10 +72,11 @@ public class DateActionUtils {
 
     /**
      * 时间格式转换成yyyy-MM-dd
+     *
      * @param stringDate 原始时间
+     * @return java.util.Date
      * @author littlehui
      * @date 2021/11/15 15:48
-     * @return java.util.Date
      */
     public static Date parseDate(String stringDate) {
         return parseDate(stringDate, ISO_DATE_FORMAT);
@@ -81,18 +84,19 @@ public class DateActionUtils {
 
     /**
      * 转换成format格式
+     *
      * @param stringDate 原始时间
-     * @param format 格式
+     * @param format     格式
+     * @return java.util.Date
      * @author littlehui
      * @date 2021/11/15 15:48
-     * @return java.util.Date
      */
     public static Date parseDate(String stringDate, String format) {
         if (stringDate == null) {
             return null;
         }
         try {
-            return DateUtils.parseDate(stringDate, new String[] { format });
+            return DateUtils.parseDate(stringDate, new String[]{format});
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -101,10 +105,11 @@ public class DateActionUtils {
 
     /**
      * 将Date格式时间转成yyyy-MM-dd格式
+     *
      * @param srcDate 原始时间
+     * @return java.lang.String
      * @author littlehui
      * @date 2021/11/15 15:48
-     * @return java.lang.String
      */
     public static String formatDate(Date srcDate) {
         return formatDate(srcDate, ISO_DATE_FORMAT);
@@ -112,11 +117,12 @@ public class DateActionUtils {
 
     /**
      * 将Date格式转成需要的patter格式
+     *
      * @param srcDate 原始时间
      * @param pattern 格式
+     * @return java.lang.String
      * @author littlehui
      * @date 2021/11/15 15:49
-     * @return java.lang.String
      */
     public static String formatDate(Date srcDate, String pattern) {
         if (srcDate == null) {
@@ -127,11 +133,12 @@ public class DateActionUtils {
 
     /**
      * 将时间戳毫秒数转成响应的格式并返回
-     * @param time 时间戳毫秒数
+     *
+     * @param time    时间戳毫秒数
      * @param pattern 格式
+     * @return java.lang.String
      * @author littlehui
      * @date 2021/11/15 15:49
-     * @return java.lang.String
      */
     private static String formatDate(long time, String pattern) {
         return DateFormatUtils.format(time, pattern);
@@ -139,10 +146,11 @@ public class DateActionUtils {
 
     /**
      * 根据时间戳毫秒数返回当前的季度
+     *
      * @param timeMills 时间戳毫秒数
+     * @return java.lang.Integer
      * @author littlehui
      * @date 2021/11/15 15:50
-     * @return java.lang.Integer
      */
     public static Integer quarter(Long timeMills) {
         Timestamp timestamp = new Timestamp(timeMills);
@@ -158,10 +166,11 @@ public class DateActionUtils {
 
     /**
      * 根据时间戳毫秒数计算天yyyyMMdd格式返回
+     *
      * @param timeMills 时间戳毫秒
+     * @return java.lang.Integer
      * @author littlehui
      * @date 2021/11/15 15:50
-     * @return java.lang.Integer
      */
     public static Integer day(Long timeMills) {
         Timestamp timestamp = new Timestamp(timeMills);
@@ -172,10 +181,11 @@ public class DateActionUtils {
 
     /**
      * 根据时间戳毫秒数计算月份yyyyMM格式返回
+     *
      * @param timeMills 时间戳毫秒
+     * @return java.lang.Integer
      * @author littlehui
      * @date 2021/11/15 15:51
-     * @return java.lang.Integer
      */
     public static Integer month(Long timeMills) {
         Timestamp timestamp = new Timestamp(timeMills);
@@ -186,10 +196,11 @@ public class DateActionUtils {
 
     /**
      * 根据时间戳毫秒数计算分钟yyyyMMddmm格式返回
+     *
      * @param timeMills 时间戳毫秒
+     * @return java.lang.String
      * @author littlehui
      * @date 2021/11/15 15:51
-     * @return java.lang.String
      */
     public static String minute(Long timeMills) {
         Timestamp timestamp = new Timestamp(timeMills);
@@ -200,10 +211,11 @@ public class DateActionUtils {
 
     /**
      * 获取前N分钟
+     *
      * @param latest 最近的第几分钟
+     * @return java.util.List<java.lang.String>
      * @author littlehui
      * @date 2021/11/15 15:52
-     * @return java.util.List<java.lang.String>
      */
     public static List<String> latestMinutes(Integer latest) {
         Long currentMills = System.currentTimeMillis();
@@ -217,10 +229,11 @@ public class DateActionUtils {
 
     /**
      * 根据时间戳毫秒数计算当前年yyyy格式返回
+     *
      * @param timeMills 时间戳毫秒
+     * @return java.lang.Integer
      * @author littlehui
      * @date 2021/11/15 15:52
-     * @return java.lang.Integer
      */
     public static Integer year(Long timeMills) {
         Timestamp timestamp = new Timestamp(timeMills);
@@ -231,10 +244,11 @@ public class DateActionUtils {
 
     /**
      * 计算当天开始的时间戳毫秒数并返回
+     *
      * @param
+     * @return java.lang.Long
      * @author littlehui
      * @date 2021/11/15 15:53
-     * @return java.lang.Long
      */
     public static Long getDayStartTime() {
         Calendar todayStart = Calendar.getInstance();
@@ -247,10 +261,11 @@ public class DateActionUtils {
 
     /**
      * 计算当天的最后一毫秒并返回
+     *
      * @param
+     * @return java.lang.Long
      * @author littlehui
      * @date 2021/11/15 15:53
-     * @return java.lang.Long
      */
     public static Long getDayEndTime() {
         Calendar todayEnd = Calendar.getInstance();
@@ -263,11 +278,12 @@ public class DateActionUtils {
 
     /**
      * 获取指定时区时间戳毫秒数的所在天的开始毫秒数
+     *
      * @param timeStamp 时间戳毫秒
-     * @param timeZone GMT+8或UTC+08:00
+     * @param timeZone  GMT+8或UTC+08:00
+     * @return java.lang.Long
      * @author littlehui
      * @date 2021/11/15 15:54
-     * @return java.lang.Long
      */
     public static Long getDailyStartTime(Long timeStamp, String timeZone) {
         Calendar calendar = Calendar.getInstance();
@@ -282,11 +298,12 @@ public class DateActionUtils {
 
     /**
      * 计算特定时区下时间戳毫秒数所在的那天的最后一毫秒，并返回
+     *
      * @param timeStamp 时间戳毫秒
-     * @param timeZone GMT+8或UTC+08:00
+     * @param timeZone  GMT+8或UTC+08:00
+     * @return java.lang.Long
      * @author littlehui
      * @date 2021/11/15 15:55
-     * @return java.lang.Long
      */
     public static Long getDailyEndTime(Long timeStamp, String timeZone) {
         Calendar calendar = Calendar.getInstance();
@@ -301,11 +318,12 @@ public class DateActionUtils {
 
     /**
      * 计算时间戳毫秒数在指定时区所在月的开始毫秒数
+     *
      * @param timeStamp 时间戳毫秒
-     * @param timeZone GMT+8或UTC+08:00
+     * @param timeZone  GMT+8或UTC+08:00
+     * @return java.lang.Long
      * @author littlehui
      * @date 2021/11/15 15:56
-     * @return java.lang.Long
      */
     public static Long getMonthStartTime(Long timeStamp, String timeZone) {
         Calendar calendar = Calendar.getInstance();
@@ -324,11 +342,12 @@ public class DateActionUtils {
 
     /**
      * 计算指定时间毫秒数下的某个时区下所在月份的结束毫秒数
+     *
      * @param timeStamp 时间戳毫秒
-     * @param timeZone GMT+8或UTC+08:00
+     * @param timeZone  GMT+8或UTC+08:00
+     * @return java.lang.Long
      * @author littlehui
      * @date 2021/11/15 15:57
-     * @return java.lang.Long
      */
     public static Long getMonthEndTime(Long timeStamp, String timeZone) {
         Calendar calendar = Calendar.getInstance();
@@ -347,11 +366,12 @@ public class DateActionUtils {
 
     /**
      * 获取时间戳毫秒数在特定时区下的当前年的开始毫秒数
+     *
      * @param timeStamp 时间戳毫秒
-     * @param timeZone GMT+8或UTC+08:00
+     * @param timeZone  GMT+8或UTC+08:00
+     * @return java.lang.Long
      * @author littlehui
      * @date 2021/11/15 15:58
-     * @return java.lang.Long
      */
     public static Long getYearStartTime(Long timeStamp, String timeZone) {
         // 获取当前日期
@@ -371,11 +391,12 @@ public class DateActionUtils {
 
     /**
      * 获取时间戳毫秒数在特定时区下所在年的最后一毫秒数
+     *
      * @param timeStamp 时间戳毫秒
-     * @param timeZone GMT+8或UTC+08:00
+     * @param timeZone  GMT+8或UTC+08:00
+     * @return java.lang.Long
      * @author littlehui
      * @date 2021/11/15 15:58
-     * @return java.lang.Long
      */
     public static Long getYearEndTime(Long timeStamp, String timeZone) {
         // 获取当前日期
@@ -395,11 +416,12 @@ public class DateActionUtils {
 
     /**
      * 时间戳毫秒数转特定时区字符串并返回
+     *
      * @param timestamp 时间戳毫秒
-     * @param zoneId 时区ID
+     * @param zoneId    时区ID
+     * @return java.lang.String
      * @author littlehui
      * @date 2021/11/15 16:00
-     * @return java.lang.String
      */
     public static String timestampToStr(long timestamp, String zoneId) {
         ZoneId timezone = ZoneId.of(zoneId);
@@ -409,11 +431,12 @@ public class DateActionUtils {
 
     /**
      * 天数累加
-     * @param date 时间
+     *
+     * @param date   时间
      * @param amount 累计数
+     * @return java.util.Date
      * @author littlehui
      * @date 2021/11/15 16:00
-     * @return java.util.Date
      */
     public static Date addDays(Date date, int amount) {
         return add(date, 5, amount);
@@ -421,11 +444,12 @@ public class DateActionUtils {
 
     /**
      * 月数累加
-     * @param date 时间
+     *
+     * @param date   时间
      * @param amount 累计数
+     * @return java.util.Date
      * @author littlehui
      * @date 2021/11/15 16:01
-     * @return java.util.Date
      */
     public static Date addMonths(Date date, int amount) {
         return add(date, 2, amount);
@@ -433,11 +457,12 @@ public class DateActionUtils {
 
     /**
      * 星期数累加
-     * @param date 时间
+     *
+     * @param date   时间
      * @param amount 累计数
+     * @return java.util.Date
      * @author littlehui
      * @date 2021/11/15 16:01
-     * @return java.util.Date
      */
     public static Date addWeeks(Date date, int amount) {
         return add(date, 3, amount);
@@ -445,11 +470,12 @@ public class DateActionUtils {
 
     /**
      * 年数累加
-     * @param date 时间
+     *
+     * @param date   时间
      * @param amount 累计数
+     * @return java.util.Date
      * @author littlehui
      * @date 2021/11/15 16:01
-     * @return java.util.Date
      */
     public static Date addYears(Date date, int amount) {
         return add(date, 1, amount);
@@ -457,15 +483,16 @@ public class DateActionUtils {
 
     /**
      * 根据日历字段累加
-     * @param date 时间
+     *
+     * @param date          时间
      * @param calendarField 需要计算的日历字段
-     * @param amount 累计数
+     * @param amount        累计数
+     * @return java.util.Date
      * @author littlehui
      * @date 2021/11/15 16:02
-     * @return java.util.Date
      */
     public static Date add(Date date, int calendarField, int amount) {
-        if(date == null) {
+        if (date == null) {
             throw new IllegalArgumentException("The date must not be null");
         } else {
             Calendar c = Calendar.getInstance();

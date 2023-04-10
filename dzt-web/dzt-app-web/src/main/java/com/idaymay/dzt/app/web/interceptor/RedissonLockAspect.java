@@ -1,7 +1,6 @@
 package com.idaymay.dzt.app.web.interceptor;
 
 import com.idaymay.dzt.common.lock.CustomRedissonLock;
-import javax.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -10,10 +9,10 @@ import org.redisson.Redisson;
 import org.redisson.api.RLock;
 import org.redisson.spring.starter.RedissonAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**

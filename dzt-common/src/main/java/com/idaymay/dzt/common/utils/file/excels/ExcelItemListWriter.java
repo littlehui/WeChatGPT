@@ -13,10 +13,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO 
+ * TODO
+ *
  * @author littlehui
- * @date 2021/12/6 16:49
  * @version 1.0
+ * @date 2021/12/6 16:49
  */
 public class ExcelItemListWriter {
 
@@ -30,10 +31,11 @@ public class ExcelItemListWriter {
 
     /**
      * 添加一行
+     *
      * @param excelItemLists
      */
-    public void addRows(List<ExcelItemList> excelItemLists , int startRow, int startCol) {
-        sheetValues.add(new ExcelItemListWithOffset(excelItemLists , startRow, startCol));
+    public void addRows(List<ExcelItemList> excelItemLists, int startRow, int startCol) {
+        sheetValues.add(new ExcelItemListWithOffset(excelItemLists, startRow, startCol));
     }
 
     public HSSFWorkbook writeToExcel() {
@@ -46,26 +48,26 @@ public class ExcelItemListWriter {
             int colPos = excelItemListWithOffset.startCol;
             sheet.autoSizeColumn(colPos);
             for (ExcelItemList excelItemList : excelItemListWithOffset.excelItemLists) {
-                int rowPlace = excelItemList.getRowPlace() ;
+                int rowPlace = excelItemList.getRowPlace();
                 for (ExcelItem item : excelItemList.itemList) {
                     HSSFRow row = sheet.getRow(rowPos);
                     if (row == null) {
-                        row =  sheet.createRow(rowPos);
+                        row = sheet.createRow(rowPos);
                     }
                     HSSFCell cell = row.createCell(colPos);
                     cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                     cell.setCellValue(item.getItemValue());
                     if (excelItemList.isHead()) {
                         cell.setCellStyle(styles.get(HEADER));
-                    }else{
+                    } else {
                         cell.setCellStyle(styles.get(CELL));
                     }
-                    int endRowPos = rowPos + (rowPlace > 0 ?(rowPlace  - 1) :0 );
+                    int endRowPos = rowPos + (rowPlace > 0 ? (rowPlace - 1) : 0);
                     int endColPos = colPos + item.getColOffset();
-                    sheet.addMergedRegion(new CellRangeAddress(rowPos,endRowPos ,colPos,endColPos - 1));
+                    sheet.addMergedRegion(new CellRangeAddress(rowPos, endRowPos, colPos, endColPos - 1));
                     colPos = endColPos;
                 }
-                rowPos = rowPlace + rowPos ;
+                rowPos = rowPlace + rowPos;
                 colPos = excelItemListWithOffset.startCol;
             }
         }
@@ -84,10 +86,10 @@ public class ExcelItemListWriter {
         style.setFont(titleFont);
         styles.put(TITLE, style);
         style = wb.createCellStyle();
-        HSSFFont font=wb.createFont();
+        HSSFFont font = wb.createFont();
         //HSSFColor.VIOLET.index //字体颜色
         font.setColor(HSSFColor.BLACK.index);
-        font.setFontHeightInPoints((short)11);
+        font.setFontHeightInPoints((short) 11);
         //字体增粗
         font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         style.setFont(font);
@@ -103,12 +105,12 @@ public class ExcelItemListWriter {
         return styles;
     }
 
-    private class ExcelItemListWithOffset{
+    private class ExcelItemListWithOffset {
         List<ExcelItemList> excelItemLists;
         int startRow;
         int startCol;
 
-        public ExcelItemListWithOffset( List<ExcelItemList> excelItemLists, int startRow, int startCol) {
+        public ExcelItemListWithOffset(List<ExcelItemList> excelItemLists, int startRow, int startCol) {
             this.excelItemLists = excelItemLists;
             this.startRow = startRow;
             this.startCol = startCol;
@@ -116,7 +118,7 @@ public class ExcelItemListWriter {
     }
 
     public static void main(String[] args) throws IOException {
-        ExcelItemListWriter  excelItemListWriter = new ExcelItemListWriter();
+        ExcelItemListWriter excelItemListWriter = new ExcelItemListWriter();
         List<ExcelItemList> itemLists = new ArrayList<>();
         itemLists.add(new ExcelItemList(true).addItem("序号").addItem("订单编号").addItem("下单时间").addItem("收货人信息", 4).addItem("订单金额").addItem("货品金额").addItem("配送费用").addItem("商品来源").addItem("订单状态")
                 .addItem("商品序号").addItem("商品编号").addItem("商品名称").addItem("商户商品编号").addItem("商品单价").addItem("数量").addItem("款式").addItem("尺寸").addItem("小计"));
@@ -124,12 +126,12 @@ public class ExcelItemListWriter {
                 .addItem("商品序号").addItem("商品编号").addItem("商品名称").addItem("商户商品编号").addItem("商品单价").addItem("数量").addItem("款式").addItem("尺寸").addItem("小计"));
 
         List<ExcelItemList> itemLists1 = new ArrayList<>();
-        itemLists1.add(new ExcelItemList(4).addItem("aeeeeeeeeeeeeeeeeeeee" ,1 ).addItem("bbbbbbbbbbbbbbbbb",1).addItem("cccccccccccccccccccccc",1));
-        itemLists1.add(new ExcelItemList(4).addItem("aeeeeeeeeeeeeeeeeeeee" ,1 ).addItem("bbbbbbbbbbbbbbbbb",1).addItem("cccccccccccccccccccccc",1));
-        itemLists1.add(new ExcelItemList(4).addItem("aeeeeeeeeeeeeeeeeeeee" ,1 ).addItem("bbbbbbbbbbbbbbbbb",1).addItem("cccccccccccccccccccccc",1));
+        itemLists1.add(new ExcelItemList(4).addItem("aeeeeeeeeeeeeeeeeeeee", 1).addItem("bbbbbbbbbbbbbbbbb", 1).addItem("cccccccccccccccccccccc", 1));
+        itemLists1.add(new ExcelItemList(4).addItem("aeeeeeeeeeeeeeeeeeeee", 1).addItem("bbbbbbbbbbbbbbbbb", 1).addItem("cccccccccccccccccccccc", 1));
+        itemLists1.add(new ExcelItemList(4).addItem("aeeeeeeeeeeeeeeeeeeee", 1).addItem("bbbbbbbbbbbbbbbbb", 1).addItem("cccccccccccccccccccccc", 1));
 
-        excelItemListWriter.addRows(itemLists , 0 , 0);
-        excelItemListWriter.addRows(itemLists1 , itemLists.size() , 0);
+        excelItemListWriter.addRows(itemLists, 0, 0);
+        excelItemListWriter.addRows(itemLists1, itemLists.size(), 0);
         HSSFWorkbook sheet = excelItemListWriter.writeToExcel();
         FileOutputStream fileOut = new FileOutputStream("d:/workbook.xls");
         sheet.write(fileOut);

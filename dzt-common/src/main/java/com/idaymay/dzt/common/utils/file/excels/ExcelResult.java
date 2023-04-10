@@ -3,16 +3,17 @@ package com.idaymay.dzt.common.utils.file.excels;
 import java.util.Iterator;
 
 /**
- * TODO 
+ * TODO
+ *
  * @author littlehui
- * @date 2021/12/6 16:58
  * @version 1.0
+ * @date 2021/12/6 16:58
  */
-public class ExcelResult implements Iterable<String[]>{
+public class ExcelResult implements Iterable<String[]> {
 
-    private  int rowCount;
+    private int rowCount;
 
-    private  int cellCountPerRow;
+    private int cellCountPerRow;
 
     private String[][] excelValues;
 
@@ -60,7 +61,7 @@ public class ExcelResult implements Iterable<String[]>{
             @Override
             public String[] next() {
                 String[] next = new String[cellCountPerRow];
-                for (int i = 0; i < cellCountPerRow; i ++) {
+                for (int i = 0; i < cellCountPerRow; i++) {
                     next[i] = excelValues[cursor][i];
                 }
                 cursor++;
@@ -72,8 +73,8 @@ public class ExcelResult implements Iterable<String[]>{
                 if (hasNext()) {
                     for (int i = cursor; i < rowCount - 1; i++) {
                         for (int r = 0; r < cellCountPerRow; r++) {
-                            if (excelValues[i+1] != null) {
-                                excelValues[i][r] = excelValues[i+1][r];
+                            if (excelValues[i + 1] != null) {
+                                excelValues[i][r] = excelValues[i + 1][r];
                             }
                         }
                     }

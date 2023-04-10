@@ -21,6 +21,7 @@ public class JwtUtils {
 
     /**
      * 检验合法性，其中secret参数就应该传入的是用户的id
+     *
      * @param token
      * @throws TokenUnavailable
      */
@@ -57,7 +58,7 @@ public class JwtUtils {
     /**
      * 通过载荷名字获取载荷的值
      */
-    public static Claim getClaimByName(String token, String name){
+    public static Claim getClaimByName(String token, String name) {
         return JWT.decode(token).getClaim(name);
     }
 

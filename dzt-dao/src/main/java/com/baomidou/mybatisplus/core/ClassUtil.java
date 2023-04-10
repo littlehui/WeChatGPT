@@ -15,16 +15,16 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class ClassUtil {
 
-    private final static Map<String,Field> fieldCache =  new ConcurrentHashMap<String,Field>();
+    private final static Map<String, Field> fieldCache = new ConcurrentHashMap<String, Field>();
 
-    public static boolean hasProperty(Class clz, String propertyName){
+    public static boolean hasProperty(Class clz, String propertyName) {
         try {
-            Field f = getField(clz, propertyName,false);
+            Field f = getField(clz, propertyName, false);
             if (f != null) {
                 return true;
             }
         } catch (Exception e) {
-            log.error("获取属性异常" , e) ;
+            log.error("获取属性异常", e);
         }
         return false;
     }
@@ -34,13 +34,13 @@ public class ClassUtil {
     }
 
     public static Field getField(Class clz, String fieldName, boolean exception) {
-        String key = clz.getName()+" - " +fieldName;
+        String key = clz.getName() + " - " + fieldName;
         Field f = fieldCache.get(key);
         if (f != null) {
             return f;
         }
 
-        for (; clz != Object.class ; clz = clz.getSuperclass()){
+        for (; clz != Object.class; clz = clz.getSuperclass()) {
             try {
                 if (!Object.class.getName().equals(clz.getName())) {
                     Field field = clz.getDeclaredField(fieldName);
@@ -52,7 +52,7 @@ public class ClassUtil {
             }
         }
 
-        if(exception){
+        if (exception) {
             throw new RuntimeException("no such field in " + clz.getName());
         }
         return null;

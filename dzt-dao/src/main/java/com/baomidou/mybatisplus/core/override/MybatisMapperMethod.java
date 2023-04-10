@@ -71,7 +71,7 @@ public class MybatisMapperMethod {
                 Object param = method.convertArgsToSqlCommandParam(args);
                 //增加默认字段 updateTime
                 if (param instanceof MapperMethod.ParamMap) {
-                    MapperMethod.ParamMap map = (MapperMethod.ParamMap)param;
+                    MapperMethod.ParamMap map = (MapperMethod.ParamMap) param;
                     for (Object value : map.values()) {
                         if (value instanceof BaseDomain) {
                             BaseDomain baseDomain = (BaseDomain) value;

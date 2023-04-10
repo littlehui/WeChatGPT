@@ -24,19 +24,19 @@ public class RemoveBatchAbleRedisCache extends RedisCache {
     protected RemoveBatchAbleRedisCache(String name, RedisCacheWriter cacheWriter, RedisCacheConfiguration cacheConfig) {
         super(name, cacheWriter, cacheConfig);
         this.name = name;
-        this.cacheWriter=cacheWriter;
+        this.cacheWriter = cacheWriter;
         this.conversionService = cacheConfig.getConversionService();
     }
 
     @Override
     public void evict(Object key) {
-        if(key instanceof  String){
-            String keyString=key.toString();
-            if(StringUtils.endsWith(keyString,"*")){
+        if (key instanceof String) {
+            String keyString = key.toString();
+            if (StringUtils.endsWith(keyString, "*")) {
                 evictLikeSuffix(keyString);
                 return;
             }
-            if(StringUtils.startsWith(keyString,"*")){
+            if (StringUtils.startsWith(keyString, "*")) {
                 evictLikePrefix(keyString);
                 return;
             }
@@ -46,6 +46,7 @@ public class RemoveBatchAbleRedisCache extends RedisCache {
 
     /**
      * 前缀匹配
+     *
      * @param key
      */
     public void evictLikePrefix(String key) {
@@ -55,10 +56,11 @@ public class RemoveBatchAbleRedisCache extends RedisCache {
 
     /**
      * 后缀匹配
+     *
      * @param key
      */
     public void evictLikeSuffix(String key) {
-        byte[] pattern = (byte[])this.conversionService.convert(this.createCacheKey(key), byte[].class);
+        byte[] pattern = (byte[]) this.conversionService.convert(this.createCacheKey(key), byte[].class);
         this.cacheWriter.clean(this.name, pattern);
     }
 }

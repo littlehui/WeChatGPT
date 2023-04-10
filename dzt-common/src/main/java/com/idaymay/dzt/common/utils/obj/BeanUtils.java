@@ -24,7 +24,7 @@ public class BeanUtils {
 
     private final static Logger logger = LoggerFactory.getLogger(BeanUtils.class);
 
-    public static Map convertBean(Object bean)   {
+    public static Map convertBean(Object bean) {
         if (bean == null) {
             return new HashMap();
         }
@@ -38,8 +38,8 @@ public class BeanUtils {
         } catch (IntrospectionException e) {
             e.printStackTrace();
         }
-        PropertyDescriptor[] propertyDescriptors =  beanInfo.getPropertyDescriptors();
-        for (int i = 0; i< propertyDescriptors.length; i++) {
+        PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+        for (int i = 0; i < propertyDescriptors.length; i++) {
             PropertyDescriptor descriptor = propertyDescriptors[i];
             String propertyName = descriptor.getName();
             if (!propertyName.equals("class")) {
@@ -48,7 +48,7 @@ public class BeanUtils {
                 try {
                     result = readMethod.invoke(bean, new Object[0]);
                 } catch (Exception e) {
-                    logger.error("bean:"+bean.getClass()+"转换 map:失败,字段set value 失败:"+propertyName );
+                    logger.error("bean:" + bean.getClass() + "转换 map:失败,字段set value 失败:" + propertyName);
                 }
                 if (result != null) {
                     returnMap.put(propertyName, result);
@@ -70,7 +70,7 @@ public class BeanUtils {
     }
 
     @SuppressWarnings("rawtypes")
-    public static <R> R  convertMap(Class<R> type, Map map) {
+    public static <R> R convertMap(Class<R> type, Map map) {
         // 获取类属性
         BeanInfo beanInfo = null;
         try {
@@ -83,8 +83,8 @@ public class BeanUtils {
         try {
             obj = type.newInstance();
             // 给 JavaBean 对象的属性赋值
-            PropertyDescriptor[] propertyDescriptors =  beanInfo.getPropertyDescriptors();
-            for (int i = 0; i< propertyDescriptors.length; i++) {
+            PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+            for (int i = 0; i < propertyDescriptors.length; i++) {
                 PropertyDescriptor descriptor = propertyDescriptors[i];
                 String propertyName = descriptor.getName();
 
@@ -100,13 +100,13 @@ public class BeanUtils {
                     }
                 }
             }
-            return (R)obj;
+            return (R) obj;
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        return (R)obj;
+        return (R) obj;
     }
 
     public static <T> List<T> converMaps2Object(List<Map<String, Object>> datas, Class<T> beanClass) {
