@@ -1,0 +1,47 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /
+    encoding:
+      enabled: true
+      force: true
+      force-request: true
+      force-response: true
+  tomcat:
+    uri-encoding: UTF-8
+  shutdown: graceful
+spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  application:
+    name: dzt-app-web
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  profiles:
+    active: local
+  session:
+    store-type: none
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+logging:
+  level:
+    org.springframework.security: debug
+
+mybatis:
+  #type-aliases-package: tk.mybatis.springboot.model
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package=net:
+    codingme:
+      boot:
+        domain: com.idaymay.dzt.dao.mysql.domain
+mybatis-plus:
+  configuration:
+    log-impl:
+  type-aliases-package: com.idaymay.dzt.dao.mysql.domain
+cache:
+  prefix: 0.1.0

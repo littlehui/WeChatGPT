@@ -1,0 +1,330 @@
+2023-04-09 21:24:17.664  INFO 20788 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : Starting IndexAppControllerTests using Java 1.8.0_101 on LITTLEHUi-PC with PID 20788 (started by littlehui in G:\创业\program\dzt\dzt-web\dzt-app-web)
+2023-04-09 21:24:17.666  INFO 20788 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : The following profiles are active: local
+2023-04-09 21:24:20.629  INFO 20788 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 21:24:20.633  INFO 20788 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-04-09 21:24:20.662  INFO 20788 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 15 ms. Found 0 JPA repository interfaces.
+2023-04-09 21:24:20.685  INFO 20788 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 21:24:20.687  INFO 20788 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-04-09 21:24:20.709  INFO 20788 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 Redis repository interfaces.
+2023-04-09 21:24:21.008  WARN 20788 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.idaymay.dzt.app.web]' package. Please check your configuration.
+2023-04-09 21:24:23.236  INFO 20788 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2023-04-09 21:24:24.066  INFO 20788 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-04-09 21:24:24.137  INFO 20788 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2023-04-09 21:24:24.296  INFO 20788 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-04-09 21:24:25.898  INFO 20788 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2023-04-09 21:24:26.204  INFO 20788 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-04-09 21:24:26.239  INFO 20788 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 21:24:27.033  WARN 20788 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-04-09 21:24:28.465  INFO 20788 --- [main] org.redisson.Version                     : Redisson 3.13.5
+2023-04-09 21:24:32.991  INFO 20788 --- [redisson-netty-2-15] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for /47.75.0.185:6379
+2023-04-09 21:24:33.216  INFO 20788 --- [redisson-netty-2-19] o.r.c.pool.MasterConnectionPool          : 24 connections initialized for /47.75.0.185:6379
+2023-04-09 21:24:33.448  INFO 20788 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path ''
+2023-04-09 21:24:35.471  WARN 20788 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2023-04-09 21:24:38.480  WARN 20788 --- [main] io.sentry.dsn.Dsn                        : *** Couldn't find a suitable DSN, Sentry operations will do nothing! See documentation: https://docs.sentry.io/clients/java/ ***
+2023-04-09 21:24:38.502  WARN 20788 --- [main] io.sentry.DefaultSentryClientFactory     : No 'stacktrace.app.packages' was configured, this option is highly recommended as it affects stacktrace grouping and display on Sentry. See documentation: https://docs.sentry.io/clients/java/config/#in-application-stack-frames
+2023-04-09 21:24:40.231  INFO 20788 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-04-09 21:24:40.256  INFO 20788 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : Started IndexAppControllerTests in 23.235 seconds (JVM running for 24.949)
+2023-04-09 21:24:40.410  INFO 20788 --- [main] c.i.d.a.w.c.common.BaseControllerTest    : 开始测试...
+2023-04-09 21:24:40.448  INFO 20788 --- [main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2023-04-09 21:24:40.449  INFO 20788 --- [main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2023-04-09 21:24:40.449  INFO 20788 --- [main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2023-04-09 21:24:40.529  INFO 20788 --- [main] c.idaymay.dzt.app.web.config.LogAspect   : Aspect-URL: /
+Aspect-HTTP_METHOD: GET
+Aspect-IP: 10.5.150.94
+Aspect-REQUEST_METHOD: com.idaymay.dzt.app.web.controller.IndexAppController.wxAuth
+Aspect-Args: [WxTokenAuthParam(signature=null, timestamp=null, nonce=null, echostr=test), org.springframework.mock.web.MockHttpServletRequest@47f50549, org.springframework.mock.web.MockHttpServletResponse@43f88150]Aspect-QueryString: null
+2023-04-09 21:24:40.579  INFO 20788 --- [main] c.idaymay.dzt.app.web.config.LogAspect   : Aspect-Response: test
+Aspect-SpeedTime: 54ms
+2023-04-09 21:24:40.608  INFO 20788 --- [main] c.i.d.a.w.c.common.DztAppControllerTest  : test
+2023-04-09 21:24:40.612  INFO 20788 --- [main] c.i.d.a.w.c.common.BaseControllerTest    : 测试结束...
+2023-04-09 21:24:40.830  INFO 20788 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 21:24:40.834  INFO 20788 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2023-04-09 21:24:40.850  INFO 20788 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2023-04-09 21:26:42.273  INFO 10120 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : Starting IndexAppControllerTests using Java 1.8.0_101 on LITTLEHUi-PC with PID 10120 (started by littlehui in G:\创业\program\dzt\dzt-web\dzt-app-web)
+2023-04-09 21:26:42.275  INFO 10120 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : The following profiles are active: local
+2023-04-09 21:26:45.199  INFO 10120 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 21:26:45.203  INFO 10120 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-04-09 21:26:45.246  INFO 10120 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25 ms. Found 0 JPA repository interfaces.
+2023-04-09 21:26:45.273  INFO 10120 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 21:26:45.275  INFO 10120 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-04-09 21:26:45.299  INFO 10120 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 Redis repository interfaces.
+2023-04-09 21:26:45.574  WARN 10120 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.idaymay.dzt.app.web]' package. Please check your configuration.
+2023-04-09 21:26:47.293  INFO 10120 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2023-04-09 21:26:48.314  INFO 10120 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-04-09 21:26:48.401  INFO 10120 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2023-04-09 21:26:48.565  INFO 10120 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-04-09 21:26:50.130  INFO 10120 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2023-04-09 21:26:50.417  INFO 10120 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-04-09 21:26:50.436  INFO 10120 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 21:26:51.453  WARN 10120 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-04-09 21:26:53.075  INFO 10120 --- [main] org.redisson.Version                     : Redisson 3.13.5
+2023-04-09 21:26:58.135  INFO 10120 --- [redisson-netty-2-23] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for /47.75.0.185:6379
+2023-04-09 21:26:58.319  INFO 10120 --- [redisson-netty-2-19] o.r.c.pool.MasterConnectionPool          : 24 connections initialized for /47.75.0.185:6379
+2023-04-09 21:26:58.523  INFO 10120 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path ''
+2023-04-09 21:27:00.732  WARN 10120 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2023-04-09 21:27:03.874  WARN 10120 --- [main] io.sentry.dsn.Dsn                        : *** Couldn't find a suitable DSN, Sentry operations will do nothing! See documentation: https://docs.sentry.io/clients/java/ ***
+2023-04-09 21:27:03.896  WARN 10120 --- [main] io.sentry.DefaultSentryClientFactory     : No 'stacktrace.app.packages' was configured, this option is highly recommended as it affects stacktrace grouping and display on Sentry. See documentation: https://docs.sentry.io/clients/java/config/#in-application-stack-frames
+2023-04-09 21:27:05.443  INFO 10120 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-04-09 21:27:05.462  INFO 10120 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : Started IndexAppControllerTests in 23.821 seconds (JVM running for 25.491)
+2023-04-09 21:27:05.596  INFO 10120 --- [main] c.i.d.a.w.c.common.BaseControllerTest    : 开始测试...
+2023-04-09 21:27:05.644  INFO 10120 --- [main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2023-04-09 21:27:05.644  INFO 10120 --- [main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2023-04-09 21:27:05.645  INFO 10120 --- [main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2023-04-09 21:27:05.757  INFO 10120 --- [main] c.idaymay.dzt.app.web.config.LogAspect   : Aspect-URL: /
+Aspect-HTTP_METHOD: GET
+Aspect-IP: 10.5.150.94
+Aspect-REQUEST_METHOD: com.idaymay.dzt.app.web.controller.IndexAppController.wxAuth
+Aspect-Args: [WxTokenAuthParam(signature=null, timestamp=null, nonce=null, echostr=test), org.springframework.mock.web.MockHttpServletRequest@5a6dd1e7, org.springframework.mock.web.MockHttpServletResponse@4fd9deed]Aspect-QueryString: null
+2023-04-09 21:27:05.802  INFO 10120 --- [main] c.idaymay.dzt.app.web.config.LogAspect   : Aspect-Response: test
+Aspect-SpeedTime: 50ms
+2023-04-09 21:27:05.837  INFO 10120 --- [main] c.i.d.a.w.c.common.DztAppControllerTest  : test
+2023-04-09 21:27:05.840  INFO 10120 --- [main] c.i.d.a.w.c.common.BaseControllerTest    : 测试结束...
+2023-04-09 21:27:06.201  INFO 10120 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 21:27:06.204  INFO 10120 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2023-04-09 21:27:06.213  INFO 10120 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2023-04-09 21:27:30.597  INFO 20368 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : Starting IndexAppControllerTests using Java 1.8.0_101 on LITTLEHUi-PC with PID 20368 (started by littlehui in G:\创业\program\dzt\dzt-web\dzt-app-web)
+2023-04-09 21:27:30.600  INFO 20368 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : The following profiles are active: local
+2023-04-09 21:27:33.509  INFO 20368 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 21:27:33.512  INFO 20368 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-04-09 21:27:33.536  INFO 20368 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 14 ms. Found 0 JPA repository interfaces.
+2023-04-09 21:27:33.555  INFO 20368 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 21:27:33.558  INFO 20368 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-04-09 21:27:33.576  INFO 20368 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 0 Redis repository interfaces.
+2023-04-09 21:27:33.841  WARN 20368 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.idaymay.dzt.app.web]' package. Please check your configuration.
+2023-04-09 21:27:35.633  INFO 20368 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2023-04-09 21:27:36.446  INFO 20368 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-04-09 21:27:36.540  INFO 20368 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2023-04-09 21:27:36.723  INFO 20368 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-04-09 21:27:38.311  INFO 20368 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2023-04-09 21:27:38.615  INFO 20368 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-04-09 21:27:38.633  INFO 20368 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 21:27:39.601  WARN 20368 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-04-09 21:27:40.980  INFO 20368 --- [main] org.redisson.Version                     : Redisson 3.13.5
+2023-04-09 21:27:45.502  INFO 20368 --- [redisson-netty-2-20] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for /47.75.0.185:6379
+2023-04-09 21:27:45.692  INFO 20368 --- [redisson-netty-2-19] o.r.c.pool.MasterConnectionPool          : 24 connections initialized for /47.75.0.185:6379
+2023-04-09 21:27:45.911  INFO 20368 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path ''
+2023-04-09 21:27:47.819  WARN 20368 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2023-04-09 21:27:50.844  WARN 20368 --- [main] io.sentry.dsn.Dsn                        : *** Couldn't find a suitable DSN, Sentry operations will do nothing! See documentation: https://docs.sentry.io/clients/java/ ***
+2023-04-09 21:27:50.865  WARN 20368 --- [main] io.sentry.DefaultSentryClientFactory     : No 'stacktrace.app.packages' was configured, this option is highly recommended as it affects stacktrace grouping and display on Sentry. See documentation: https://docs.sentry.io/clients/java/config/#in-application-stack-frames
+2023-04-09 21:27:52.996  INFO 20368 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-04-09 21:27:53.015  INFO 20368 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : Started IndexAppControllerTests in 23.116 seconds (JVM running for 24.714)
+2023-04-09 21:27:53.174  INFO 20368 --- [main] c.i.d.a.w.c.common.BaseControllerTest    : 开始测试...
+2023-04-09 21:27:53.221  INFO 20368 --- [main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2023-04-09 21:27:53.221  INFO 20368 --- [main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2023-04-09 21:27:53.222  INFO 20368 --- [main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2023-04-09 21:27:53.289  INFO 20368 --- [main] c.idaymay.dzt.app.web.config.LogAspect   : Aspect-URL: /
+Aspect-HTTP_METHOD: GET
+Aspect-IP: 10.5.150.94
+Aspect-REQUEST_METHOD: com.idaymay.dzt.app.web.controller.IndexAppController.wxAuth
+Aspect-Args: [WxTokenAuthParam(signature=null, timestamp=null, nonce=null, echostr=test), org.springframework.mock.web.MockHttpServletRequest@1a0c384d, org.springframework.mock.web.MockHttpServletResponse@3e8cf854]Aspect-QueryString: null
+2023-04-09 21:27:53.342  INFO 20368 --- [main] c.idaymay.dzt.app.web.config.LogAspect   : Aspect-Response: test
+Aspect-SpeedTime: 57ms
+2023-04-09 21:27:53.370  INFO 20368 --- [main] c.i.d.a.w.c.common.DztAppControllerTest  : test
+2023-04-09 21:27:53.373  INFO 20368 --- [main] c.i.d.a.w.c.common.BaseControllerTest    : 测试结束...
+2023-04-09 21:27:53.785  INFO 20368 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 21:27:53.788  INFO 20368 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2023-04-09 21:27:53.800  INFO 20368 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2023-04-09 21:28:50.764  INFO 24356 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : Starting IndexAppControllerTests using Java 1.8.0_101 on LITTLEHUi-PC with PID 24356 (started by littlehui in G:\创业\program\dzt\dzt-web\dzt-app-web)
+2023-04-09 21:28:50.766  INFO 24356 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : The following profiles are active: local
+2023-04-09 21:28:54.167  INFO 24356 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 21:28:54.173  INFO 24356 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-04-09 21:28:54.208  INFO 24356 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 18 ms. Found 0 JPA repository interfaces.
+2023-04-09 21:28:54.232  INFO 24356 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 21:28:54.236  INFO 24356 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-04-09 21:28:54.257  INFO 24356 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 0 Redis repository interfaces.
+2023-04-09 21:28:54.518  WARN 24356 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.idaymay.dzt.app.web]' package. Please check your configuration.
+2023-04-09 21:28:56.405  INFO 24356 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2023-04-09 21:28:57.282  INFO 24356 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-04-09 21:28:57.364  INFO 24356 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2023-04-09 21:28:57.530  INFO 24356 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-04-09 21:28:59.112  INFO 24356 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2023-04-09 21:28:59.454  INFO 24356 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-04-09 21:28:59.471  INFO 24356 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 21:29:00.370  WARN 24356 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-04-09 21:29:01.810  INFO 24356 --- [main] org.redisson.Version                     : Redisson 3.13.5
+2023-04-09 21:29:06.555  INFO 24356 --- [redisson-netty-2-24] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for /47.75.0.185:6379
+2023-04-09 21:29:06.743  INFO 24356 --- [redisson-netty-2-14] o.r.c.pool.MasterConnectionPool          : 24 connections initialized for /47.75.0.185:6379
+2023-04-09 21:29:06.985  INFO 24356 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path ''
+2023-04-09 21:29:08.885  WARN 24356 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2023-04-09 21:29:11.898  WARN 24356 --- [main] io.sentry.dsn.Dsn                        : *** Couldn't find a suitable DSN, Sentry operations will do nothing! See documentation: https://docs.sentry.io/clients/java/ ***
+2023-04-09 21:29:11.917  WARN 24356 --- [main] io.sentry.DefaultSentryClientFactory     : No 'stacktrace.app.packages' was configured, this option is highly recommended as it affects stacktrace grouping and display on Sentry. See documentation: https://docs.sentry.io/clients/java/config/#in-application-stack-frames
+2023-04-09 21:29:13.556  INFO 24356 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-04-09 21:29:13.577  INFO 24356 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : Started IndexAppControllerTests in 23.567 seconds (JVM running for 26.266)
+2023-04-09 21:29:13.705  INFO 24356 --- [main] c.i.d.a.w.c.common.BaseControllerTest    : 开始测试...
+2023-04-09 21:29:13.751  INFO 24356 --- [main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2023-04-09 21:29:13.751  INFO 24356 --- [main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2023-04-09 21:29:13.752  INFO 24356 --- [main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2023-04-09 21:29:13.844  INFO 24356 --- [main] c.idaymay.dzt.app.web.config.LogAspect   : Aspect-URL: /
+Aspect-HTTP_METHOD: GET
+Aspect-IP: 10.5.150.94
+Aspect-REQUEST_METHOD: com.idaymay.dzt.app.web.controller.IndexAppController.wxAuth
+Aspect-Args: [WxTokenAuthParam(signature=null, timestamp=null, nonce=null, echostr=test), org.springframework.mock.web.MockHttpServletRequest@58179860, org.springframework.mock.web.MockHttpServletResponse@43e55cfb]Aspect-QueryString: null
+2023-04-09 21:29:13.899  INFO 24356 --- [main] c.idaymay.dzt.app.web.config.LogAspect   : Aspect-Response: test
+Aspect-SpeedTime: 60ms
+2023-04-09 21:29:13.931  INFO 24356 --- [main] c.i.d.a.w.c.common.DztAppControllerTest  : test
+2023-04-09 21:29:13.934  INFO 24356 --- [main] c.i.d.a.w.c.common.BaseControllerTest    : 测试结束...
+2023-04-09 21:29:14.366  INFO 24356 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 21:29:14.370  INFO 24356 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2023-04-09 21:29:14.383  INFO 24356 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2023-04-09 22:29:14.615  INFO 16468 --- [main] c.i.dzt.app.web.DztApplicationTests      : Starting DztApplicationTests using Java 17.0.6 on LITTLEHUi-PC with PID 16468 (started by littlehui in G:\��ҵ\program\dzt\dzt-web\dzt-app-web)
+2023-04-09 22:29:14.618  INFO 16468 --- [main] c.i.dzt.app.web.DztApplicationTests      : The following profiles are active: local
+2023-04-09 22:29:16.575  INFO 16468 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 22:29:16.578  INFO 16468 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-04-09 22:29:16.602  INFO 16468 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 16 ms. Found 0 JPA repository interfaces.
+2023-04-09 22:29:16.624  INFO 16468 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 22:29:16.626  INFO 16468 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-04-09 22:29:16.645  INFO 16468 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 Redis repository interfaces.
+2023-04-09 22:29:16.853  WARN 16468 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.idaymay.dzt.app.web]' package. Please check your configuration.
+2023-04-09 22:29:18.532  INFO 16468 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2023-04-09 22:29:19.412  INFO 16468 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-04-09 22:29:19.507  INFO 16468 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2023-04-09 22:29:19.708  INFO 16468 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-04-09 22:29:20.146  INFO 16468 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2023-04-09 22:29:20.428  INFO 16468 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-04-09 22:29:20.439  INFO 16468 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 22:29:21.613  WARN 16468 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-04-09 22:29:23.544  INFO 16468 --- [main] org.redisson.Version                     : Redisson 3.13.5
+2023-04-09 22:29:25.114  INFO 16468 --- [redisson-netty-2-30] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for /47.75.0.185:6379
+2023-04-09 22:29:25.352  INFO 16468 --- [redisson-netty-2-19] o.r.c.pool.MasterConnectionPool          : 24 connections initialized for /47.75.0.185:6379
+2023-04-09 22:29:25.606  INFO 16468 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path ''
+2023-04-09 22:29:28.018  WARN 16468 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2023-04-09 22:29:29.612  WARN 16468 --- [main] io.sentry.dsn.Dsn                        : *** Couldn't find a suitable DSN, Sentry operations will do nothing! See documentation: https://docs.sentry.io/clients/java/ ***
+2023-04-09 22:29:29.635  WARN 16468 --- [main] io.sentry.DefaultSentryClientFactory     : No 'stacktrace.app.packages' was configured, this option is highly recommended as it affects stacktrace grouping and display on Sentry. See documentation: https://docs.sentry.io/clients/java/config/#in-application-stack-frames
+2023-04-09 22:29:31.448  INFO 16468 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-04-09 22:29:31.472  INFO 16468 --- [main] c.i.dzt.app.web.DztApplicationTests      : Started DztApplicationTests in 17.388 seconds (JVM running for 18.677)
+2023-04-09 22:29:32.416  INFO 16468 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 22:29:32.422  INFO 16468 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2023-04-09 22:29:32.436  INFO 16468 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2023-04-09 22:31:29.664  INFO 4132 --- [main] c.i.dzt.app.web.DztApplicationTests      : Starting DztApplicationTests using Java 17.0.6 on LITTLEHUi-PC with PID 4132 (started by littlehui in G:\��ҵ\program\dzt\dzt-web\dzt-app-web)
+2023-04-09 22:31:29.666  INFO 4132 --- [main] c.i.dzt.app.web.DztApplicationTests      : The following profiles are active: local
+2023-04-09 22:31:32.696  INFO 4132 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 22:31:32.702  INFO 4132 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-04-09 22:31:32.765  INFO 4132 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 30 ms. Found 0 JPA repository interfaces.
+2023-04-09 22:31:32.794  INFO 4132 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 22:31:32.796  INFO 4132 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-04-09 22:31:32.854  INFO 4132 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9 ms. Found 0 Redis repository interfaces.
+2023-04-09 22:31:33.216  WARN 4132 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.idaymay.dzt.app.web]' package. Please check your configuration.
+2023-04-09 22:31:35.683  INFO 4132 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2023-04-09 22:31:36.777  INFO 4132 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-04-09 22:31:36.912  INFO 4132 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2023-04-09 22:31:37.194  INFO 4132 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-04-09 22:31:37.730  INFO 4132 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2023-04-09 22:31:38.134  INFO 4132 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-04-09 22:31:38.154  INFO 4132 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 22:31:39.321  WARN 4132 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-04-09 22:31:40.651  INFO 4132 --- [main] org.redisson.Version                     : Redisson 3.13.5
+2023-04-09 22:31:42.034  INFO 4132 --- [redisson-netty-2-30] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for /47.75.0.185:6379
+2023-04-09 22:31:42.209  INFO 4132 --- [redisson-netty-2-19] o.r.c.pool.MasterConnectionPool          : 24 connections initialized for /47.75.0.185:6379
+2023-04-09 22:31:42.484  INFO 4132 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path ''
+2023-04-09 22:31:44.793  WARN 4132 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2023-04-09 22:31:46.952  WARN 4132 --- [main] io.sentry.dsn.Dsn                        : *** Couldn't find a suitable DSN, Sentry operations will do nothing! See documentation: https://docs.sentry.io/clients/java/ ***
+2023-04-09 22:31:46.967  WARN 4132 --- [main] io.sentry.DefaultSentryClientFactory     : No 'stacktrace.app.packages' was configured, this option is highly recommended as it affects stacktrace grouping and display on Sentry. See documentation: https://docs.sentry.io/clients/java/config/#in-application-stack-frames
+2023-04-09 22:31:49.215  INFO 4132 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-04-09 22:31:49.230  INFO 4132 --- [main] c.i.dzt.app.web.DztApplicationTests      : Started DztApplicationTests in 20.25 seconds (JVM running for 21.964)
+2023-04-09 22:31:50.197  INFO 4132 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 22:31:50.200  INFO 4132 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2023-04-09 22:31:50.211  INFO 4132 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2023-04-09 22:36:53.157  INFO 21756 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : Starting IndexAppControllerTests using Java 1.8.0_101 on LITTLEHUi-PC with PID 21756 (started by littlehui in G:\创业\program\dzt\dzt-web\dzt-app-web)
+2023-04-09 22:36:53.159  INFO 21756 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : The following profiles are active: local
+2023-04-09 22:36:55.829  INFO 21756 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 22:36:55.833  INFO 21756 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-04-09 22:36:55.866  INFO 21756 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 18 ms. Found 0 JPA repository interfaces.
+2023-04-09 22:36:55.885  INFO 21756 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 22:36:55.886  INFO 21756 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-04-09 22:36:55.907  INFO 21756 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 0 Redis repository interfaces.
+2023-04-09 22:36:56.282  WARN 21756 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.idaymay.dzt.app.web]' package. Please check your configuration.
+2023-04-09 22:36:58.288  INFO 21756 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2023-04-09 22:36:59.059  INFO 21756 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-04-09 22:36:59.128  INFO 21756 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2023-04-09 22:36:59.329  INFO 21756 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-04-09 22:37:00.954  INFO 21756 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2023-04-09 22:37:01.247  INFO 21756 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-04-09 22:37:01.262  INFO 21756 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 22:37:01.950  INFO 21756 --- [main] org.redisson.Version                     : Redisson 3.13.5
+2023-04-09 22:37:06.574  INFO 21756 --- [redisson-netty-2-14] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for /47.75.0.185:6379
+2023-04-09 22:37:06.776  INFO 21756 --- [redisson-netty-2-18] o.r.c.pool.MasterConnectionPool          : 24 connections initialized for /47.75.0.185:6379
+2023-04-09 22:37:09.569  WARN 21756 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-04-09 22:37:11.076  INFO 21756 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path ''
+2023-04-09 22:37:14.150  WARN 21756 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2023-04-09 22:37:17.660  WARN 21756 --- [main] io.sentry.dsn.Dsn                        : *** Couldn't find a suitable DSN, Sentry operations will do nothing! See documentation: https://docs.sentry.io/clients/java/ ***
+2023-04-09 22:37:17.682  WARN 21756 --- [main] io.sentry.DefaultSentryClientFactory     : No 'stacktrace.app.packages' was configured, this option is highly recommended as it affects stacktrace grouping and display on Sentry. See documentation: https://docs.sentry.io/clients/java/config/#in-application-stack-frames
+2023-04-09 22:37:19.686  INFO 21756 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-04-09 22:37:19.715  INFO 21756 --- [main] c.i.d.a.w.c.IndexAppControllerTests      : Started IndexAppControllerTests in 27.294 seconds (JVM running for 29.262)
+2023-04-09 22:37:19.854  INFO 21756 --- [main] c.i.d.a.w.c.common.BaseControllerTest    : 开始测试...
+2023-04-09 22:37:19.855  INFO 21756 --- [main] c.i.d.a.w.c.common.BaseControllerTest    : 测试结束...
+2023-04-09 22:37:20.315  INFO 21756 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 22:37:20.319  INFO 21756 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2023-04-09 22:37:20.331  INFO 21756 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2023-04-09 22:38:22.791  INFO 2332 --- [main] c.i.dzt.app.web.DztApplicationTests      : Starting DztApplicationTests using Java 17.0.6 on LITTLEHUi-PC with PID 2332 (started by littlehui in G:\��ҵ\program\dzt\dzt-web\dzt-app-web)
+2023-04-09 22:38:22.795  INFO 2332 --- [main] c.i.dzt.app.web.DztApplicationTests      : The following profiles are active: local
+2023-04-09 22:38:24.678  INFO 2332 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 22:38:24.681  INFO 2332 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-04-09 22:38:24.726  INFO 2332 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 23 ms. Found 0 JPA repository interfaces.
+2023-04-09 22:38:24.749  INFO 2332 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 22:38:24.751  INFO 2332 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-04-09 22:38:24.770  INFO 2332 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 Redis repository interfaces.
+2023-04-09 22:38:25.042  WARN 2332 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.idaymay.dzt.app.web]' package. Please check your configuration.
+2023-04-09 22:38:26.642  INFO 2332 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2023-04-09 22:38:27.398  INFO 2332 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-04-09 22:38:27.515  INFO 2332 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2023-04-09 22:38:27.700  INFO 2332 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-04-09 22:38:28.116  INFO 2332 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2023-04-09 22:38:28.343  INFO 2332 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-04-09 22:38:28.352  INFO 2332 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 22:38:28.741  INFO 2332 --- [main] org.redisson.Version                     : Redisson 3.13.5
+2023-04-09 22:38:29.799  INFO 2332 --- [redisson-netty-2-17] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for /47.75.0.185:6379
+2023-04-09 22:38:29.998  INFO 2332 --- [redisson-netty-2-19] o.r.c.pool.MasterConnectionPool          : 24 connections initialized for /47.75.0.185:6379
+2023-04-09 22:38:31.671  WARN 2332 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-04-09 22:38:32.606  INFO 2332 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path ''
+2023-04-09 22:38:34.278  WARN 2332 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2023-04-09 22:38:34.753  WARN 2332 --- [main] io.sentry.dsn.Dsn                        : *** Couldn't find a suitable DSN, Sentry operations will do nothing! See documentation: https://docs.sentry.io/clients/java/ ***
+2023-04-09 22:38:34.771  WARN 2332 --- [main] io.sentry.DefaultSentryClientFactory     : No 'stacktrace.app.packages' was configured, this option is highly recommended as it affects stacktrace grouping and display on Sentry. See documentation: https://docs.sentry.io/clients/java/config/#in-application-stack-frames
+2023-04-09 22:38:36.234  INFO 2332 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-04-09 22:38:36.246  INFO 2332 --- [main] c.i.dzt.app.web.DztApplicationTests      : Started DztApplicationTests in 14.146 seconds (JVM running for 15.47)
+2023-04-09 22:38:36.943  INFO 2332 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 22:38:36.946  INFO 2332 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2023-04-09 22:38:36.954  INFO 2332 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2023-04-09 22:39:22.698  INFO 24560 --- [main] c.i.d.a.w.c.AppIndexControllerTests      : Starting AppIndexControllerTests using Java 1.8.0_101 on LITTLEHUi-PC with PID 24560 (started by littlehui in G:\创业\program\dzt\dzt-web\dzt-app-web)
+2023-04-09 22:39:22.700  INFO 24560 --- [main] c.i.d.a.w.c.AppIndexControllerTests      : The following profiles are active: local
+2023-04-09 22:39:25.088  INFO 24560 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 22:39:25.093  INFO 24560 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-04-09 22:39:25.129  INFO 24560 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17 ms. Found 0 JPA repository interfaces.
+2023-04-09 22:39:25.152  INFO 24560 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-09 22:39:25.154  INFO 24560 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-04-09 22:39:25.199  INFO 24560 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 20 ms. Found 0 Redis repository interfaces.
+2023-04-09 22:39:25.616  WARN 24560 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.idaymay.dzt.app.web]' package. Please check your configuration.
+2023-04-09 22:39:27.962  INFO 24560 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2023-04-09 22:39:28.839  INFO 24560 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-04-09 22:39:28.960  INFO 24560 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2023-04-09 22:39:29.219  INFO 24560 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-04-09 22:39:30.938  INFO 24560 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2023-04-09 22:39:31.264  INFO 24560 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-04-09 22:39:31.283  INFO 24560 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 22:39:31.938  INFO 24560 --- [main] org.redisson.Version                     : Redisson 3.13.5
+2023-04-09 22:39:36.591  INFO 24560 --- [redisson-netty-2-15] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for /47.75.0.185:6379
+2023-04-09 22:39:36.762  INFO 24560 --- [redisson-netty-2-19] o.r.c.pool.MasterConnectionPool          : 24 connections initialized for /47.75.0.185:6379
+2023-04-09 22:39:38.563  WARN 24560 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-04-09 22:39:39.650  INFO 24560 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path ''
+2023-04-09 22:39:41.631  WARN 24560 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2023-04-09 22:39:44.849  WARN 24560 --- [main] io.sentry.dsn.Dsn                        : *** Couldn't find a suitable DSN, Sentry operations will do nothing! See documentation: https://docs.sentry.io/clients/java/ ***
+2023-04-09 22:39:44.874  WARN 24560 --- [main] io.sentry.DefaultSentryClientFactory     : No 'stacktrace.app.packages' was configured, this option is highly recommended as it affects stacktrace grouping and display on Sentry. See documentation: https://docs.sentry.io/clients/java/config/#in-application-stack-frames
+2023-04-09 22:39:46.606  INFO 24560 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-04-09 22:39:46.626  INFO 24560 --- [main] c.i.d.a.w.c.AppIndexControllerTests      : Started AppIndexControllerTests in 24.668 seconds (JVM running for 26.311)
+2023-04-09 22:39:46.740  INFO 24560 --- [main] c.i.d.a.w.c.common.BaseControllerTest    : 开始测试...
+2023-04-09 22:39:46.778  INFO 24560 --- [main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2023-04-09 22:39:46.778  INFO 24560 --- [main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2023-04-09 22:39:46.779  INFO 24560 --- [main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2023-04-09 22:39:46.849  INFO 24560 --- [main] c.idaymay.dzt.app.web.config.LogAspect   : Aspect-URL: /
+Aspect-HTTP_METHOD: GET
+Aspect-IP: 10.5.150.94
+Aspect-REQUEST_METHOD: com.idaymay.dzt.app.web.controller.AppIndexController.index
+Aspect-Args: [WxTokenAuthParam(signature=d3d449072c8cde6d1b6ee738e004f86eabe28500, timestamp=1681033102, nonce=1214142239, echostr=5952339343081447358), org.springframework.mock.web.MockHttpServletRequest@797bbeae, org.springframework.mock.web.MockHttpServletResponse@1643e817]Aspect-QueryString: null
+2023-04-09 22:40:28.630  WARN 24560 --- [main] c.idaymay.dzt.app.web.config.LogAspect   : 执行时间大于5秒。Aspect-Response: 5952339343081447358
+Aspect-SpeedTime: 41786ms
+2023-04-09 22:40:28.630  INFO 24560 --- [main] c.idaymay.dzt.app.web.config.LogAspect   : Aspect-Response: 5952339343081447358
+Aspect-SpeedTime: 41786ms
+2023-04-09 22:40:28.656  INFO 24560 --- [main] c.i.d.a.w.c.common.DztAppControllerTest  : 5952339343081447358
+2023-04-09 22:40:28.660  INFO 24560 --- [main] c.i.d.a.w.c.common.BaseControllerTest    : 测试结束...
+2023-04-09 22:40:28.850  INFO 24560 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-04-09 22:40:28.853  INFO 24560 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2023-04-09 22:40:28.867  INFO 24560 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed

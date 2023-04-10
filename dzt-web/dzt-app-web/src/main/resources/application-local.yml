@@ -1,0 +1,97 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: ${local.app.datasource.url}
+    username: ${local.app.datasource.username}
+    password: ${local.app.datasource.password}
+    #name: druidDataSource
+    druid:
+      stat-view-servlet:
+        enabled: ${local.druid.view.enable}
+        login-password: ${local.druid.view.password}
+        login-username: ${local.druid.view.username}
+        url-pattern: /druid/*
+        allow:
+      filters: stat,slf4j,wall
+      max-active: 200
+      initial-size: 5
+      max-wait: 60000
+      min-idle: 1
+      time-between-eviction-runs-millis: 10000
+      min-evictable-idle-time-millis: 30000
+      max-evictable-idle-time-millis: 84000
+      validation-query: select 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+  #redis
+  redis:
+    password: ${local.app.redis.password}
+    timeout: 30M
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    port: ${local.app.redis.port}
+    host: ${local.app.redis.host}
+  #spring-session
+  session:
+    store-type: redis
+    timeout: 30M
+    redis:
+      namespace: ${cache.prefix}:${spring.config.activate.on-profile}:app:spring:session
+
+
+logging:
+  level:
+    root: INFO
+  file:
+    name: /opt/logs/prog/dzt.idaymay.com/dzt-app-web.log
+  logback:
+    rollingpolicy:
+      max-history: 7
+      max-file-size: 100MB
+management:
+  endpoint:
+    env:
+      enabled: false
+    heapdump:
+      enabled: false
+  endpoints:
+    web:
+      ##面向外网，不暴露端点
+      exposure:
+        include: health
+      path-mapping:
+        health: ping
+      base-path: /
+swagger:
+  show: true
+
+wx:
+  mp:
+    appId: wxa7434cd204ed887c
+    secret: a0b32eb930fb3902ceda2b309578abfc
+    token: 2F0A2EED6D38C6F982A88122B1B0A61C
+    aesKey: SVYlTenSegBcoG85hVFjtk8CNG52HjfyudsUg5i51c2
+    config-storage:
+      type: RedisTemplate
+      key-prefix: wx
+      redis:
+        host: 47.75.0.185
+        port: 6379
+      http-client-type: HttpClient
+      http-proxy-host:
+      http-proxy-port:
+      http-proxy-username:
+      http-proxy-password:

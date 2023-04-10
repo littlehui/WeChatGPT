@@ -1,0 +1,24 @@
+URL:https://dzt.idaymay.com
+token:2F0A2EED6D38C6F982A88122B1B0A61C
+EncodingAESKey:SVYlTenSegBcoG85hVFjtk8CNG52HjfyudsUg5i51c2
+
+
+Aspect-Args: [WxTokenAuthParam(
+signature=d3d449072c8cde6d1b6ee738e004f86eabe28500
+, timestamp=1681033102
+, nonce=1214142239
+, echostr=5952339343081447358)
+, org.apache.catalina.connector.RequestFacade@35055caa
+, org.apache.catalina.connector.ResponseFacade@dbb26c2]
+Aspect-QueryString: signature=d3d449072c8cde6d1b6ee738e004f86eabe28500&echostr=5952339343081447358&timestamp=1681033102&nonce=1214142239
+
+redis:
+47.75.0.185:6379
+littlehui888
+
+
+47.75.0.185:3306
+dzt
+dzt
+
+jar包瘦身
