@@ -74,7 +74,6 @@ public class AppIndexController {
             if (content.startsWith(ChatConstants.ANSWER_PRE)) {
                 String messageId = content.split(":")[1];
                 String answer = chatService.answerAQuestion(messageId);
-                answer = URLEncodeUtil.encodeAll(answer);
                 responseMessage.setContent(answer);
             } else {
                 //这个是响应消息内容，直接复制收到的内容做演示，甚至整个响应对象都可以直接使用原请求参数对象，只需要换下from和to就可以了哈哈哈
