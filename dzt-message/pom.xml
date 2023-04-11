@@ -18,12 +18,22 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>com.idaymay</groupId>
+            <artifactId>dzt-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.idaymay</groupId>
+            <artifactId>dzt-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>

@@ -14,6 +14,6 @@ public class OpenAiServiceTests extends BaseTestService {
 
     @Test
     public void chatTest() {
-        System.out.println(openAiService.chat("你好，你是机器人吗？"));
+        System.out.println(openAiService.chat("你好，你是机器人吗？", "littlehui"));
     }
 }

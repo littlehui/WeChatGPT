@@ -1,6 +1,9 @@
 package com.idaymay.dzt.bean.wechat;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -12,6 +15,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "xml")
 //指定Xml映射的生效范围
 @XmlAccessorType(XmlAccessType.FIELD)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class WeChatMessage {
     /**
      * 开发者微信号

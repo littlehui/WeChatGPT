@@ -2,6 +2,7 @@ package com.idaymay.dzt.app.web.controller;
 
 import com.idaymay.dzt.app.web.controller.common.DztAppContextControllerAwareTest;
 import com.idaymay.dzt.bean.param.WxTokenAuthParam;
+import com.idaymay.dzt.bean.wechat.WeChatMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
@@ -29,5 +30,17 @@ public class AppIndexControllerTests extends DztAppContextControllerAwareTest {
                 .signature("d3d449072c8cde6d1b6ee738e004f86eabe28500")
                 .build();
         get(wxTokenAuthParam, "/");
+    }
+
+    @Test
+    public void weChat() throws Exception {
+        WeChatMessage weChatMessage = WeChatMessage.builder()
+                .content("hello")
+                .createTime(System.currentTimeMillis())
+                .fromUserName("littlehui")
+                .toUserName("littlehui")
+                .build();
+        post(weChatMessage, "/wechat");
+        Thread.sleep(10000);
     }
 }

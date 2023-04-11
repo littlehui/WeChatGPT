@@ -209,6 +209,11 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-cas</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>org.apache.skywalking</groupId>
@@ -280,7 +285,7 @@
 
 
             <!-- 3、将所有依赖的jar文件复制到target/lib目录 -->
-            <plugin>
+  <!--          <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
@@ -291,7 +296,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <!--复制到哪个路径，${project.build.directory} 缺醒为 target，其他内置参数见下面解释-->
+                            &lt;!&ndash;复制到哪个路径，${project.build.directory} 缺醒为 target，其他内置参数见下面解释&ndash;&gt;
                             <outputDirectory>${project.build.directory}/lib</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
@@ -300,7 +305,7 @@
                     </execution>
                 </executions>
             </plugin>
-
+-->
         </plugins>
         <resources>
             <resource>

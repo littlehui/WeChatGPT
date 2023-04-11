@@ -36,14 +36,13 @@ spring:
   redis:
     password: ${local.app.redis.password}
     timeout: 30M
-    jedis:
-      pool:
-        max-active: 8
-        max-wait: -1
-        max-idle: 8
-        min-idle: 0
     port: ${local.app.redis.port}
     host: ${local.app.redis.host}
+    lettuce:
+      pool:
+        max-active: 4
+        min-idle: 0
+        max-idle: 4
   #spring-session
   session:
     store-type: redis
@@ -90,6 +89,9 @@ wx:
       redis:
         host: 47.75.0.185
         port: 6379
+        min-idle: 0
+        maxActive: 4
+        max-idle: 4
       http-client-type: HttpClient
       http-proxy-host:
       http-proxy-port:

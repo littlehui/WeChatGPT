@@ -1,7 +1,7 @@
 package com.idaymay.dzt.app.web.service;
 
 import com.idaymay.dzt.app.web.service.common.BaseTestService;
-import com.idaymay.dzt.message.redis.RedisMessagePublisher;
+import com.idaymay.dzt.service.impl.RedisMessagePublisher;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
 

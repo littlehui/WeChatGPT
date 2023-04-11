@@ -1,4 +1,4 @@
-package com.idaymay.dzt.message.redis;
+package com.idaymay.dzt.service.constant;
 
 /**
  * TODO
