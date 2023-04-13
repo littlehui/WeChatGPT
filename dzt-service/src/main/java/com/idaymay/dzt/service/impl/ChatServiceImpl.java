@@ -60,9 +60,25 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public String answerAQuestion(String messageId) {
         AnswerCache answerCache = answerCacheRepository.getAnswerByMessageId(messageId);
+        String currentAnswerSegment = ChatConstants.DEFAULT_ANSWER;
         if (answerCache != null) {
-            return answerCache.getAnswer();
+            if (answerCache.getAnswerTimeMills() != null) {
+                //已经回答
+                if (answerCache.getAnswerSegment() != null && answerCache.getAnswerSegment().size() > 0) {
+                    Integer currentSegment = answerCache.getCurrentSegment();
+                    Integer segmentCount = answerCache.getAnswerSegment().size();
+                    currentAnswerSegment = answerCache.getAnswerSegment().get(currentSegment);
+                    Integer preSegment = currentSegment + 1;
+                    if (preSegment >= segmentCount) {
+                        preSegment = 0;
+                    }
+                    answerCache.setCurrentSegment(preSegment);
+                }
+                answerCacheRepository.saveAnswer(answerCache);
+            } else {
+                currentAnswerSegment = answerCache.getAnswer();
+            }
         }
-        return ChatConstants.DEFAULT_ANSWER;
+        return currentAnswerSegment;
     }
 }

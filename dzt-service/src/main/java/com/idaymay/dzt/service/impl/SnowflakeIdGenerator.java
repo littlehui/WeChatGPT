@@ -1,5 +1,6 @@
 package com.idaymay.dzt.service.impl;
 
+import com.idaymay.dzt.service.constant.ChatConstants;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,7 +128,7 @@ public class SnowflakeIdGenerator {
     }
 
     public String generaMessageId() {
-        return nextId() + "";
+        return ChatConstants.QUESTION_ID_PRE + nextId();
     }
 
     public long incr(String key, long delta) {

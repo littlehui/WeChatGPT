@@ -48,4 +48,18 @@ public class StringUtil {
     public static String filterRegexChar(String s) {
         return s;
     }
+
+    public static String[] foldString(String str, int len) {
+        int strLen = str.length();
+        int arrLen = (int) Math.ceil((double) strLen / len);
+        String[] result = new String[arrLen];
+        int startPos = 0;
+        for (int i = 0; i < arrLen; i++) {
+            int endPos = Math.min(startPos + len, strLen);
+            result[i] = str.substring(startPos, endPos);
+            startPos += len;
+        }
+        return result;
+    }
+
 }

@@ -18,14 +18,18 @@ import io.swagger.v3.oas.models.OpenAPI;
 import jodd.net.HtmlEncoder;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Base64Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.util.DecodeUtils;
 import org.springframework.http.MediaType;
+import org.springframework.util.Base64Utils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
+import java.util.Base64;
 
 @RestController
 @Api(value = "微信公众号", tags = "微信公众号")
@@ -72,7 +76,7 @@ public class AppIndexController {
         responseMessage.setCreateTime(System.currentTimeMillis());
         try {
             if (content.startsWith(ChatConstants.ANSWER_PRE)) {
-                String messageId = content.split(":")[1];
+                String messageId = content;
                 String answer = chatService.answerAQuestion(messageId);
                 responseMessage.setContent(answer);
             } else {

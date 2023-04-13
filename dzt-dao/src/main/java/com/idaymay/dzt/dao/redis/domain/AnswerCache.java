@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * TODO
@@ -31,4 +32,8 @@ public class AnswerCache implements Serializable {
     private Long askTimeMills;
 
     private Long answerTimeMills;
+
+    private List<String> answerSegment;
+
+    private Integer currentSegment;
 }
