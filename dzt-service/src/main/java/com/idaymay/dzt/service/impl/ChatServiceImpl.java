@@ -132,7 +132,7 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
         } catch (ExecutionException e) {
             log.error("{}", e);
         }
-        return null;
+        return ChatConstants.THINKING;
     }
 
     private Message completionAnswer(ChatCompletionResponse response) {
