@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.*;
 
 /**
  * TODO
@@ -62,6 +63,9 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
 
     @Autowired
     OpenAiConfigSupport openAiConfigSupport;
+
+    ThreadPoolExecutor chatThreadPool = new ThreadPoolExecutor(1, 1, 20, TimeUnit.SECONDS, new ArrayBlockingQueue(1000),
+            new ThreadPoolExecutor.CallerRunsPolicy());
 
     @Override
     public String askAQuestion(String question, String user) {
@@ -108,14 +112,20 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
 
     @Override
     public String chat(QuestionDTO questionDTO) {
-        ChatCompletion chatCompletion = new ChatCompletion();
-        chatCompletion.setMessages(makeChatMessages(questionDTO));
-        ChatCompletionResponse response = openAiClient.chatCompletion(chatCompletion);
-        log.info("chat response:{}", response);
-        Message answerMessage = completionAnswer(response);
-        saveChatMessageToCache(questionDTO, answerMessage);
-        log.info("question {}, answered!", questionDTO.getMessageId());
-        return answerMessage.getContent();
+        Future<String> content = chatThreadPool.submit(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                ChatCompletion chatCompletion = new ChatCompletion();
+                chatCompletion.setMessages(makeChatMessages(questionDTO));
+                ChatCompletionResponse response = openAiClient.chatCompletion(chatCompletion);
+                log.info("chat response:{}", response);
+                Message answerMessage = completionAnswer(response);
+                saveChatMessageToCache(questionDTO, answerMessage);
+                log.info("question {}, answered!", questionDTO.getMessageId());
+                return answerMessage.getContent();
+            }
+        });
+        return content.get();
     }
 
     private Message completionAnswer(ChatCompletionResponse response) {
