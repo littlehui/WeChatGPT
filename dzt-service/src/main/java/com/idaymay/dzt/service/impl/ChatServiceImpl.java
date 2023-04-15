@@ -128,9 +128,9 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
         try {
             return content.get();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error("{}", e);
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            log.error("{}", e);
         }
         return null;
     }
