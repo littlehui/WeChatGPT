@@ -1,5 +1,7 @@
 package com.idaymay.dzt.service;
 
+import com.idaymay.dzt.bean.dto.QuestionDTO;
+
 /**
  * TODO
  *
@@ -27,4 +29,13 @@ public interface ChatService {
     * @return java.lang.String
     */
    public String answerAQuestion(String messageId);
+
+   /**
+    * 包含上下文
+    * @param questionDTO
+    * @author littlehui
+    * @date 2023/4/16 01:36
+    * @return java.lang.String
+    */
+   public String chat(QuestionDTO questionDTO);
 }

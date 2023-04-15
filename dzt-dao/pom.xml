@@ -57,6 +57,11 @@
             <artifactId>mybatis-plus-core</artifactId>
             <version>3.5.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.idaymay</groupId>
+            <artifactId>dzt-bean</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

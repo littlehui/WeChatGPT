@@ -1,5 +1,6 @@
 package com.idaymay.dzt.dao.redis.repository;
 
+import com.idaymay.dzt.bean.constant.ChatConstants;
 import com.idaymay.dzt.dao.redis.AbstractBaseRedisDAO;
 import com.idaymay.dzt.dao.redis.domain.AnswerCache;
 import org.springframework.stereotype.Repository;
@@ -30,7 +31,7 @@ public class AnswerCacheRepository extends AbstractBaseRedisDAO<AnswerCache> {
 
     public AnswerCache initAnswer(String messageId, String question, String user) {
         AnswerCache answerCache = AnswerCache.builder()
-                .answer("解答中，请稍后！")
+                .answer(ChatConstants.THINKING)
                 .askTimeMills(System.currentTimeMillis())
                 .name(user)
                 .question(question)

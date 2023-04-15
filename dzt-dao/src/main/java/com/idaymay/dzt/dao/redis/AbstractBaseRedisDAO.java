@@ -8,10 +8,6 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by mac on 15/4/22.
- */
-
 public abstract class AbstractBaseRedisDAO<T> {
 
     @Autowired
@@ -34,82 +30,88 @@ public abstract class AbstractBaseRedisDAO<T> {
         return redisTemplate.getDefaultSerializer();
     }
 
+    ValueOperations<String, T> valueOperator;
 
-    ValueOperations<String, T> valueOper;
-    ValueOperations<String, Collection<T>> collectionOper;
-    ListOperations<String, T> listOper;
-    SetOperations<String, T> setOperater;
-    HashOperations<String, String, T> hashOperater;
+    ValueOperations<String, Collection<T>> collectionOperator;
+
+    ListOperations<String, T> listOperator;
+
+    SetOperations<String, T> setOperator;
+
+
+
+    HashOperations<String, String, T> hashOperator;
+
     public AbstractBaseRedisDAO() {
     }
 
     @PostConstruct
     public void init() {
-        valueOper = redisTemplate.opsForValue();
-        collectionOper = redisTemplate.opsForValue();
-        listOper = redisTemplate.opsForList();
-        setOperater = redisTemplate.opsForSet();
-        hashOperater = redisTemplate.opsForHash();
+        valueOperator = redisTemplate.opsForValue();
+        collectionOperator = redisTemplate.opsForValue();
+        listOperator = redisTemplate.opsForList();
+        setOperator = redisTemplate.opsForSet();
+        hashOperator = redisTemplate.opsForHash();
     }
 
     protected String zone;
 
     public void save(String key, String hkey, T data) {
-        hashOperater.put(key, hkey, data);
+        hashOperator.put(key, hkey, data);
     }
 
     public Long incrementInHash(String key, String hkey, Long incrCount, Long timeOutSeconds) {
-        Long count = hashOperater.increment(zone + key, hkey, incrCount);
+        Long count = hashOperator.increment(zone + key, hkey, incrCount);
         redisTemplate.expire(zone + key, timeOutSeconds, TimeUnit.SECONDS);
         return count;
     }
 
     public Map<String, T> getHash(String key) {
-        return hashOperater.entries(zone + key);
+        return hashOperator.entries(zone + key);
     }
 
     public void save(String key, T data) {
-        valueOper.set(zone + key, data);
+        valueOperator.set(zone + key, data);
     }
 
     public void save(String key, T data, long timeStamp) {
-        valueOper.set(zone + key, data, timeStamp, TimeUnit.MILLISECONDS);
+        valueOperator.set(zone + key, data, timeStamp, TimeUnit.MILLISECONDS);
     }
 
     public void listLeftPush(String key, T data) {
-        listOper.leftPush(zone + key, data);
+        listOperator.leftPush(zone + key, data);
     }
 
     public void saveCollection(String key, Collection<T> datas) {
-        collectionOper.set(zone + "collection:" + key, datas);
+        collectionOperator.set(zone + "collection:" + key, datas);
     }
 
     public void saveCollection(String key, Collection<T> datas, long timeStamp) {
-        collectionOper.set(zone + "collection:" + key, datas, timeStamp, TimeUnit.MILLISECONDS);
+        collectionOperator.set(zone + "collection:" + key, datas, timeStamp, TimeUnit.MILLISECONDS);
     }
 
     public Collection<T> getCollection(String key) {
-        return collectionOper.get(zone + "collection:" + key);
+        return collectionOperator.get(zone + "collection:" + key);
     }
 
     public void listRightPush(String key, T data) {
-        listOper.rightPush(zone + "list:" + key, data);
+        listOperator.rightPush(zone + "list:" + key, data);
     }
 
     public Long getListSize(String key) {
-        return listOper.size(zone + "list:" + key);
+        return listOperator.size(zone + "list:" + key);
     }
 
     public T get(String key) {
-        return valueOper.get(zone + key);
+        return valueOperator.get(zone + key);
     }
 
     public T listLeftPop(String key) {
-        return listOper.leftPop(zone + "list:" + key);
+        return listOperator.leftPop(zone + "list:" + key);
     }
 
     public T listRightPop(String key) {
-        return listOper.rightPop(zone + "list:" + key);
+        return listOperator.rightPop(zone + "list:" + key);
     }
 
     public void delete(String key) {
@@ -150,43 +152,43 @@ public abstract class AbstractBaseRedisDAO<T> {
     }
 
     public List<T> lRangeAll(String key) {
-        return listOper.range(zone + key, 0, -1);
+        return listOperator.range(zone + key, 0, -1);
     }
 
     public List<T> lRangeSize(String key, Integer size) {
-        return listOper.range(zone + key, 0, size - 1);
+        return listOperator.range(zone + key, 0, size - 1);
     }
 
     public T leftPop(String key) {
-        return listOper.leftPop(zone + key);
+        return listOperator.leftPop(zone + key);
     }
 
     public T rightPop(String key) {
-        return listOper.rightPop(zone + key);
+        return listOperator.rightPop(zone + key);
     }
 
     public void leftPush(String key, T data) {
-        this.listOper.leftPush(zone + key, data);
+        this.listOperator.leftPush(zone + key, data);
     }
 
     public void rightPush(String key, T data) {
-        this.listOper.rightPush(zone + key, data);
+        this.listOperator.rightPush(zone + key, data);
     }
+
     public void setAdd(String key, T data) {
-        setOperater.add(zone + key, data);
+        setOperator.add(zone + key, data);
     }
 
     protected Long setMemberSize(String key) {
-        return setOperater.size(zone + key);
+        return setOperator.size(zone + key);
     }
 
-
     public Set<T> setGet(String key) {
-        return setOperater.members(zone + key);
+        return setOperator.members(zone + key);
     }
 
     public Long removeSet(String key, T data) {
-        Long result = setOperater.remove(zone + key, data);
+        Long result = setOperator.remove(zone + key, data);
         return result;
     }
 

@@ -3,11 +3,7 @@ package com.idaymay.dzt.app.web.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.idaymay.dzt.bean.dto.QuestionDTO;
-import com.idaymay.dzt.message.redis.QuestionMessageListener;
-import com.idaymay.dzt.service.constant.MessageConstant;
 import org.redisson.Redisson;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +16,6 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 /**

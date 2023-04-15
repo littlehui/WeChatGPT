@@ -100,3 +100,4 @@ wx:
 config:
   openai:
     apiKey: ${local.app.config.openai.apikey}
+    associationCount: ${local.app.config.openai.associationCount}

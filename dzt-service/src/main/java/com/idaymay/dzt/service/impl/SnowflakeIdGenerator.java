@@ -1,6 +1,6 @@
 package com.idaymay.dzt.service.impl;
 
-import com.idaymay.dzt.service.constant.ChatConstants;
+import com.idaymay.dzt.bean.constant.ChatConstants;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

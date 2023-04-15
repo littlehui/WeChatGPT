@@ -31,6 +31,10 @@ public class OpenAiConfig implements OpenAiConfigSupport {
     @Setter
     private String apiKey;
 
+    @Getter
+    @Setter
+    private Long associationCount;
+
     @PostConstruct
     public void openAiConfigCreated() {
         log.info("openAiConfig created!");

@@ -1,4 +1,4 @@
-package com.idaymay.dzt.service.constant;
+package com.idaymay.dzt.bean.constant;
 
 /**
  * TODO
@@ -10,6 +10,8 @@ package com.idaymay.dzt.service.constant;
 public class ChatConstants {
 
    public static final String DEFAULT_ANSWER = "请先提问吧！";
+
+   public static final String THINKING = "思考中，请稍后！";
 
    public static final String ANSWER_PRE = "QUESTION";
 

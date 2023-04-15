@@ -1,4 +1,4 @@
-package com.idaymay.dzt.dao.redis.queue;
+package com.idaymay.dzt.dao.redis.optype;
 
 import com.idaymay.dzt.dao.redis.AbstractBaseRedisDAO;
 
@@ -14,12 +14,11 @@ import java.util.List;
  **/
 public class BaseRedisQueue<T> extends AbstractBaseRedisDAO<T> {
 
-
     public String adderQueue;
 
     public BaseRedisQueue() {
         this.zone = "queue:";
-        adderQueue = "reader:";
+        adderQueue = "adder:";
     }
 
     public void pushItem(String key, T t) {

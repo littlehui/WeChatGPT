@@ -1,11 +1,8 @@
 package com.idaymay.dzt.service.impl;
 
-import com.idaymay.dzt.bean.dto.QuestionDTO;
+import com.idaymay.dzt.bean.constant.MessageConstant;
 import com.idaymay.dzt.service.MessagePublisher;
-import com.idaymay.dzt.service.constant.MessageConstant;
 import org.redisson.Redisson;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

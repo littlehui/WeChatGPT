@@ -1,4 +1,4 @@
-package com.idaymay.dzt.service.constant;
+package com.idaymay.dzt.bean.constant;
 
 /**
  * TODO

@@ -1,19 +1,33 @@
 package com.idaymay.dzt.service.impl;
 
+import com.idaymay.dzt.bean.constant.ChatConstants;
 import com.idaymay.dzt.bean.dto.QuestionDTO;
+import com.idaymay.dzt.bean.openai.OpenAiConfigSupport;
 import com.idaymay.dzt.common.utils.string.StringUtil;
 import com.idaymay.dzt.dao.redis.domain.AnswerCache;
+import com.idaymay.dzt.dao.redis.domain.ChatMessageCache;
 import com.idaymay.dzt.dao.redis.domain.QuestionCache;
 import com.idaymay.dzt.dao.redis.repository.AnswerCacheRepository;
+import com.idaymay.dzt.dao.redis.repository.ChatMessageRepository;
 import com.idaymay.dzt.dao.redis.repository.QuestionCacheRepository;
 import com.idaymay.dzt.service.ChatService;
 import com.idaymay.dzt.service.MessagePublisher;
-import com.idaymay.dzt.service.constant.ChatConstants;
+import com.unfbx.chatgpt.OpenAiClient;
+import com.unfbx.chatgpt.entity.chat.ChatChoice;
+import com.unfbx.chatgpt.entity.chat.ChatCompletion;
+import com.unfbx.chatgpt.entity.chat.ChatCompletionResponse;
+import com.unfbx.chatgpt.entity.chat.Message;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * TODO
@@ -23,7 +37,10 @@ import javax.annotation.Resource;
  * @date 2023/04/11 21:26
  */
 @Service
-public class ChatServiceImpl implements ChatService {
+@Slf4j
+public class ChatServiceImpl implements ChatService, ApplicationContextAware {
+
+    private ApplicationContext context;
 
     @Autowired
     AnswerCacheRepository answerCacheRepository;
@@ -37,8 +54,14 @@ public class ChatServiceImpl implements ChatService {
     @Autowired
     MessagePublisher messagePublisher;
 
-    @Resource
-    Jackson2JsonRedisSerializer<QuestionDTO> jackson2JsonRedisSerializer;
+    @Autowired
+    OpenAiClient openAiClient;
+
+    @Autowired
+    ChatMessageRepository chatMessageRepository;
+
+    @Autowired
+    OpenAiConfigSupport openAiConfigSupport;
 
     @Override
     public String askAQuestion(String question, String user) {
@@ -74,11 +97,108 @@ public class ChatServiceImpl implements ChatService {
                     }
                     answerCache.setCurrentSegment(preSegment);
                 }
+                //更新一下阅读的分页点
                 answerCacheRepository.saveAnswer(answerCache);
             } else {
                 currentAnswerSegment = answerCache.getAnswer();
             }
         }
         return currentAnswerSegment;
+    }
+
+    @Override
+    public String chat(QuestionDTO questionDTO) {
+        ChatCompletion chatCompletion = new ChatCompletion();
+        chatCompletion.setMessages(makeChatMessages(questionDTO));
+        ChatCompletionResponse response = openAiClient.chatCompletion(chatCompletion);
+        log.info("chat response:{}", response);
+        Message answerMessage = completionAnswer(response);
+        saveChatMessageToCache(questionDTO, answerMessage);
+        log.info("question {}, answered!", questionDTO.getMessageId());
+        return answerMessage.getContent();
+    }
+
+    private Message completionAnswer(ChatCompletionResponse response) {
+        Message answerMessage = Message.builder()
+                .role(Message.Role.ASSISTANT)
+                .content(ChatConstants.THINKING)
+                .build();
+        if (response != null && response.getChoices() != null && response.getChoices().size() > 0) {
+            ChatChoice choice = response.getChoices().get(0);
+            log.info("choice != null");
+            if (choice.getMessage() != null) {
+                answerMessage = choice.getMessage();
+            } else {
+                log.warn("answer message is null");
+            }
+        } else {
+            log.info("choice is null");
+        }
+        return answerMessage;
+    }
+
+    private List<Message> makeChatMessages(QuestionDTO questionDTO) {
+        OpenAiConfigSupport openAiConfigSupport = context.getBean(OpenAiConfigSupport.class);
+        Long associationCount = openAiConfigSupport.getAssociationCount();
+        Set<ChatMessageCache> chatMessageCaches = chatMessageRepository.top(questionDTO.getUser(), associationCount);
+        List<Message> messages = new ArrayList<>();
+        List<Message> historyMessages = new ArrayList<>();
+        for (ChatMessageCache chatMessageCache : chatMessageCaches) {
+            historyMessages.add(messageCacheToMessage(chatMessageCache));
+        }
+        Message currentMessage = Message.builder()
+                .content(questionDTO.getQuestion())
+                .name(questionDTO.getUser())
+                .role(Message.Role.USER)
+                .build();
+        messages.addAll(historyMessages);
+        messages.add(currentMessage);
+        return messages;
+    }
+
+    private Message messageCacheToMessage(ChatMessageCache messageCache) {
+        return Message.builder()
+                .content(messageCache.getContent())
+                .name(messageCache.getName())
+                .role(Message.Role.valueOf(messageCache.getRole()))
+                .build();
+    }
+
+    private ChatMessageCache messageToMessageCache(Message message) {
+        return ChatMessageCache.builder()
+                .content(message.getContent())
+                .name(message.getName())
+                .createTimeMills(System.currentTimeMillis())
+                .role(message.getRole())
+                .build();
+    }
+
+    private void saveChatMessageToCache(QuestionDTO questionDTO, Message answerMessage) {
+        String answerContent = answerMessage.getContent();
+        AnswerCache answerCache = AnswerCache.builder()
+                .answer(answerContent)
+                .messageId(questionDTO.getMessageId())
+                .question(questionDTO.getQuestion())
+                .askTimeMills(questionDTO.getAskTimeMills())
+                .answerTimeMills(System.currentTimeMillis())
+                .name(answerMessage.getName())
+                .answerSegment(Arrays.asList(StringUtil.foldString(answerContent, 500)))
+                .currentSegment(0)
+                .build();
+        ChatMessageCache answerMessageCache = messageToMessageCache(answerMessage);
+        ChatMessageCache questionMessageCache = ChatMessageCache.builder()
+                .content(questionDTO.getQuestion())
+                .name(questionDTO.getUser())
+                .role(Message.Role.USER.getName())
+                .createTimeMills(questionDTO.getAskTimeMills())
+                .build();
+        answerCacheRepository.saveAnswer(answerCache);
+        chatMessageRepository.add(questionDTO.getUser(), questionMessageCache);
+        chatMessageRepository.add(questionDTO.getUser(), answerMessageCache);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.context = applicationContext;
     }
 }

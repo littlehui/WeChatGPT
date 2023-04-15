@@ -1,6 +1,6 @@
 package com.idaymay.dzt.app.web.controller;
 
-import cn.hutool.core.net.URLEncodeUtil;
+import com.idaymay.dzt.bean.dto.QuestionDTO;
 import com.idaymay.dzt.bean.param.WxTokenAuthParam;
 import com.idaymay.dzt.bean.wechat.WeChatMessage;
 import com.idaymay.dzt.common.ajax.Response;
@@ -9,27 +9,19 @@ import com.idaymay.dzt.common.constants.ApiVersionConstant;
 import com.idaymay.dzt.common.exception.BusinessException;
 import com.idaymay.dzt.common.swagger.ApiVersion;
 import com.idaymay.dzt.service.ChatService;
-import com.idaymay.dzt.service.IndexService;
-import com.idaymay.dzt.service.OpenAiService;
-import com.idaymay.dzt.service.constant.ChatConstants;
+import com.idaymay.dzt.service.CheckService;
+import com.idaymay.dzt.bean.constant.ChatConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.models.OpenAPI;
-import jodd.net.HtmlEncoder;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Base64Util;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.util.DecodeUtils;
 import org.springframework.http.MediaType;
-import org.springframework.util.Base64Utils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.URLEncoder;
-import java.util.Base64;
 
 @RestController
 @Api(value = "微信公众号", tags = "微信公众号")
@@ -39,20 +31,17 @@ import java.util.Base64;
 public class AppIndexController {
 
     @Autowired
-    IndexService indexService;
+    CheckService checkService;
 
     @Autowired
     ChatService chatService;
-
-    @Autowired
-    OpenAiService openAiService;
 
     @GetMapping(value = "/wechat", produces = MediaType.TEXT_PLAIN_VALUE)
     @ApiOperation(value = "微信公众号推送数据接口", produces = MediaType.TEXT_PLAIN_VALUE)
     @ApiVersion(group = ApiVersionConstant.FAP_APP010)
     @ResponseBody
     public String check(WxTokenAuthParam wxTokenAuthParam, HttpServletRequest httpServletRequest, HttpServletResponse response) throws BusinessException {
-        return indexService.checkIndexSign(wxTokenAuthParam);
+        return checkService.checkIndexSign(wxTokenAuthParam);
     }
 
     @PostMapping(value = "/wechat", produces = MediaType.APPLICATION_XML_VALUE)
@@ -86,7 +75,6 @@ public class AppIndexController {
         } catch (Exception e) {
             responseMessage.setContent("");
         }
-
         return responseMessage;
     }
 
@@ -94,9 +82,9 @@ public class AppIndexController {
     @ApiOperation(value = "chatGpt提问接口", produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @ApiVersion(group = ApiVersionConstant.FAP_APP010)
     @ResponseBody
-    public Response<String> gpt(String question, HttpServletRequest httpServletRequest, HttpServletResponse response) throws BusinessException {
+    public Response<String> gpt(QuestionDTO question, HttpServletRequest httpServletRequest, HttpServletResponse response) throws BusinessException {
         log.info("messge 接收到：{}", question);
-        String answer = openAiService.chat(question, "littlehui");
+        String answer = chatService.chat(question);
         return ResponseFactory.success(answer);
     }
 }

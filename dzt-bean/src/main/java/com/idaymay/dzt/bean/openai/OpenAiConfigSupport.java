@@ -10,4 +10,6 @@ package com.idaymay.dzt.bean.openai;
 public interface OpenAiConfigSupport {
 
     public String getApiKey();
+
+    public Long getAssociationCount();
 }
