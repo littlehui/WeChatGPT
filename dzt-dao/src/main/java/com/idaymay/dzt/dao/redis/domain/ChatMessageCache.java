@@ -29,6 +29,8 @@ public class ChatMessageCache implements SortScore {
 
     private Long createTimeMills;
 
+    private Double score;
+
     @Override
     public double getScore() {
         return createTimeMills - timeMillsBend;
