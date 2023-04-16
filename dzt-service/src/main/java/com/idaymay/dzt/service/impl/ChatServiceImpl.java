@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
+import retrofit2.HttpException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,7 +62,6 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
     @Autowired
     ChatMessageRepository chatMessageRepository;
 
-    @Autowired
     OpenAiConfigSupport openAiConfigSupport;
 
     ThreadPoolExecutor chatThreadPool = new ThreadPoolExecutor(1, 1, 20, TimeUnit.SECONDS, new ArrayBlockingQueue(1000),
@@ -111,12 +111,12 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
     }
 
     @Override
-    public String chat(QuestionDTO questionDTO) {
+    public String chat(QuestionDTO questionDTO, Long associationRound) {
         Future<String> content = chatThreadPool.submit(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 ChatCompletion chatCompletion = new ChatCompletion();
-                chatCompletion.setMessages(makeChatMessages(questionDTO));
+                chatCompletion.setMessages(makeChatMessages(questionDTO, associationRound));
                 ChatCompletionResponse response = openAiClient.chatCompletion(chatCompletion);
                 log.info("chat response:{}", response);
                 Message answerMessage = completionAnswer(response);
@@ -130,9 +130,21 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
         } catch (InterruptedException e) {
             log.error("{}", e);
         } catch (ExecutionException e) {
+            if (e.getCause() != null && e.getCause() instanceof HttpException) {
+                log.warn("请求到openapi发生错误，可能是http 400,exception:{}", ((HttpException) e.getCause()).message());
+                log.warn("上下文太多自动去掉一个重试！");
+                chat(questionDTO, openAiConfigSupport.getAssociationRound() - 1);
+            }
             log.error("{}", e);
         }
         return ChatConstants.THINKING;
+    }
+
+    @Override
+    public String chat(QuestionDTO questionDTO) {
+        OpenAiConfigSupport openAiConfigSupport = context.getBean(OpenAiConfigSupport.class);
+        Long associationRound = openAiConfigSupport.getAssociationRound();
+        return chat(questionDTO, associationRound);
     }
 
     private Message completionAnswer(ChatCompletionResponse response) {
@@ -154,10 +166,8 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
         return answerMessage;
     }
 
-    private List<Message> makeChatMessages(QuestionDTO questionDTO) {
-        OpenAiConfigSupport openAiConfigSupport = context.getBean(OpenAiConfigSupport.class);
-        Long associationCount = openAiConfigSupport.getAssociationRound();
-        Set<ChatMessageCache> chatMessageCaches = chatMessageRepository.latest(questionDTO.getUser(), associationCount * 2);
+    private List<Message> makeChatMessages(QuestionDTO questionDTO, Long associationRound) {
+        Set<ChatMessageCache> chatMessageCaches = chatMessageRepository.latest(questionDTO.getUser(), associationRound * 2);
         List<Message> messages = new ArrayList<>();
         List<Message> historyMessages = new ArrayList<>();
         for (ChatMessageCache chatMessageCache : chatMessageCaches) {
@@ -219,5 +229,6 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.context = applicationContext;
+        openAiConfigSupport = context.getBean(OpenAiConfigSupport.class);
     }
 }

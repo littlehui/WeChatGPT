@@ -33,9 +33,20 @@ public interface ChatService {
    /**
     * 包含上下文
     * @param questionDTO
+    * @param associationRound
     * @author littlehui
     * @date 2023/4/16 01:36
     * @return java.lang.String
     */
+   public String chat(QuestionDTO questionDTO, Long associationRound);
+
+   /**
+    * 默认上下文聊天方式
+    * @param questionDTO
+    * @author littlehui
+    * @date 2023/4/16 18:49
+    * @return java.lang.String
+    */
    public String chat(QuestionDTO questionDTO);
+
 }
