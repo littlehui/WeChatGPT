@@ -24,6 +24,8 @@ public class BaseRedisZSet<T extends SortScore> {
 
     public String zone;
 
+    private static final Integer MAX_SIZE = 10;
+
     public BaseRedisZSet() {
         this.zone = "SortSet:";
     }
@@ -34,7 +36,15 @@ public class BaseRedisZSet<T extends SortScore> {
     }
 
     public Boolean add(String key, T t) {
-        return operator.add(getKey(key), t, t.getScore());
+        Boolean addResult = operator.add(getKey(key), t, t.getScore());
+        removeIfNeed(key);
+        return addResult;
+    }
+
+    private void removeIfNeed(String key) {
+        if (operator.zCard(getKey(key)) > MAX_SIZE) {
+            operator.removeRange(getKey(key), 0, (operator.zCard(getKey(key)) - MAX_SIZE) - 1);
+        }
     }
 
     public Long remove(String key, T t) {
@@ -45,7 +55,7 @@ public class BaseRedisZSet<T extends SortScore> {
         return operator.randomMember(getKey(key));
     }
 
-    public Set<T> top(String key, Long topNum) {
+    public Set<T> reverseRange(String key, Long topNum) {
         Long totalNum = operator.size(getKey(key));
         if (totalNum.intValue() == 0) {
             return Collections.emptySet();

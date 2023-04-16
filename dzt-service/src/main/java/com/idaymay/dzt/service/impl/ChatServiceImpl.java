@@ -157,7 +157,7 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
     private List<Message> makeChatMessages(QuestionDTO questionDTO) {
         OpenAiConfigSupport openAiConfigSupport = context.getBean(OpenAiConfigSupport.class);
         Long associationCount = openAiConfigSupport.getAssociationRound();
-        Set<ChatMessageCache> chatMessageCaches = chatMessageRepository.top(questionDTO.getUser(), associationCount * 2);
+        Set<ChatMessageCache> chatMessageCaches = chatMessageRepository.latest(questionDTO.getUser(), associationCount * 2);
         List<Message> messages = new ArrayList<>();
         List<Message> historyMessages = new ArrayList<>();
         for (ChatMessageCache chatMessageCache : chatMessageCaches) {

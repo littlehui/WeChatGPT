@@ -4,6 +4,10 @@ import com.idaymay.dzt.dao.redis.domain.ChatMessageCache;
 import com.idaymay.dzt.dao.redis.optype.BaseRedisZSet;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 /**
  * TODO
  *
@@ -17,5 +21,10 @@ public class ChatMessageRepository extends BaseRedisZSet<ChatMessageCache> {
     public ChatMessageRepository() {
         super();
         this.zone += "ChatMessage:";
+    }
+
+    public Set<ChatMessageCache> latest(String user, Long topNum) {
+        Set<ChatMessageCache> latestChatMessage = reverseRange(user, topNum);
+        return latestChatMessage;
     }
 }
