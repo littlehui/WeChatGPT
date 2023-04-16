@@ -33,7 +33,7 @@ public class OpenAiConfig implements OpenAiConfigSupport {
 
     @Getter
     @Setter
-    private Long associationCount;
+    private Long associationRound;
 
     @PostConstruct
     public void openAiConfigCreated() {

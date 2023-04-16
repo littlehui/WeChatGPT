@@ -156,8 +156,8 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
 
     private List<Message> makeChatMessages(QuestionDTO questionDTO) {
         OpenAiConfigSupport openAiConfigSupport = context.getBean(OpenAiConfigSupport.class);
-        Long associationCount = openAiConfigSupport.getAssociationCount();
-        Set<ChatMessageCache> chatMessageCaches = chatMessageRepository.top(questionDTO.getUser(), associationCount);
+        Long associationCount = openAiConfigSupport.getAssociationRound();
+        Set<ChatMessageCache> chatMessageCaches = chatMessageRepository.top(questionDTO.getUser(), associationCount * 2);
         List<Message> messages = new ArrayList<>();
         List<Message> historyMessages = new ArrayList<>();
         for (ChatMessageCache chatMessageCache : chatMessageCaches) {
@@ -177,7 +177,9 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
         return Message.builder()
                 .content(messageCache.getContent())
                 .name(messageCache.getName())
-                .role(Message.Role.valueOf(messageCache.getRole()))
+                .role(messageCache.getRole() != null
+                        ? Message.Role.valueOf(messageCache.getRole().toUpperCase())
+                        : null)
                 .build();
     }
 
@@ -206,7 +208,7 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
         ChatMessageCache questionMessageCache = ChatMessageCache.builder()
                 .content(questionDTO.getQuestion())
                 .name(questionDTO.getUser())
-                .role(Message.Role.USER.getName())
+                .role(Message.Role.USER.name())
                 .createTimeMills(questionDTO.getAskTimeMills())
                 .build();
         answerCacheRepository.saveAnswer(answerCache);

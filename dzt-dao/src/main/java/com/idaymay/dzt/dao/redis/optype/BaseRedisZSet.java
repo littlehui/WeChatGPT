@@ -51,7 +51,7 @@ public class BaseRedisZSet<T extends SortScore> {
             return Collections.emptySet();
         }
         topNum = totalNum >= topNum ? topNum : totalNum;
-        return operator.range(getKey(key), 0, topNum - 1);
+        return operator.reverseRange(getKey(key), 0, topNum - 1);
     }
 
     private String getKey(String key) {

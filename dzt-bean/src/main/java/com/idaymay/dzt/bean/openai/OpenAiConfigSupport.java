@@ -11,5 +11,5 @@ public interface OpenAiConfigSupport {
 
     public String getApiKey();
 
-    public Long getAssociationCount();
+    public Long getAssociationRound();
 }

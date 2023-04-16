@@ -18,6 +18,8 @@ public class QuestionCacheRepository extends AbstractBaseRedisDAO<QuestionCache>
         this.zone = "Chat:Question:";
     }
 
+    private final static Long TIMEOUT = 60 * 60 * 24 * 1000L;
+
     public QuestionCache getQuestionByMessageId(Long messageId) {
         return get(messageId + "");
     }
@@ -29,7 +31,7 @@ public class QuestionCacheRepository extends AbstractBaseRedisDAO<QuestionCache>
                 .user(user)
                 .askTimeMills(System.currentTimeMillis())
                 .build();
-        this.save(messageId, questionCache);
+        this.save(messageId, questionCache, TIMEOUT);
         return questionCache;
     }
 }
