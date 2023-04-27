@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * TODO
@@ -37,6 +38,7 @@ public class BaseRedisZSet<T extends SortScore> {
 
     public Boolean add(String key, T t) {
         Boolean addResult = operator.add(getKey(key), t, t.getScore());
+        operator.getOperations().expire(getKey(key), 60 * 10, TimeUnit.SECONDS);
         removeIfNeed(key);
         return addResult;
     }

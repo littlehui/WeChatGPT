@@ -20,7 +20,7 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 30s
   profiles:
-    active: local
+    active: dev
   session:
     store-type: none
   mvc:

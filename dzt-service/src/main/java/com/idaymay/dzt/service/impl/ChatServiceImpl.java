@@ -3,13 +3,14 @@ package com.idaymay.dzt.service.impl;
 import com.idaymay.dzt.bean.constant.ChatConstants;
 import com.idaymay.dzt.bean.dto.QuestionDTO;
 import com.idaymay.dzt.bean.openai.OpenAiConfigSupport;
+import com.idaymay.dzt.common.redission.CustomRedissonLock;
+import com.idaymay.dzt.common.redission.NeedRateLimit;
 import com.idaymay.dzt.common.utils.string.StringUtil;
 import com.idaymay.dzt.dao.redis.domain.AnswerCache;
 import com.idaymay.dzt.dao.redis.domain.ChatMessageCache;
 import com.idaymay.dzt.dao.redis.domain.QuestionCache;
-import com.idaymay.dzt.dao.redis.repository.AnswerCacheRepository;
-import com.idaymay.dzt.dao.redis.repository.ChatMessageRepository;
-import com.idaymay.dzt.dao.redis.repository.QuestionCacheRepository;
+import com.idaymay.dzt.dao.redis.domain.UserConfigCache;
+import com.idaymay.dzt.dao.redis.repository.*;
 import com.idaymay.dzt.service.ChatService;
 import com.idaymay.dzt.service.MessagePublisher;
 import com.unfbx.chatgpt.OpenAiClient;
@@ -64,19 +65,30 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
 
     OpenAiConfigSupport openAiConfigSupport;
 
+    @Autowired
+    UserConfigCacheRepository userConfigCacheRepository;
+
+    @Autowired
+    UserKeyStrategy userKeyStrategy;
+
+    @Autowired
+    FreeCountCacheRepository freeCountCacheRepository;
+
     ThreadPoolExecutor chatThreadPool = new ThreadPoolExecutor(1, 1, 20, TimeUnit.SECONDS, new ArrayBlockingQueue(1000),
             new ThreadPoolExecutor.CallerRunsPolicy());
 
+    @NeedRateLimit(limitKey = "#fromUser", permit = 1, timeOut = 10, fromUser = "#fromUser", toUser = "#toUser")
+    @CustomRedissonLock
     @Override
-    public String askAQuestion(String question, String user) {
+    public String askAQuestion(String question, String fromUser, String toUser) {
         String messageId = snowflakeIdGenerator.generaMessageId();
-        QuestionCache questionCache = questionCacheRepository.saveQuestion(messageId, question, user);
-        answerCacheRepository.initAnswer(messageId, question, user);
+        QuestionCache questionCache = questionCacheRepository.saveQuestion(messageId, question, fromUser);
+        answerCacheRepository.initAnswer(messageId, question, fromUser);
         QuestionDTO questionDTO = QuestionDTO.builder()
                 .askTimeMills(questionCache.getAskTimeMills())
                 .messageId(messageId)
                 .question(questionCache.getQuestion())
-                .user(user)
+                .userCode(fromUser)
                 .build();
         //messagePublisher.publishMessage(GsonUtil.toJson(questionDTO));
         //String messageQuestion = new String(jackson2JsonRedisSerializer.serialize(questionDTO), StandardCharsets.UTF_8);
@@ -117,7 +129,13 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
             public String call() throws Exception {
                 ChatCompletion chatCompletion = new ChatCompletion();
                 chatCompletion.setMessages(makeChatMessages(questionDTO, associationRound));
+                userKeyStrategy.setUserCode(questionDTO.getUserCode());
                 ChatCompletionResponse response = openAiClient.chatCompletion(chatCompletion);
+                //试用次数+1
+                UserConfigCache userConfigCache = userConfigCacheRepository.getUserConfig(questionDTO.getUserCode());
+                if (userConfigCache == null || userConfigCache.getOpenAiApiKey() == null) {
+                    freeCountCacheRepository.incrUsedFreeCount(questionDTO.getUserCode());
+                }
                 log.info("chat response:{}", response);
                 Message answerMessage = completionAnswer(response);
                 saveChatMessageToCache(questionDTO, answerMessage);
@@ -131,9 +149,24 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
             log.error("{}", e);
         } catch (ExecutionException e) {
             if (e.getCause() != null && e.getCause() instanceof HttpException) {
-                log.warn("请求到openapi发生错误，可能是http 400,exception:{}", ((HttpException) e.getCause()).message());
-                log.warn("上下文太多自动去掉一个重试！");
-                chat(questionDTO, openAiConfigSupport.getAssociationRound() - 1);
+                int httpCode = ((HttpException)e.getCause()).code();
+                switch (httpCode) {
+                    case 400:
+                        log.warn("请求到openapi发生错误，可能是http 400,exception:{}", ((HttpException) e.getCause()).message());
+                        log.warn("上下文太多自动去掉一个重试！");
+                        if (openAiConfigSupport.getAssociationRound() > 1) {
+                            return chat(questionDTO, openAiConfigSupport.getAssociationRound() - 1);
+                        } else {
+                            saveAnswerMessageToCache(questionDTO, ChatConstants.ANSWER_ERROR);
+                            return ChatConstants.ANSWER_ERROR;
+                        }
+                    case 401:
+                        log.warn("请求到openapi发生错误，:{}", ((HttpException) e.getCause()).message());
+                        saveAnswerMessageToCache(questionDTO, ChatConstants.API_KEY_ERROR);
+                        return ChatConstants.API_KEY_ERROR;
+                    default:
+                        log.warn("请求到openapi发生错误:{}", ((HttpException) e.getCause()).message());
+                }
             }
             log.error("{}", e);
         }
@@ -167,7 +200,7 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
     }
 
     private List<Message> makeChatMessages(QuestionDTO questionDTO, Long associationRound) {
-        Set<ChatMessageCache> chatMessageCaches = chatMessageRepository.latest(questionDTO.getUser(), associationRound * 2);
+        Set<ChatMessageCache> chatMessageCaches = chatMessageRepository.latest(questionDTO.getUserCode(), associationRound * 2);
         List<Message> messages = new ArrayList<>();
         List<Message> historyMessages = new ArrayList<>();
         for (ChatMessageCache chatMessageCache : chatMessageCaches) {
@@ -175,7 +208,7 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
         }
         Message currentMessage = Message.builder()
                 .content(questionDTO.getQuestion())
-                .name(questionDTO.getUser())
+                .name(questionDTO.getUserCode())
                 .role(Message.Role.USER)
                 .build();
         messages.addAll(historyMessages);
@@ -202,6 +235,19 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
                 .build();
     }
 
+    private void saveAnswerMessageToCache(QuestionDTO questionDTO, String answerContent) {
+        AnswerCache answerCache = AnswerCache.builder()
+            .answer(answerContent)
+            .messageId(questionDTO.getMessageId())
+            .question(questionDTO.getQuestion())
+            .askTimeMills(questionDTO.getAskTimeMills())
+            .answerTimeMills(System.currentTimeMillis())
+            .answerSegment(Arrays.asList(StringUtil.foldString(answerContent, 500)))
+            .currentSegment(0)
+            .build();
+        answerCacheRepository.saveAnswer(answerCache);
+    }
+
     private void saveChatMessageToCache(QuestionDTO questionDTO, Message answerMessage) {
         String answerContent = answerMessage.getContent();
         AnswerCache answerCache = AnswerCache.builder()
@@ -217,13 +263,13 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
         ChatMessageCache answerMessageCache = messageToMessageCache(answerMessage);
         ChatMessageCache questionMessageCache = ChatMessageCache.builder()
                 .content(questionDTO.getQuestion())
-                .name(questionDTO.getUser())
+                .name(questionDTO.getUserCode())
                 .role(Message.Role.USER.name())
                 .createTimeMills(questionDTO.getAskTimeMills())
                 .build();
         answerCacheRepository.saveAnswer(answerCache);
-        chatMessageRepository.add(questionDTO.getUser(), questionMessageCache);
-        chatMessageRepository.add(questionDTO.getUser(), answerMessageCache);
+        chatMessageRepository.add(questionDTO.getUserCode(), questionMessageCache);
+        chatMessageRepository.add(questionDTO.getUserCode(), answerMessageCache);
     }
 
     @Override

@@ -1,7 +1,8 @@
 package com.idaymay.dzt.app.web.interceptor;
 
-import com.idaymay.dzt.common.lock.CustomRedissonLock;
+import com.idaymay.dzt.common.redission.CustomRedissonLock;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -25,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 @Aspect
 @Component
 @Order(1) //该order必须设置，很关键
-@Log4j2
+@Slf4j
 @ConditionalOnBean(value = {RedissonAutoConfiguration.class})
 public class RedissonLockAspect {
 
@@ -53,7 +54,7 @@ public class RedissonLockAspect {
         if (res) {
             log.info(joinPoint.getTarget().getClass() + ",取到锁:" + key);
             obj = joinPoint.proceed();
-            if (rLock.isLocked()) {
+            if (rLock.isHeldByCurrentThread()) {
                 rLock.unlock();
                 log.info(joinPoint.getTarget().getClass() + ",释放锁:" + key);
             } else {

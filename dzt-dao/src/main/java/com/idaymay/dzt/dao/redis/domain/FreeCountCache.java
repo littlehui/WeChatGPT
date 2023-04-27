@@ -12,19 +12,16 @@ import java.io.Serializable;
  *
  * @author littlehui
  * @version 1.0
- * @date 2023/04/11 21:09
+ * @date 2023/04/26 16:48
  */
 @Builder
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class QuestionCache implements Serializable {
+@NoArgsConstructor
+public class FreeCountCache implements Serializable {
 
-    private String messageId;
-
-    private String question;
-
-    private Long askTimeMills;
+    private Integer freeCount;
 
     private String userCode;
+
 }

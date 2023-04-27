@@ -12,19 +12,16 @@ import java.io.Serializable;
  *
  * @author littlehui
  * @version 1.0
- * @date 2023/04/11 21:09
+ * @date 2023/04/23 17:56
  */
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuestionCache implements Serializable {
-
-    private String messageId;
-
-    private String question;
-
-    private Long askTimeMills;
+public class UserConfigCache implements Serializable {
 
     private String userCode;
+
+    private String openAiApiKey;
+
 }

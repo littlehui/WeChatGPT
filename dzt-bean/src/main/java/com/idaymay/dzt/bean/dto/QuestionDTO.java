@@ -26,5 +26,5 @@ public class QuestionDTO implements Serializable {
 
     private Long askTimeMills;
 
-    private String user;
+    private String userCode;
 }

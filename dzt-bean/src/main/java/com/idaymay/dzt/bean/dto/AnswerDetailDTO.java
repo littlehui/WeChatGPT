@@ -22,7 +22,7 @@ public class AnswerDetailDTO implements Serializable {
 
    private String messageId;
 
-   private String name;
+   private String userCode;
 
    private String question;
 

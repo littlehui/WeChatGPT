@@ -1,5 +1,6 @@
 package com.idaymay.dzt.app.web.controller;
 
+import com.idaymay.dzt.bean.constant.DztCommandConstant;
 import com.idaymay.dzt.bean.dto.QuestionDTO;
 import com.idaymay.dzt.bean.param.WxTokenAuthParam;
 import com.idaymay.dzt.bean.wechat.WeChatMessage;
@@ -11,6 +12,9 @@ import com.idaymay.dzt.common.swagger.ApiVersion;
 import com.idaymay.dzt.service.ChatService;
 import com.idaymay.dzt.service.CheckService;
 import com.idaymay.dzt.bean.constant.ChatConstants;
+import com.idaymay.dzt.service.command.Command;
+import com.idaymay.dzt.service.command.CommandFactory;
+import com.idaymay.dzt.service.command.CommandResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.NoArgsConstructor;
@@ -22,6 +26,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @Api(value = "微信公众号", tags = "微信公众号")
@@ -35,6 +42,9 @@ public class AppIndexController {
 
     @Autowired
     ChatService chatService;
+
+    @Autowired
+    CommandFactory commandFactory;
 
     @GetMapping(value = "/wechat", produces = MediaType.TEXT_PLAIN_VALUE)
     @ApiOperation(value = "微信公众号推送数据接口", produces = MediaType.TEXT_PLAIN_VALUE)
@@ -63,17 +73,30 @@ public class AppIndexController {
         responseMessage.setMsgType("text");
         //消息创建时间，当前时间就可以
         responseMessage.setCreateTime(System.currentTimeMillis());
-        try {
-            if (content.startsWith(ChatConstants.ANSWER_PRE)) {
-                String messageId = content;
-                String answer = chatService.answerAQuestion(messageId);
-                responseMessage.setContent(answer);
-            } else {
-                //这个是响应消息内容，直接复制收到的内容做演示，甚至整个响应对象都可以直接使用原请求参数对象，只需要换下from和to就可以了哈哈哈
-                responseMessage.setContent(chatService.askAQuestion(requestMessage.getContent(), toUserName));
+        if (content.startsWith(DztCommandConstant.COMMAND_PRE)) {
+            //命令开头 setApiKey xxxxxx
+            String[] args = content.split(" ");
+            String commandName = args[0];
+            List<String> commandArgs = new ArrayList<String>();
+            for (int i = 0; i < args.length ; i++) {
+                if (i>0) {
+                    commandArgs.add(args[i]);
+                }
             }
-        } catch (Exception e) {
-            responseMessage.setContent("");
+            Command command = commandFactory.createCommand(commandName);
+            String argString = content.substring(content.indexOf(" "), content.length() - 1).trim();
+            if (argString != null) {
+                CommandResult commandResult = command.execute(fromUserName, commandArgs);
+                responseMessage.setContent(commandResult.getMessage());
+                return responseMessage;
+            }
+        }
+        if (content.startsWith(ChatConstants.ANSWER_PRE)) {
+            String messageId = content;
+            String answer = chatService.answerAQuestion(messageId);
+            responseMessage.setContent(answer);
+        } else {
+            responseMessage.setContent(chatService.askAQuestion(requestMessage.getContent(), fromUserName, toUserName));
         }
         return responseMessage;
     }

@@ -1,22 +1,22 @@
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: dev
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    url: ${local.app.datasource.url}
-    username: ${local.app.datasource.username}
-    password: ${local.app.datasource.password}
+    url: ${dev.app.datasource.url}
+    username: ${dev.app.datasource.username}
+    password: ${dev.app.datasource.password}
     #name: druidDataSource
     druid:
       stat-view-servlet:
-        enabled: ${local.druid.view.enable}
-        login-password: ${local.druid.view.password}
-        login-username: ${local.druid.view.username}
+        enabled: ${dev.druid.view.enable}
+        login-password: ${dev.druid.view.password}
+        login-username: ${dev.druid.view.username}
         url-pattern: /druid/*
         allow:
       filters: stat,slf4j,wall
@@ -34,10 +34,10 @@ spring:
       pool-prepared-statements: true
   #redis
   redis:
-    password: ${local.app.redis.password}
+    password: ${dev.app.redis.password}
     timeout: 30M
-    port: ${local.app.redis.port}
-    host: ${local.app.redis.host}
+    port: ${dev.app.redis.port}
+    host: ${dev.app.redis.host}
     lettuce:
       pool:
         max-active: 4
@@ -45,7 +45,7 @@ spring:
         max-idle: 4
   #spring-session
   session:
-    store-type: redis
+    store-type: NONE
     timeout: 30M
     redis:
       namespace: ${cache.prefix}:${spring.config.activate.on-profile}:app:spring:session
@@ -99,5 +99,5 @@ wx:
       http-proxy-password:
 config:
   openai:
-    apiKey: ${local.app.config.openai.apikey}
-    associationRound: ${local.app.config.openai.associationRound}
+    apiKey: ${dev.app.config.openai.apikey}
+    associationRound: ${dev.app.config.openai.associationRound}

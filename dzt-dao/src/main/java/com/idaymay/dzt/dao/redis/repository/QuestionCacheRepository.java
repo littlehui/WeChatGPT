@@ -28,7 +28,7 @@ public class QuestionCacheRepository extends AbstractBaseRedisDAO<QuestionCache>
         QuestionCache questionCache = QuestionCache.builder()
                 .question(question)
                 .messageId(messageId)
-                .user(user)
+                .userCode(user)
                 .askTimeMills(System.currentTimeMillis())
                 .build();
         this.save(messageId, questionCache, TIMEOUT);

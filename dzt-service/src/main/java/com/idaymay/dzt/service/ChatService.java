@@ -14,12 +14,13 @@ public interface ChatService {
    /**
     * 快速回答，返回消息ID
     * @param question
-    * @param user
+    * @param fromUser
+    * @param toUser
     * @author littlehui
     * @date 2023/4/11 16:03
     * @return java.lang.String
     */
-   public String askAQuestion(String question, String user);
+   public String askAQuestion(String question, String fromUser, String toUser);
 
    /**
     * 返回已经处理好的回答

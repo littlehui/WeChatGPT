@@ -1,22 +1,34 @@
 package com.idaymay.dzt.app.web.handler;
 
 import com.idaymay.dzt.app.web.utils.WebUtil;
+import com.idaymay.dzt.bean.wechat.WeChatMessage;
 import com.idaymay.dzt.common.ajax.Response;
 import com.idaymay.dzt.common.ajax.ResponseEnum;
 import com.idaymay.dzt.common.ajax.ResponseFactory;
 import com.idaymay.dzt.common.exception.BusinessException;
 import com.idaymay.dzt.common.exception.ParamException;
+import com.idaymay.dzt.common.exception.RateLimitException;
 import com.idaymay.dzt.common.exception.SystemException;
+import com.idaymay.dzt.common.utils.obj.GsonUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.StringWriter;
 
 
 /**
@@ -86,6 +98,34 @@ public class ExceptionHandle {
             return ResponseFactory.result(code, message);
         }
         return ResponseFactory.result(ResponseEnum.UNKNOW_ERROR);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(RateLimitException.class)
+    public ResponseEntity<String> handleRateLimitException(RateLimitException e, HttpServletRequest request, HttpServletResponse response) {
+        WeChatMessage weChatMessage = e.getWeChatMessage();
+        XmlRootElement xmlRootElement = WeChatMessage.class.getAnnotation(XmlRootElement.class);
+        if (xmlRootElement != null) {
+            try {
+                JAXBContext jaxbContext = JAXBContext.newInstance(WeChatMessage.class);
+                Marshaller marshaller = jaxbContext.createMarshaller();
+                StringWriter stringWriter = new StringWriter();
+                marshaller.marshal(weChatMessage, stringWriter);
+                String xml = stringWriter.toString();
+                return ResponseEntity.ok().contentType(MediaType.APPLICATION_XML).body(xml);
+            } catch (JAXBException ex) {
+                log.error("jaxb exception", ex);
+            }
+        } else {
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(GsonUtil.toJson(weChatMessage));
+        }
+        return ResponseEntity.ok("");
+    }
+
+    private String getRequestContentType() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        return request.getContentType();
     }
 
     private void printErrorDetail(Exception e, HttpServletRequest request) {

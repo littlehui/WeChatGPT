@@ -315,7 +315,7 @@
                     <include>application-local.properties</include>
                     <include>application-prod.properties</include>
                     <include>application-test.properties</include>
-                    <include>application-pre.properties</include>
+                    <include>application-mac.properties</include>
                     <include>application-demo.properties</include>
                 </includes>
                 <filtering>true</filtering>

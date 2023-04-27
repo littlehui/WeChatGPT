@@ -98,7 +98,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 //设置允许跨域请求的域名
-                .allowedOriginPatterns("*.1y.com", "*.1y.com:*")
+                .allowedOriginPatterns("*.idaymay.com", "*.idaymay.com:*")
                 // 设置允许请求方式
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
                 // 是否允许证书（cookies）

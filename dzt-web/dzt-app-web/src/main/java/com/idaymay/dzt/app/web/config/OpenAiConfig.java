@@ -1,11 +1,13 @@
 package com.idaymay.dzt.app.web.config;
 
 import com.idaymay.dzt.bean.openai.OpenAiConfigSupport;
+import com.idaymay.dzt.service.impl.UserKeyStrategy;
 import com.unfbx.chatgpt.OpenAiClient;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +37,9 @@ public class OpenAiConfig implements OpenAiConfigSupport {
     @Setter
     private Long associationRound;
 
+    @Autowired
+    UserKeyStrategy userKeyStrategy;
+
     @PostConstruct
     public void openAiConfigCreated() {
         log.info("openAiConfig created!");
@@ -57,6 +62,7 @@ public class OpenAiConfig implements OpenAiConfigSupport {
                 .build();
         OpenAiClient openAiClient = OpenAiClient.builder()
                 .apiKey(apiKeys)
+                .keyStrategy(userKeyStrategy)
                 .okHttpClient(okHttpClient)
                 .build();
         return openAiClient;
