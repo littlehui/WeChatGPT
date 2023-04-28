@@ -34,10 +34,10 @@ public class ChatConstants {
 
    public static final String ANSWER_ERROR = "暂时回答不了，抱歉。";
 
-   public static final String OUT_OF_FREE_COUNT = "达到今天免费试用上限次数数5，明天再聊吧！" +
-           "\n\n添加自己的apiKey：" +
-           "\n/setApiKey 你的openAiApiKey 后无此限制。";
-
    public static final Integer FREE_COUNT = 5;
+
+   public static final String OUT_OF_FREE_COUNT = "达到今天免费试用上限次数" + ChatConstants.FREE_COUNT + "，明天再聊吧！" +
+           "\n\n添加自己的apiKey,回复：" +
+           "\n\"/setApiKey ${您的openAiApiKey}\" 后无此限制。";
 
 }

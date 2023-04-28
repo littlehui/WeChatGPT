@@ -23,7 +23,7 @@ public class FreeCountCacheRepository extends AbstractBaseRedisDAO<Long> {
     }
 
     public Long getUsedFreeCount(String userCode) {
-        Integer count = (Integer) redisTemplate.boundValueOps(getKey(userCode)).get();
+        Integer count = (Integer) redisTemplate.opsForValue().get(zone + getKey(userCode));
         return count == null ? 0 : Long.parseLong(count + "");
     }
 
