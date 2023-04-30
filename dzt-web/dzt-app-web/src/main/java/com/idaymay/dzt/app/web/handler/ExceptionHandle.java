@@ -5,12 +5,10 @@ import com.idaymay.dzt.bean.wechat.WeChatMessage;
 import com.idaymay.dzt.common.ajax.Response;
 import com.idaymay.dzt.common.ajax.ResponseEnum;
 import com.idaymay.dzt.common.ajax.ResponseFactory;
-import com.idaymay.dzt.common.exception.BusinessException;
-import com.idaymay.dzt.common.exception.ParamException;
-import com.idaymay.dzt.common.exception.RateLimitException;
-import com.idaymay.dzt.common.exception.SystemException;
+import com.idaymay.dzt.common.exception.*;
 import com.idaymay.dzt.common.utils.obj.GsonUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -120,6 +118,14 @@ public class ExceptionHandle {
             return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(GsonUtil.toJson(weChatMessage));
         }
         return ResponseEntity.ok("");
+    }
+
+
+    @ResponseBody
+    @ExceptionHandler(AnswerTimeOutException.class)
+    public ResponseEntity<String> handleAnswerTimeOutException(AnswerTimeOutException e, HttpServletRequest request, HttpServletResponse response) {
+        log.warn("回答时间超时。messageId:{},userCode:{},超时次数:{}", e.getMessageId(), e.getUserCode(), e.getTimeOutCount());
+        return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).build();
     }
 
     private String getRequestContentType() {

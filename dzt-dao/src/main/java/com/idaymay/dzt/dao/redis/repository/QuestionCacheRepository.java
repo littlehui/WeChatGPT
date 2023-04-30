@@ -20,16 +20,17 @@ public class QuestionCacheRepository extends AbstractBaseRedisDAO<QuestionCache>
 
     private final static Long TIMEOUT = 60 * 60 * 24 * 1000L;
 
-    public QuestionCache getQuestionByMessageId(Long messageId) {
-        return get(messageId + "");
+    public QuestionCache getQuestionByMessageId(String messageId) {
+        return get(messageId);
     }
 
-    public QuestionCache saveQuestion(String messageId, String question, String user) {
+    public QuestionCache saveQuestion(String messageId, String question, String user, Integer requestTimes) {
         QuestionCache questionCache = QuestionCache.builder()
                 .question(question)
                 .messageId(messageId)
                 .userCode(user)
                 .askTimeMills(System.currentTimeMillis())
+                .requestEdTimes(requestTimes)
                 .build();
         this.save(messageId, questionCache, TIMEOUT);
         return questionCache;

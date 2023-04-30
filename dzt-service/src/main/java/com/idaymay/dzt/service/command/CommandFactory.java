@@ -1,9 +1,13 @@
 package com.idaymay.dzt.service.command;
 
-import com.idaymay.dzt.bean.constant.DztCommandConstant;
+import com.idaymay.dzt.bean.constant.ChatConstants;
+import com.idaymay.dzt.bean.constant.SystemCommandConstant;
+import com.idaymay.dzt.dao.redis.repository.CurrentQuestionCheckRepository;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO
@@ -19,14 +23,67 @@ public class CommandFactory {
     SetApiKeyCommand setApiKeyCommand;
 
     @Resource
+    CheckQuestionNoCommand checkQuestionNoCommand;
+
+    @Resource
+    CheckQuestionYesCommand checkQuestionYesCommand;
+
+    @Resource
     NoneCommand noneCommand;
 
-    public Command createCommand(String commandName) {
+    @Resource
+    AnswerQuestionCommand answerQuestionCommand;
+
+    @Resource
+    AskQuestionCommand askQuestionCommand;
+
+    @Resource
+    CurrentQuestionCheckRepository currentQuestionCheckRepository;
+
+    @Resource
+    ContinueAnswerQuestionCommand continueAnswerQuestionCommand;
+
+    public Command createSystemCommand(String commandName) {
         switch (commandName) {
-            case DztCommandConstant.SET_APIKEY:
+            case SystemCommandConstant.SET_APIKEY:
                 return setApiKeyCommand;
             default:
                 return noneCommand;
+        }
+    }
+
+    public Command createChatCommand(String userCode, String content) {
+        String commandName = content;
+        if (content.startsWith(SystemCommandConstant.COMMAND_PRE)) {
+            //命令开头 setApiKey xxxxxx
+            String[] args = content.split(" ");
+            commandName = args[0];
+            List<String> commandArgs = new ArrayList<String>();
+            for (int i = 0; i < args.length ; i++) {
+                if (i>0) {
+                    commandArgs.add(args[i]);
+                }
+            }
+            Command command = createSystemCommand(commandName);
+            return command;
+        }
+        if (content.startsWith(ChatConstants.ANSWER_PRE)) {
+            return answerQuestionCommand;
+        }
+        String currentCheckQuestion = currentQuestionCheckRepository.get(userCode);
+        switch (content) {
+            case ChatConstants.QUESTION_CHECK_RESULT_YES:
+                if (currentCheckQuestion != null) {
+                    return checkQuestionYesCommand;
+                }
+            case ChatConstants.QUESTION_CHECK_RESULT_NO:
+                if (currentCheckQuestion != null) {
+                    return checkQuestionNoCommand;
+                }
+            case ChatConstants.ANSWER_CONTINUE:
+                return continueAnswerQuestionCommand;
+            default:
+                return askQuestionCommand;
         }
     }
 }

@@ -25,11 +25,12 @@ public interface ChatService {
    /**
     * 返回已经处理好的回答
     * @param messageId
+    * @param userCode
     * @author littlehui
     * @date 2023/4/11 16:04
     * @return java.lang.String
     */
-   public String answerAQuestion(String messageId);
+   public String answerAQuestion(String userCode, String messageId);
 
    /**
     * 包含上下文
@@ -50,4 +51,12 @@ public interface ChatService {
     */
    public String chat(QuestionDTO questionDTO);
 
+   /**
+    * 继续回答的实现
+    * @param userCode
+    * @author littlehui
+    * @date 2023/4/29 20:13
+    * @return java.lang.String
+    */
+   public String continueAnswer(String userCode);
 }

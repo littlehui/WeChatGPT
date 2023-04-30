@@ -1,10 +1,8 @@
 package com.idaymay.dzt.service.command;
 
-import com.idaymay.dzt.bean.constant.DztCommandConstant;
+import com.idaymay.dzt.bean.constant.SystemCommandConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * TODO
@@ -22,10 +20,10 @@ public class NoneCommand extends AbstractCommand<CommandResult> {
     }
 
     @Override
-    public CommandResult execute(String userCode, List<String> args) {
+    public CommandResult execute(String userCode, String toUserCode, String content) {
         log.info("无效的command");
         return  CommandResult.builder()
-                .message(DztCommandConstant.DEFAULT_RESULT_MESSAGE)
+                .message(SystemCommandConstant.DEFAULT_RESULT_MESSAGE)
                 .build();
     }
 }

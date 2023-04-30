@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 public class WebContext {
 
     private static ThreadLocal<HttpServletRequest> requestThreadLocal = new ThreadLocal<>();
+
     private static ThreadLocal<String> userThreadLocal = new ThreadLocal<>();
 
     public static void setRequest(HttpServletRequest httpServletRequest) {

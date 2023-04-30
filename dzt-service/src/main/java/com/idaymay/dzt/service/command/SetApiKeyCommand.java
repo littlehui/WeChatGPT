@@ -1,9 +1,10 @@
 package com.idaymay.dzt.service.command;
 
-import com.idaymay.dzt.bean.constant.DztCommandConstant;
+import com.idaymay.dzt.bean.constant.SystemCommandConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,12 +24,21 @@ public class SetApiKeyCommand extends AbstractCommand<CommandResult> {
     }
 
     @Override
-    public CommandResult execute(String userCode, List<String> args) {
-        if (args != null && args.size() > 0) {
-            String apiKey = args.get(0);
+    public CommandResult execute(String userCode, String toUserCode, String content) {
+        //命令开头 setApiKey xxxxxx
+        String[] args = content.split(" ");
+        String commandName = args[0];
+        List<String> commandArgs = new ArrayList<String>();
+        for (int i = 0; i < args.length ; i++) {
+            if (i>0) {
+                commandArgs.add(args[i]);
+            }
+        }
+        if (commandArgs != null && commandArgs.size() > 0) {
+            String apiKey = commandArgs.get(0);
             executor.setUserApiKey(userCode, apiKey);
         } else {
-            return CommandResult.builder().message(DztCommandConstant.DEFAULT_RESULT_MESSAGE).build();
+            return CommandResult.builder().message(SystemCommandConstant.DEFAULT_RESULT_MESSAGE).build();
         }
         return CommandResult.builder().message(SET_API_KEY_SUCCESS).build();
     }

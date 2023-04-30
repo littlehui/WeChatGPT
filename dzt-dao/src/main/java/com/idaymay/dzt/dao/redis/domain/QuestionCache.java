@@ -27,4 +27,7 @@ public class QuestionCache implements Serializable {
     private Long askTimeMills;
 
     private String userCode;
+
+    //第几次提问
+    private Integer requestEdTimes;
 }

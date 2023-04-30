@@ -11,5 +11,5 @@ import java.util.List;
  */
 public interface Command<R extends CommandResult> {
 
-    public R execute(String userCode, List<String> args);
+    public R execute(String userCode, String toUser, String content);
 }

@@ -1,6 +1,5 @@
 package com.idaymay.dzt.app.web.controller;
 
-import com.idaymay.dzt.bean.constant.DztCommandConstant;
 import com.idaymay.dzt.bean.dto.QuestionDTO;
 import com.idaymay.dzt.bean.param.WxTokenAuthParam;
 import com.idaymay.dzt.bean.wechat.WeChatMessage;
@@ -9,9 +8,10 @@ import com.idaymay.dzt.common.ajax.ResponseFactory;
 import com.idaymay.dzt.common.constants.ApiVersionConstant;
 import com.idaymay.dzt.common.exception.BusinessException;
 import com.idaymay.dzt.common.swagger.ApiVersion;
+import com.idaymay.dzt.dao.redis.repository.AnswerCacheRepository;
+import com.idaymay.dzt.dao.redis.repository.CurrentQuestionCheckRepository;
 import com.idaymay.dzt.service.ChatService;
 import com.idaymay.dzt.service.CheckService;
-import com.idaymay.dzt.bean.constant.ChatConstants;
 import com.idaymay.dzt.service.command.Command;
 import com.idaymay.dzt.service.command.CommandFactory;
 import com.idaymay.dzt.service.command.CommandResult;
@@ -26,9 +26,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @RestController
 @Api(value = "微信公众号", tags = "微信公众号")
@@ -45,6 +42,12 @@ public class AppIndexController {
 
     @Autowired
     CommandFactory commandFactory;
+
+    @Autowired
+    CurrentQuestionCheckRepository currentQuestionCheckRepository;
+
+    @Autowired
+    AnswerCacheRepository answerCacheRepository;
 
     @GetMapping(value = "/wechat", produces = MediaType.TEXT_PLAIN_VALUE)
     @ApiOperation(value = "微信公众号推送数据接口", produces = MediaType.TEXT_PLAIN_VALUE)
@@ -73,31 +76,9 @@ public class AppIndexController {
         responseMessage.setMsgType("text");
         //消息创建时间，当前时间就可以
         responseMessage.setCreateTime(System.currentTimeMillis());
-        if (content.startsWith(DztCommandConstant.COMMAND_PRE)) {
-            //命令开头 setApiKey xxxxxx
-            String[] args = content.split(" ");
-            String commandName = args[0];
-            List<String> commandArgs = new ArrayList<String>();
-            for (int i = 0; i < args.length ; i++) {
-                if (i>0) {
-                    commandArgs.add(args[i]);
-                }
-            }
-            Command command = commandFactory.createCommand(commandName);
-            String argString = content.substring(content.indexOf(" "), content.length() - 1).trim();
-            if (argString != null) {
-                CommandResult commandResult = command.execute(fromUserName, commandArgs);
-                responseMessage.setContent(commandResult.getMessage());
-                return responseMessage;
-            }
-        }
-        if (content.startsWith(ChatConstants.ANSWER_PRE)) {
-            String messageId = content;
-            String answer = chatService.answerAQuestion(messageId);
-            responseMessage.setContent(answer);
-        } else {
-            responseMessage.setContent(chatService.askAQuestion(requestMessage.getContent(), fromUserName, toUserName));
-        }
+        Command command = commandFactory.createChatCommand(fromUserName, content);
+        CommandResult commandResult = command.execute(fromUserName, toUserName, content);
+        responseMessage.setContent(commandResult.getMessage());
         return responseMessage;
     }
 

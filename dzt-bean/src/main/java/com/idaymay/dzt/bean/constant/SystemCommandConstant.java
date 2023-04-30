@@ -7,7 +7,7 @@ package com.idaymay.dzt.bean.constant;
  * @version 1.0
  * @date 2023/04/25 14:00
  */
-public class DztCommandConstant {
+public class SystemCommandConstant {
 
     public static final String COMMAND_PRE = "/";
 

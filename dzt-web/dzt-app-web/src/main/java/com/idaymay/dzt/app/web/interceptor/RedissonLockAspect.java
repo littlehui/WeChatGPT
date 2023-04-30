@@ -46,9 +46,9 @@ public class RedissonLockAspect {
         if (lockIndex != -1) {
             key += params[lockIndex];
         }
-        //多久会自动释放，默认5秒
+        //多久会自动释放，默认10秒
         int leaseTime = customRedissonLock.leaseTime();
-        int waitTime = 30;
+        int waitTime = 5;
         RLock rLock = redisson.getLock(key);
         boolean res = rLock.tryLock(waitTime, leaseTime, TimeUnit.SECONDS);
         if (res) {

@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0
  * @date 2023/04/25 17:51
  */
-@ActiveProfiles("local")
+@ActiveProfiles("dev")
 @Slf4j
 public class RateLimiterTests extends BaseTestService {
 
@@ -28,10 +28,10 @@ public class RateLimiterTests extends BaseTestService {
 
     @Test
     public void tryAcquire() throws InterruptedException {
-        log.info("获取锁：{}", aspect.tryAcquire("test", 1, 10));
-        for (int i = 0; i<10; i++) {
+        log.info("获取锁：{}", aspect.tryAcquire("test121", 4, 10));
+        for (int i = 0; i<20; i++) {
             Thread.sleep(1000);
-            log.info("获取锁：{}", aspect.tryAcquire("test", 1, 10));
+            log.info("获取锁：{}", aspect.tryAcquire("test121", 4, 10));
         }
     }
 }
