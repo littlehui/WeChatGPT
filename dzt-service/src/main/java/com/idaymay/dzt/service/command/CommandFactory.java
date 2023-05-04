@@ -75,10 +75,14 @@ public class CommandFactory {
             case ChatConstants.QUESTION_CHECK_RESULT_YES:
                 if (currentCheckQuestion != null) {
                     return checkQuestionYesCommand;
+                } else {
+                    return askQuestionCommand;
                 }
             case ChatConstants.QUESTION_CHECK_RESULT_NO:
                 if (currentCheckQuestion != null) {
                     return checkQuestionNoCommand;
+                } else {
+                    return askQuestionCommand;
                 }
             case ChatConstants.ANSWER_CONTINUE:
                 return continueAnswerQuestionCommand;

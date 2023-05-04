@@ -5,33 +5,6 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: ${dev.app.datasource.url}
-    username: ${dev.app.datasource.username}
-    password: ${dev.app.datasource.password}
-    #name: druidDataSource
-    druid:
-      stat-view-servlet:
-        enabled: ${dev.druid.view.enable}
-        login-password: ${dev.druid.view.password}
-        login-username: ${dev.druid.view.username}
-        url-pattern: /druid/*
-        allow:
-      filters: stat,slf4j,wall
-      max-active: 200
-      initial-size: 5
-      max-wait: 60000
-      min-idle: 1
-      time-between-eviction-runs-millis: 10000
-      min-evictable-idle-time-millis: 30000
-      max-evictable-idle-time-millis: 84000
-      validation-query: select 'x'
-      test-while-idle: true
-      test-on-borrow: false
-      test-on-return: false
-      pool-prepared-statements: true
   #redis
   redis:
     password: ${dev.app.redis.password}
@@ -43,14 +16,6 @@ spring:
         max-active: 4
         min-idle: 0
         max-idle: 4
-  #spring-session
-  session:
-    store-type: NONE
-    timeout: 30M
-    redis:
-      namespace: ${cache.prefix}:${spring.config.activate.on-profile}:app:spring:session
-
-
 logging:
   level:
     root: INFO
@@ -79,16 +44,16 @@ swagger:
 
 wx:
   mp:
-    appId: wxa7434cd204ed887c
-    secret: a0b32eb930fb3902ceda2b309578abfc
-    token: 2F0A2EED6D38C6F982A88122B1B0A61C
-    aesKey: SVYlTenSegBcoG85hVFjtk8CNG52HjfyudsUg5i51c2
+    appId: ${dev.wx.mp.appId}
+    secret: ${dev.wx.mp.secret}
+    token: ${dev.wx.mp.token}
+    aesKey: ${dev.wx.mp.aesKey}
     config-storage:
       type: RedisTemplate
       key-prefix: wx
       redis:
-        host: 47.75.0.185
-        port: 6379
+        host: ${dev.app.redis.host}
+        port: ${dev.app.redis.port}
         min-idle: 0
         maxActive: 4
         max-idle: 4

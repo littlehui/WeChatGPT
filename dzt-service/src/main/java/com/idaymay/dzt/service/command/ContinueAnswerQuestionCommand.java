@@ -1,5 +1,7 @@
 package com.idaymay.dzt.service.command;
 
+import com.idaymay.dzt.dao.redis.repository.CurrentAnswerQuestionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,7 +20,7 @@ public class ContinueAnswerQuestionCommand extends AbstractCommand<CommandResult
 
     @Override
     public CommandResult execute(String userCode, String toUser, String content) {
-        String result = executor.answerAQuestion(userCode, content);
+        String result = executor.continueAnswer(userCode);
         return CommandResult.builder().message(result).build();
     }
 }

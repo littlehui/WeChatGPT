@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CurrentAnswerQuestionRepository extends AbstractBaseRedisDAO<String> {
 
-    private static final Long ONE_DAY_MILLS = 60 * 60 * 24 * 1000L;
+    private static final Long ONE_DAY_MILLS = 30 * 60 * 1000L;
 
     public CurrentAnswerQuestionRepository() {
         this.zone = "Chat:CurrentAnswerQuestion:";

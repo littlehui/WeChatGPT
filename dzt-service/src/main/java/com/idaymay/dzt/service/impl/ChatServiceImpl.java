@@ -26,10 +26,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
 import retrofit2.HttpException;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.LockSupport;
 
 /**
  * TODO
@@ -86,56 +88,55 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
     @CustomRedissonLock(lockIndex = 1, leaseTime = 3)
     @Override
     public String askAQuestion(String question, String fromUser, String toUser) {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
         //String messageId = snowflakeIdGenerator.generaMessageId();
         String messageId = ChatConstants.QUESTION_ID_PRE + MD5.create().digestHex16(question + fromUser + toUser).toUpperCase(Locale.ROOT);
-        QuestionDTO questionDTO = null;
         //第几次进行answer 总共3次。
         Integer currentAnswerCount = 1;
-        Integer waitTimeOut = ChatConstants.QUESTION_REQUEST_WAIT_TIMEOUT;
+        Long waitTimeOut = ChatConstants.QUESTION_REQUEST_WAIT_TIMEOUT;
         QuestionCache questionCache = questionCacheRepository.getQuestionByMessageId(messageId);
         if (questionCache != null) {
             currentAnswerCount = questionCache.getRequestEdTimes().intValue() + 1;
-            if (currentAnswerCount.intValue()%ChatConstants.QUESTION_REQUEST_TOTAL_TIMES == 0) {
-                //第三次
-                log.info("messageId:{},第{}次", messageId, ChatConstants.QUESTION_REQUEST_TOTAL_TIMES);
-                waitTimeOut = ChatConstants.QUESTION_LAST_REQUEST_WAIT_TIMEOUT;
-            }
             //请求次数+1
             questionCacheRepository.saveQuestion(messageId, question, fromUser, questionCache.getRequestEdTimes() + 1);
             //已经提问过了。
             log.warn("from user:{},messageId:{},当前第{}次请求。开始寻找答案！", fromUser, messageId, currentAnswerCount);
             //阻塞查询是否有答案
-            Future<String> answered = chatThreadPool.submit(new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    for (int i = 0; i < 3; i++) {
-                        AnswerCache answerCache = answerCacheRepository.getAnswerByMessageId(messageId);
-                        if (answerCache.getAnswerTimeMills() != null) {
-                            return answerAQuestion(fromUser, messageId);
-                        } else {
-                            Thread.currentThread().wait(ChatConstants.QUESTION_LAST_REQUEST_WAIT_TIMEOUT * 1000);
-                        }
-                    }
-                    return answerAQuestion(fromUser, messageId);
-                }
-            });
+            Future<String> answered = getAnswer(fromUser, messageId, question);
             String answerContent = null;
             try {
                 log.info("messageId：{},第{}次", messageId, currentAnswerCount);
-                answerContent = answered.get(waitTimeOut, TimeUnit.SECONDS);
+                stopWatch.stop();
+                if (currentAnswerCount.intValue()%ChatConstants.QUESTION_REQUEST_TOTAL_TIMES == 0) {
+                    //第二次
+                    log.info("messageId:{},第{}次", messageId, ChatConstants.QUESTION_REQUEST_TOTAL_TIMES);
+                    waitTimeOut = ChatConstants.QUESTION_LAST_REQUEST_WAIT_TIMEOUT;
+                } else {
+                    waitTimeOut = ChatConstants.QUESTION_REQUEST_WAIT_TIMEOUT - stopWatch.getLastTaskTimeMillis();
+                }
+                log.info("异步等待时间：{} 毫秒。", waitTimeOut);
+                answerContent = answered.get(waitTimeOut, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 log.warn("等待结果失败：messageId:{}, exception:{}", messageId, e);
             } catch (ExecutionException e) {
                 log.warn("等待结果失败：messageId:{}, exception:{}", messageId, e);
             } catch (TimeoutException e) {
                 log.warn("回答超时时：{}", messageId);
+                if (answered.isDone()) {
+                    //如果已经执行，resetSegment
+                    answerCacheRepository.resetAnswerCurrentSegment(messageId);
+                } else {
+                    log.info("cancel task");
+                    answered.cancel(true);
+                }
                 if (currentAnswerCount.intValue()%ChatConstants.QUESTION_REQUEST_TOTAL_TIMES == 0) {
                     log.warn("第{}次超时：{}", ChatConstants.QUESTION_REQUEST_TOTAL_TIMES, messageId);
                     //缓存一下当前正在确认的messageId
                     currentQuestionCheckRepository.setCurrentCheck(fromUser, question);
                     return String.format(ChatConstants.REPEAT_QUESTION, question);
                 } else {
-                    throw new AnswerTimeOutException(messageId, questionDTO.getUserCode(), currentAnswerCount);
+                    throw new AnswerTimeOutException(messageId, fromUser, currentAnswerCount);
                 }
             }
             //TO DO
@@ -144,19 +145,39 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
             //本次问题第一次请求
             questionCache = questionCacheRepository.saveQuestion(messageId, question, fromUser, 1);
             answerCacheRepository.initAnswer(messageId, question, fromUser);
-            questionDTO = QuestionDTO.builder()
+            QuestionDTO questionDTO = QuestionDTO.builder()
                     .askTimeMills(questionCache.getAskTimeMills())
                     .messageId(messageId)
                     .question(questionCache.getQuestion())
                     .requestTimes(1)
                     .userCode(fromUser)
                     .build();
-            //提问直接返回
-            return chat(questionDTO);
+            //messagePublisher.publishMessage(questionDTO);
+            chat(questionDTO);
+            throw new AnswerTimeOutException(messageId, questionDTO.getUserCode(), currentAnswerCount);
         }
         //放redis队列
         //messagePublisher.publishMessage(questionDTO);
         //return String.format(ChatConstants.QUICK_ANSWER, messageId);
+    }
+
+    private Future<String> getAnswer(String fromUser, String messageId, String question) {
+        Future<String> answered = chatThreadPool.submit(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                //一秒一次
+                for (int i = 0; i < 5; i++) {
+                    AnswerCache answerCache = answerCacheRepository.getAnswerByMessageId(messageId);
+                    if (answerCache.getAnswerTimeMills() != null) {
+                        return answerAQuestion(fromUser, messageId);
+                    } else {
+                        Thread.currentThread().wait(1000);
+                    }
+                }
+                return String.format(ChatConstants.REPEAT_QUESTION, question);
+            }
+        });
+        return answered;
     }
 
     @Override
@@ -169,18 +190,11 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
                 //已经回答
                 if (answerCache.getAnswerSegment() != null && answerCache.getAnswerSegment().size() > 0) {
                     Integer currentSegment = answerCache.getCurrentSegment();
-                    Integer segmentCount = answerCache.getAnswerSegment().size();
                     currentAnswerSegment = answerCache.getAnswerSegment().get(currentSegment);
-                    Integer preSegment = currentSegment + 1;
-                    if (preSegment >= segmentCount) {
-                        preSegment = 0;
-                    }
-                    answerCache.setCurrentSegment(preSegment);
+                    answerCacheRepository.incrAnswerCurrentSegment(messageId);
+                } else {
+                    currentAnswerSegment = answerCache.getAnswer();
                 }
-                //更新一下阅读的分页点
-                answerCacheRepository.saveAnswer(answerCache);
-            } else {
-                currentAnswerSegment = answerCache.getAnswer();
             }
         }
         return currentAnswerSegment;
@@ -204,7 +218,8 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
                 Message answerMessage = completionAnswer(response);
                 saveChatMessageToCache(questionDTO, answerMessage);
                 log.info("question {}, answered!", questionDTO.getMessageId());
-                return answerAQuestion(questionDTO.getUserCode(), questionDTO.getMessageId());
+                return answerMessage.getContent();
+                //return answerAQuestion(questionDTO.getUserCode(), questionDTO.getMessageId());
             }
         });
         try {

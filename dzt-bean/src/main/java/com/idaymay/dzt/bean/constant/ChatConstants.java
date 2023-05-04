@@ -42,9 +42,9 @@ public class ChatConstants {
 
    public static final Integer QUESTION_REQUEST_TOTAL_TIMES = 2;
 
-   public static final Integer QUESTION_REQUEST_WAIT_TIMEOUT = 4;
+   public static final Long QUESTION_REQUEST_WAIT_TIMEOUT = 3000L;
 
-   public static final Integer QUESTION_LAST_REQUEST_WAIT_TIMEOUT = 1;
+   public static final Long QUESTION_LAST_REQUEST_WAIT_TIMEOUT = 1000L;
 
    public static final String ANSWER_CONTINUE = "继续";
 
