@@ -1,0 +1,68 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  #redis
+  redis:
+    password: ${dev.app.redis.password}
+    timeout: 30M
+    port: ${dev.app.redis.port}
+    host: ${dev.app.redis.host}
+    lettuce:
+      pool:
+        max-active: 4
+        min-idle: 0
+        max-idle: 4
+logging:
+  level:
+    root: INFO
+  file:
+    name: /opt/logs/prog/dzt.idaymay.com/dzt-app-web.log
+  logback:
+    rollingpolicy:
+      max-history: 7
+      max-file-size: 100MB
+management:
+  endpoint:
+    env:
+      enabled: false
+    heapdump:
+      enabled: false
+  endpoints:
+    web:
+      ##面向外网，不暴露端点
+      exposure:
+        include: health
+      path-mapping:
+        health: ping
+      base-path: /
+swagger:
+  show: true
+
+wx:
+  mp:
+    appId: ${dev.wx.mp.appId}
+    secret: ${dev.wx.mp.secret}
+    token: ${dev.wx.mp.token}
+    aesKey: ${dev.wx.mp.aesKey}
+    config-storage:
+      type: RedisTemplate
+      key-prefix: wx
+      redis:
+        host: ${dev.app.redis.host}
+        port: ${dev.app.redis.port}
+        min-idle: 0
+        maxActive: 4
+        max-idle: 4
+      http-client-type: HttpClient
+      http-proxy-host:
+      http-proxy-port:
+      http-proxy-username:
+      http-proxy-password:
+config:
+  openai:
+    apiKey: ${dev.app.config.openai.apikey}
+    associationRound: ${dev.app.config.openai.associationRound}
