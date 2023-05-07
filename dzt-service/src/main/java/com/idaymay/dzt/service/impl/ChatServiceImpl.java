@@ -20,18 +20,19 @@ import com.unfbx.chatgpt.entity.chat.ChatChoice;
 import com.unfbx.chatgpt.entity.chat.ChatCompletion;
 import com.unfbx.chatgpt.entity.chat.ChatCompletionResponse;
 import com.unfbx.chatgpt.entity.chat.Message;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.jni.Time;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StopWatch;
 import retrofit2.HttpException;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.locks.LockSupport;
 
 /**
  * TODO
@@ -81,65 +82,62 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
     @Autowired
     CurrentQuestionCheckRepository currentQuestionCheckRepository;
 
-    ThreadPoolExecutor chatThreadPool = new ThreadPoolExecutor(1, 1, 20, TimeUnit.SECONDS, new ArrayBlockingQueue(1000),
+    ThreadPoolExecutor chatThreadPool = new ThreadPoolExecutor(2, 4, 20, TimeUnit.SECONDS, new ArrayBlockingQueue(1000),
+            new ThreadPoolExecutor.CallerRunsPolicy());
+
+    ThreadPoolExecutor answerThreadPool = new ThreadPoolExecutor(2, 4, 20, TimeUnit.SECONDS, new ArrayBlockingQueue(1000),
             new ThreadPoolExecutor.CallerRunsPolicy());
 
     @NeedRateLimit(limitKey = "#fromUser", permit = 4, timeOut = 10, fromUser = "#fromUser", toUser = "#toUser")
     @CustomRedissonLock(lockIndex = 1, leaseTime = 3)
     @Override
-    public String askAQuestion(String question, String fromUser, String toUser) {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        //String messageId = snowflakeIdGenerator.generaMessageId();
+    public String askAQuestion(Long startTime, String question, String fromUser, String toUser) {
         String messageId = ChatConstants.QUESTION_ID_PRE + MD5.create().digestHex16(question + fromUser + toUser).toUpperCase(Locale.ROOT);
-        //第几次进行answer 总共3次。
+        //第几次进行answer
         Integer currentAnswerCount = 1;
-        Long waitTimeOut = ChatConstants.QUESTION_REQUEST_WAIT_TIMEOUT;
         QuestionCache questionCache = questionCacheRepository.getQuestionByMessageId(messageId);
         if (questionCache != null) {
             currentAnswerCount = questionCache.getRequestEdTimes().intValue() + 1;
             //请求次数+1
             questionCacheRepository.saveQuestion(messageId, question, fromUser, questionCache.getRequestEdTimes() + 1);
             //已经提问过了。
-            log.warn("from user:{},messageId:{},当前第{}次请求。开始寻找答案！", fromUser, messageId, currentAnswerCount);
+            Long currentTimeSeconds = new BigDecimal(System.currentTimeMillis()).multiply(new BigDecimal(1000)).longValue();
+            Long waitTimeSeconds = 1L;
+            if ((currentTimeSeconds - startTime) < 5) {
+                waitTimeSeconds = 5 - (currentTimeSeconds - startTime);
+            } else {
+                waitTimeSeconds = 5 - (currentTimeSeconds - startTime) % 5;
+                if (waitTimeSeconds == 0) {
+                    waitTimeSeconds = 1L;
+                }
+            }
+            log.warn("from user:{},messageId:{},当前第{}次请求。开始寻找答案！,等待时间:{}秒", fromUser, messageId, currentAnswerCount, waitTimeSeconds);
             //阻塞查询是否有答案
-            Future<String> answered = getAnswer(fromUser, messageId, question);
+            Future<Boolean> answered = hasAnswered(waitTimeSeconds, fromUser, messageId, question);
             String answerContent = null;
             try {
                 log.info("messageId：{},第{}次", messageId, currentAnswerCount);
-                stopWatch.stop();
-                if (currentAnswerCount.intValue()%ChatConstants.QUESTION_REQUEST_TOTAL_TIMES == 0) {
-                    //第二次
-                    log.info("messageId:{},第{}次", messageId, ChatConstants.QUESTION_REQUEST_TOTAL_TIMES);
-                    waitTimeOut = ChatConstants.QUESTION_LAST_REQUEST_WAIT_TIMEOUT;
+                Boolean answerFlag = answered.get();
+                if (answerFlag) {
+                    return answerAQuestion(fromUser, messageId);
                 } else {
-                    waitTimeOut = ChatConstants.QUESTION_REQUEST_WAIT_TIMEOUT - stopWatch.getLastTaskTimeMillis();
+                    if (currentAnswerCount.intValue()%ChatConstants.QUESTION_REQUEST_TOTAL_TIMES == 0) {
+                        //第3次第6次
+                        log.info("messageId:{},第{}次", messageId, ChatConstants.QUESTION_REQUEST_TOTAL_TIMES);
+                        log.info("异步等待时间：{} 秒。", waitTimeSeconds);
+                        //缓存一下当前正在确认的messageId
+                        currentQuestionCheckRepository.setCurrentCheck(fromUser, question);
+                        return String.format(ChatConstants.REPEAT_QUESTION, question);
+                    } else {
+                        //第二次，第4次，第5次，第7次，第8次
+                        throw new AnswerTimeOutException(messageId, fromUser, currentAnswerCount);
+                    }
                 }
-                log.info("异步等待时间：{} 毫秒。", waitTimeOut);
-                answerContent = answered.get(waitTimeOut, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 log.warn("等待结果失败：messageId:{}, exception:{}", messageId, e);
             } catch (ExecutionException e) {
                 log.warn("等待结果失败：messageId:{}, exception:{}", messageId, e);
-            } catch (TimeoutException e) {
-                log.warn("回答超时时：{}", messageId);
-                if (answered.isDone()) {
-                    //如果已经执行，resetSegment
-                    answerCacheRepository.resetAnswerCurrentSegment(messageId);
-                } else {
-                    log.info("cancel task");
-                    answered.cancel(true);
-                }
-                if (currentAnswerCount.intValue()%ChatConstants.QUESTION_REQUEST_TOTAL_TIMES == 0) {
-                    log.warn("第{}次超时：{}", ChatConstants.QUESTION_REQUEST_TOTAL_TIMES, messageId);
-                    //缓存一下当前正在确认的messageId
-                    currentQuestionCheckRepository.setCurrentCheck(fromUser, question);
-                    return String.format(ChatConstants.REPEAT_QUESTION, question);
-                } else {
-                    throw new AnswerTimeOutException(messageId, fromUser, currentAnswerCount);
-                }
             }
-            //TO DO
             return answerContent;
         } else {
             //本次问题第一次请求
@@ -154,27 +152,33 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
                     .build();
             //messagePublisher.publishMessage(questionDTO);
             chat(questionDTO);
-            throw new AnswerTimeOutException(messageId, questionDTO.getUserCode(), currentAnswerCount);
+            Long currentTime = new BigDecimal(System.currentTimeMillis()).multiply(new BigDecimal(1000)).longValue();
+            if ((currentTime - startTime) < 3) {
+                //直接返回
+                return answerAQuestion(fromUser, messageId);
+            } else {
+                //抛异常
+                throw new AnswerTimeOutException(messageId, questionDTO.getUserCode(), currentAnswerCount);
+            }
         }
-        //放redis队列
-        //messagePublisher.publishMessage(questionDTO);
-        //return String.format(ChatConstants.QUICK_ANSWER, messageId);
     }
 
-    private Future<String> getAnswer(String fromUser, String messageId, String question) {
-        Future<String> answered = chatThreadPool.submit(new Callable<String>() {
+    private Future<Boolean> hasAnswered(Long waitTimeSeconds, String fromUser, String messageId, String question) {
+        Future<Boolean> answered = answerThreadPool.submit(new Callable<Boolean>() {
             @Override
-            public String call() throws Exception {
+            public Boolean call() throws Exception {
                 //一秒一次
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < waitTimeSeconds; i++) {
                     AnswerCache answerCache = answerCacheRepository.getAnswerByMessageId(messageId);
                     if (answerCache.getAnswerTimeMills() != null) {
-                        return answerAQuestion(fromUser, messageId);
+                        log.info("getAnswer成功：{} ", messageId);
+                        return true;
                     } else {
-                        Thread.currentThread().wait(1000);
+                        log.info("未获取到回答，暂停1秒");
+                        Thread.sleep(1000);
                     }
                 }
-                return String.format(ChatConstants.REPEAT_QUESTION, question);
+                return false;
             }
         });
         return answered;
@@ -223,7 +227,7 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
             }
         });
         try {
-            return content.get(ChatConstants.QUESTION_REQUEST_WAIT_TIMEOUT, TimeUnit.SECONDS);
+            return content.get(ChatConstants.CHAT_PROCESS_TIME_OUT, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             log.error("{}", e);
         } catch (ExecutionException e) {

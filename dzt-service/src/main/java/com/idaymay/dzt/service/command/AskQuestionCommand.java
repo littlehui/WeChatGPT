@@ -1,5 +1,6 @@
 package com.idaymay.dzt.service.command;
 
+import com.idaymay.dzt.bean.wechat.WeChatMessage;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,15 +13,19 @@ import java.util.List;
  * @date 2023/04/30 17:00
  */
 @Component
-public class AskQuestionCommand extends AbstractCommand<CommandResult> {
+public class AskQuestionCommand extends AbstractCommand<CommandResult, WeChatMessage> {
 
     public AskQuestionCommand(DztCommandExecutor executor) {
         super(executor);
     }
 
     @Override
-    public CommandResult execute(String userCode, String toUserCode, String content) {
-        String result = executor.askAQuestion(userCode, toUserCode, content);
+    public CommandResult execute(WeChatMessage weChatMessage) {
+        String userCode = weChatMessage.getFromUserName();
+        String toUserCode = weChatMessage.getToUserName();
+        String content = weChatMessage.getContent();
+        Long startTime = weChatMessage.getCreateTime();
+        String result = executor.askAQuestion(startTime, userCode, toUserCode, content);
         return CommandResult.builder().message(result).build();
     }
 }

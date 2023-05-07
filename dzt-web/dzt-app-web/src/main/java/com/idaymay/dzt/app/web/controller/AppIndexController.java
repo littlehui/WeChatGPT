@@ -53,7 +53,7 @@ public class AppIndexController {
     @ApiOperation(value = "微信公众号推送数据接口", produces = MediaType.TEXT_PLAIN_VALUE)
     @ApiVersion(group = ApiVersionConstant.FAP_APP010)
     @ResponseBody
-    public String check(WxTokenAuthParam wxTokenAuthParam, HttpServletRequest httpServletRequest, HttpServletResponse response) throws BusinessException {
+    public String check(WxTokenAuthParam wxTokenAuthParam) throws BusinessException {
         return checkService.checkIndexSign(wxTokenAuthParam);
     }
 
@@ -61,7 +61,7 @@ public class AppIndexController {
     @ApiOperation(value = "微信公众号推送数据接口", produces = MediaType.APPLICATION_XML_VALUE)
     @ApiVersion(group = ApiVersionConstant.FAP_APP010)
     @ResponseBody
-    public Object message(@RequestBody WeChatMessage requestMessage, HttpServletRequest httpServletRequest, HttpServletResponse response) throws BusinessException {
+    public Object message(@RequestBody WeChatMessage requestMessage) throws BusinessException {
         log.info("messge 接收到：{}", requestMessage);
         String content = requestMessage.getContent();
         String fromUserName = requestMessage.getFromUserName();
@@ -77,7 +77,7 @@ public class AppIndexController {
         //消息创建时间，当前时间就可以
         responseMessage.setCreateTime(System.currentTimeMillis());
         Command command = commandFactory.createChatCommand(fromUserName, content);
-        CommandResult commandResult = command.execute(fromUserName, toUserName, content);
+        CommandResult commandResult = command.execute(requestMessage);
         responseMessage.setContent(commandResult.getMessage());
         return responseMessage;
     }

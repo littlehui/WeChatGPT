@@ -21,7 +21,7 @@
 # 功能演示
 
 1. 正常问答
-![图片](https://images.lilhui.com/4b788779dd9cbbeed85bebabaa23cfef)
+   ![图片](https://images.lilhui.com/4b788779dd9cbbeed85bebabaa23cfef)
 
 # 如何使用
 
@@ -31,7 +31,7 @@
 2. 在基本配置页面获取到 appId,秘钥，token,aesKey。
 3. 公众号权限开通接收消息权限。
 4. 可以访openAi的服务器，用来部署后端接口。
-配置参考：
+   配置参考：
    ![图片](https://images.lilhui.com/9a8d26e38aebfb7e5c7ddf915cc3bbc5)
 
 配置注意点：

@@ -20,7 +20,7 @@ public interface ChatService {
     * @date 2023/4/11 16:03
     * @return java.lang.String
     */
-   public String askAQuestion(String question, String fromUser, String toUser);
+   public String askAQuestion(Long startTime, String question, String fromUser, String toUser);
 
    /**
     * 返回已经处理好的回答

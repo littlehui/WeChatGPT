@@ -1,6 +1,7 @@
 package com.idaymay.dzt.service.command;
 
 import com.idaymay.dzt.bean.constant.SystemCommandConstant;
+import com.idaymay.dzt.bean.wechat.WeChatMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * @date 2023/04/23 11:32
  */
 @Component
-public class SetApiKeyCommand extends AbstractCommand<CommandResult> {
+public class SetApiKeyCommand extends AbstractCommand<CommandResult, WeChatMessage> {
 
     private static final String SET_API_KEY_SUCCESS = "设置ApiKey成功,您可以正常使用了。";
 
@@ -24,7 +25,9 @@ public class SetApiKeyCommand extends AbstractCommand<CommandResult> {
     }
 
     @Override
-    public CommandResult execute(String userCode, String toUserCode, String content) {
+    public CommandResult execute(WeChatMessage weChatMessage) {
+        String content = weChatMessage.getContent();
+        String userCode = weChatMessage.getFromUserName();
         //命令开头 setApiKey xxxxxx
         String[] args = content.split(" ");
         String commandName = args[0];
