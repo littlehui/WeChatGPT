@@ -36,7 +36,7 @@ public class DztCommandExecutor {
 
     public String checkQuestionYes(String fromUserName, String toUserName) {
         String currentCheckQuestion = currentQuestionCheckRepository.get(fromUserName);
-        String answer = chatService.askAQuestion(currentCheckQuestion, fromUserName, toUserName);
+        String answer = chatService.askAQuestion(System.currentTimeMillis(), currentCheckQuestion, fromUserName, toUserName);
         //非 REPEAT_PRE开头的，说明正常返回。清空一下check缓存
         if (!answer.startsWith(ChatConstants.REPEAT_PRE)) {
             currentQuestionCheckRepository.delete(fromUserName);
@@ -53,8 +53,8 @@ public class DztCommandExecutor {
         return answer;
     }
 
-    public String askAQuestion(String userCode, String toUserCode, String content) {
-        return chatService.askAQuestion(content, userCode, toUserCode);
+    public String askAQuestion(Long startTime, String userCode, String toUserCode, String content) {
+        return chatService.askAQuestion(startTime, content, userCode, toUserCode);
     }
 
     public String continueAnswer(String userCode) {

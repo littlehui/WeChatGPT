@@ -1,5 +1,6 @@
 package com.idaymay.dzt.service.command;
 
+import com.idaymay.dzt.bean.wechat.WeChatMessage;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,15 +13,17 @@ import java.util.List;
  * @date 2023/04/30 16:58
  */
 @Component
-public class AnswerQuestionCommand extends AbstractCommand<CommandResult> {
+public class AnswerQuestionCommand extends AbstractCommand<CommandResult, WeChatMessage> {
 
     public AnswerQuestionCommand(DztCommandExecutor executor) {
         super(executor);
     }
 
     @Override
-    public CommandResult execute(String userCode, String toUserCode, String content) {
+    public CommandResult execute(WeChatMessage weChatMessage) {
         //content是messageId
+        String userCode = weChatMessage.getFromUserName();
+        String content = weChatMessage.getContent();
         String result = executor.answerAQuestion(userCode, content);
         return CommandResult.builder().message(result).build();
     }

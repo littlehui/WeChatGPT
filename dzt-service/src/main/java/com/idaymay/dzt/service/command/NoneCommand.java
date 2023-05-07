@@ -1,6 +1,7 @@
 package com.idaymay.dzt.service.command;
 
 import com.idaymay.dzt.bean.constant.SystemCommandConstant;
+import com.idaymay.dzt.bean.wechat.WeChatMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -13,14 +14,15 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class NoneCommand extends AbstractCommand<CommandResult> {
+public class NoneCommand extends AbstractCommand<CommandResult, WeChatMessage> {
 
     public NoneCommand(DztCommandExecutor executor) {
         super(executor);
     }
 
     @Override
-    public CommandResult execute(String userCode, String toUserCode, String content) {
+    public CommandResult execute(WeChatMessage weChatMessage) {
+        String userCode = weChatMessage.getFromUserName();
         log.info("无效的command");
         return  CommandResult.builder()
                 .message(SystemCommandConstant.DEFAULT_RESULT_MESSAGE)

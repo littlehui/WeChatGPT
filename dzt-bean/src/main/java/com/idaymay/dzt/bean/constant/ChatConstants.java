@@ -40,9 +40,11 @@ public class ChatConstants {
            "\n\n添加自己的apiKey,回复：" +
            "\n\"/setApiKey ${您的openAiApiKey}\" 后无此限制。";
 
-   public static final Integer QUESTION_REQUEST_TOTAL_TIMES = 2;
+   public static final Integer QUESTION_REQUEST_TOTAL_TIMES = 3;
 
    public static final Long QUESTION_REQUEST_WAIT_TIMEOUT = 3000L;
+
+   public static final Long CHAT_PROCESS_TIME_OUT = 30L;
 
    public static final Long QUESTION_LAST_REQUEST_WAIT_TIMEOUT = 1000L;
 
@@ -50,7 +52,7 @@ public class ChatConstants {
 
    public static final String CONTINUE_SUB = "\n\n后面还有内容，请回复:\"继续\"，或者提问ID:%s,获取下页内容。";
 
-   public static final String REPEAT_QUESTION = "对不起，你说的是不是：\"%s\"" +
+   public static final String REPEAT_QUESTION = "对不起，您说的是不是：\"%s\"" +
            "\n\n请回答：\"是\"或\"不是\"";
 
    public static final String REPEAT_PRE = "对不起";

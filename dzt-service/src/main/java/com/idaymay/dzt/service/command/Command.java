@@ -9,7 +9,7 @@ import java.util.List;
  * @version 1.0
  * @date 2023/04/23 11:31
  */
-public interface Command<R extends CommandResult> {
+public interface Command<R extends CommandResult, T> {
 
-    public R execute(String userCode, String toUser, String content);
+    public R execute(T t);
 }
