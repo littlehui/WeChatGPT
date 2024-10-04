@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+profiles/application-prod.properties
+dzt-web/dzt-app-web/src/main/resources/application-prod.yml
