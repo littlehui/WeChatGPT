@@ -33,11 +33,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.cyou.fz.component</groupId>
-            <artifactId>ldap-login</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-mp</artifactId>
         </dependency>
