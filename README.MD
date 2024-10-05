@@ -4,18 +4,18 @@
 
 # 关键实现技术
 
-1. Java,版本8
-2. Spring boot,版本：2.5.2
-3. Redis,版本4.XX
-4. chatGPT客户端：chatgpt-java，版本：1.0.10
-5. 微信公众号客户端：weixin-java-mp，版本：4.4.0
+1. Java:版本8
+2. Spring boot:版本：2.5.2
+3. Redis:版本4.XX
+4. chatGPT客户端:chatgpt-java，版本：1.1.5
+5. 微信公众号客户端:weixin-java-mp，版本：4.4.0
 
 # 功能介绍
 
 1. 接入ChatGpt 3.5,通过互动二次确认问题的方式优化了只能被动推送消息的体验。
 2. 支持按照微信OpenID的限流，10秒钟4次。
 3. 未设置openAiApiKey前，每个OpenId限制1天试用5次。设置后无当天的使用次数限制。
-4. 支持上限文关联，建议最多3组上下文。
+4. 支持上下文关联，建议最多3组上下文。
 5. 支持设置用户自己的openAiApi。在聊天窗口中输入："/setApiKey xxxxxx"，即可。
 
 # 功能演示
@@ -69,7 +69,7 @@ java -jar dzt-app-web.jar --spring.profiles.active=dev
 ```
 
 # 试用效果
-微信公众号搜索："码农星人"，并关注,即可试用。
+微信公众号搜索："码农星人"并关注,即可试用。
 或则扫描二维码：
 ![图片](https://images.lilhui.com/bacb43240f1ec7cbaace956407b736a1)
 
