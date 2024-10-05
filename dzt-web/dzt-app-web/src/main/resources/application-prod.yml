@@ -101,3 +101,5 @@ config:
   openai:
     apiKey: ${prod.app.config.openai.apikey}
     associationRound: ${prod.app.config.openai.associationRound}
+    proxy: ${prod.app.config.openai.proxy}
+    proxyPort: ${prod.app.config.openai.proxyPort}

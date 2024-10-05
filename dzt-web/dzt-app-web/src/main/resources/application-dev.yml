@@ -66,3 +66,5 @@ config:
   openai:
     apiKey: ${dev.app.config.openai.apikey}
     associationRound: ${dev.app.config.openai.associationRound}
+    proxy: ${dev.app.config.openai.proxy}
+    proxyPort: ${dev.app.config.openai.proxyPort}
