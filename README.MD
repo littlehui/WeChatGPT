@@ -56,6 +56,11 @@ dev.wx.mp.aesKey=
 2. 添加openAiApi配置
 ```batch
 dev.app.config.openai.apikey=
+//上下文条数一般为3
+dev.app.config.openai.associationRound=
+//国内需要增加代理
+dev.app.config.openai.proxy=
+dev.app.config.openai.proxyPort=
 ```
 3. 编译
 ```batch
