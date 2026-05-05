@@ -2,6 +2,7 @@ package com.idaymay.dzt.app.web.controller.common;
 
 import com.idaymay.dzt.common.utils.obj.ObjectUtil;
 import com.idaymay.dzt.common.utils.string.GsonUtil;
+import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -50,7 +51,7 @@ public class DztAppControllerTest extends BaseControllerTest {
     }
 
     public void post(Object param, String url) throws Exception {
-        javax.servlet.http.Cookie cookie = new javax.servlet.http.Cookie("access_token", accessToken);
+        Cookie cookie = new Cookie("access_token", accessToken);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .cookie(cookie)
                         //.header("game-code", headerGameCode)
@@ -89,7 +90,7 @@ public class DztAppControllerTest extends BaseControllerTest {
         if (accessToken != null) {
             //requestBuilder.header("cookie", "access_token=" + accessToken);
             requestBuilder.header("game-code", headerGameCode).header("terminal", terminal);
-            javax.servlet.http.Cookie cookie = new javax.servlet.http.Cookie("access_token", accessToken);
+            Cookie cookie = new Cookie("access_token", accessToken);
             requestBuilder.cookie(cookie);
         }
         ResultActions resultActions = mockMvc.perform(requestBuilder)

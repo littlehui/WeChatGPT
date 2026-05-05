@@ -2,10 +2,10 @@ package com.idaymay.dzt.service.impl;
 
 import com.idaymay.dzt.bean.constant.MessageConstant;
 import com.idaymay.dzt.service.MessagePublisher;
+import jakarta.annotation.Resource;
 import org.redisson.Redisson;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 
 /**
  * TODO

@@ -1,7 +1,7 @@
 package com.idaymay.dzt.app.web.interceptor;
 
 import com.idaymay.dzt.common.redission.CustomRedissonLock;
-import lombok.extern.log4j.Log4j2;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -13,7 +13,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**

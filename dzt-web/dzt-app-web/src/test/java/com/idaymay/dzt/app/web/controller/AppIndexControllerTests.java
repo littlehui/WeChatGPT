@@ -3,8 +3,8 @@ package com.idaymay.dzt.app.web.controller;
 import com.idaymay.dzt.app.web.controller.common.DztAppContextControllerAwareTest;
 import com.idaymay.dzt.bean.param.WxTokenAuthParam;
 import com.idaymay.dzt.bean.wechat.WeChatMessage;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
@@ -13,10 +13,10 @@ import org.springframework.test.context.ActiveProfiles;
  * @description TODO
  * @date 2022/8/6 11:56
  */
-@ActiveProfiles("local")
+@ActiveProfiles("dev")
 public class AppIndexControllerTests extends DztAppContextControllerAwareTest {
 
-    @Before
+    @BeforeEach
     public void beforeTest() {
 
     }

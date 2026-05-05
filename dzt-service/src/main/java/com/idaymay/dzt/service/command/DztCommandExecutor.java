@@ -34,17 +34,18 @@ public class DztCommandExecutor {
         log.info("设置openAiApikey成功：{},{}", user, apiKey);
     }
 
-    public String checkQuestionYes(String fromUserName, String toUserName) {
-        String currentCheckQuestion = currentQuestionCheckRepository.get(fromUserName);
-        String answer = chatService.askAQuestion(System.currentTimeMillis(), currentCheckQuestion, fromUserName, toUserName);
+    public String checkQuestionYes(String fromUserCode, String toUserCode) {
+        String currentCheckQuestion = currentQuestionCheckRepository.get(fromUserCode);
+        String answer = chatService.askAQuestion(System.currentTimeMillis(), currentCheckQuestion, fromUserCode, toUserCode);
         //非 REPEAT_PRE开头的，说明正常返回。清空一下check缓存
         if (!answer.startsWith(ChatConstants.REPEAT_PRE)) {
-            currentQuestionCheckRepository.delete(fromUserName);
+            currentQuestionCheckRepository.delete(fromUserCode);
         }
         return answer;
     }
 
     public String checkQuestionNo(String userCode) {
+        currentQuestionCheckRepository.delete(userCode);
         return String.format(ChatConstants.REPEAT_QUESTION_ANSWER_NO[RandomUtil.randomInt(0, 3)]);
     }
 

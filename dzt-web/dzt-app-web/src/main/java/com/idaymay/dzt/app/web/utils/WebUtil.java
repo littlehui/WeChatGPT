@@ -1,10 +1,10 @@
 package com.idaymay.dzt.app.web.utils;
 
 import com.idaymay.dzt.common.utils.obj.ObjectUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 

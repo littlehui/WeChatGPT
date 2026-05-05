@@ -2,20 +2,40 @@ spring:
   config:
     activate:
       on-profile: dev
+  # DashScope（通义千问）：与旧 config.openai 并存；api-key 占位复用 dev.app.config.openai.apikey，请替换为真实 DashScope Key。
+  # HTTP 代理：RestClient 可走 JVM -Dhttps.proxyHost/-Dhttps.proxyPort（与旧 config.openai.proxy 对齐由运维配置）。
+  ai:
+    dashscope:
+      api-key: ${dev.app.config.openai.apikey}
+      # HTTP 读超时（毫秒），作用于 RestClient/OkHttp；勿放在 chat.options（该处为模型参数，不含超时字段）
+      read-timeout: 120000
+      chat:
+        options:
+          model: qwen-turbo
+      retry:
+        max-attempts: 3
+        backoff:
+          delay: 1000
+          multiplier: 2
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
   #redis
-  redis:
-    password: ${dev.app.redis.password}
-    timeout: 30M
-    port: ${dev.app.redis.port}
-    host: ${dev.app.redis.host}
-    lettuce:
-      pool:
-        max-active: 4
-        min-idle: 0
-        max-idle: 4
+  data:
+    redis:
+      password: ${dev.app.redis.password}
+      timeout: 30M
+      port: ${dev.app.redis.port}
+      host: ${dev.app.redis.host}
+      lettuce:
+        pool:
+          max-active: 4
+          min-idle: 0
+          max-idle: 4
+  web:
+    resources:
+      static-locations: classpath:/static/, classpath:/public/, classpath:/META-INF/resources/
+
 logging:
   level:
     root: INFO
@@ -39,9 +59,6 @@ management:
       path-mapping:
         health: ping
       base-path: /
-swagger:
-  show: true
-
 wx:
   mp:
     appId: ${dev.wx.mp.appId}
@@ -68,3 +85,26 @@ config:
     associationRound: ${dev.app.config.openai.associationRound}
     proxy: ${dev.app.config.openai.proxy}
     proxyPort: ${dev.app.config.openai.proxyPort}
+    proxyEnable: ${dev.app.config.openai.proxyEnable}
+swagger:
+  show: true
+springdoc:
+  # 指定要扫描的API接口所在的包，很重要，不然可能扫不到接口
+  packages-to-scan: com.idaymay.dzt.app.web.controller
+  # 设置OpenAPI JSON文档的访问路径
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  # 设置原生Swagger UI的访问路径（Knife4j会覆盖）
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+knife4j:
+  # 开启Knife4j增强功能
+  enable: true
+  # 生产环境建议设为true，可以屏蔽调试等功能
+  production: false
+  # 界面语言，中文
+  setting:
+    language: zh-CN

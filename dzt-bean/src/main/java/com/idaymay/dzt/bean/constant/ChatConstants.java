@@ -52,10 +52,10 @@ public class ChatConstants {
 
    public static final String CONTINUE_SUB = "\n\n后面还有内容，请回复:\"继续\"，或者提问ID:%s,获取下页内容。";
 
-   public static final String REPEAT_QUESTION = "对不起，您说的是不是：\"%s\"" +
+   public static final String REPEAT_QUESTION = "Execuse me,跟您确认下，您说的是不是：\"%s\"" +
            "\n\n请回答：\"是\"或\"不是\"";
-
-   public static final String REPEAT_PRE = "对不起";
+   //REPEAT_QUESTION
+   public static final String REPEAT_PRE = "Execuse";
 
    public static final String QUESTION_CHECK_RESULT_NO = "不是";
 

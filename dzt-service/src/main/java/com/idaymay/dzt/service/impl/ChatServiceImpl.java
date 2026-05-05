@@ -15,20 +15,19 @@ import com.idaymay.dzt.dao.redis.domain.UserConfigCache;
 import com.idaymay.dzt.dao.redis.repository.*;
 import com.idaymay.dzt.service.ChatService;
 import com.idaymay.dzt.service.MessagePublisher;
-import com.unfbx.chatgpt.OpenAiClient;
-import com.unfbx.chatgpt.entity.chat.ChatChoice;
-import com.unfbx.chatgpt.entity.chat.ChatCompletion;
-import com.unfbx.chatgpt.entity.chat.ChatCompletionResponse;
-import com.unfbx.chatgpt.entity.chat.Message;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.jni.Time;
+import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.MessageType;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
-import retrofit2.HttpException;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -60,7 +59,7 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
     MessagePublisher messagePublisher;
 
     @Autowired
-    OpenAiClient openAiClient;
+    DashScopeUserChatModelFactory dashScopeUserChatModelFactory;
 
     @Autowired
     ChatMessageRepository chatMessageRepository;
@@ -82,6 +81,8 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
     @Autowired
     CurrentQuestionCheckRepository currentQuestionCheckRepository;
 
+    private static final Long TIME_OUT_PERTCOUNT_SECONDS = 4L;
+
     ThreadPoolExecutor chatThreadPool = new ThreadPoolExecutor(2, 4, 20, TimeUnit.SECONDS, new ArrayBlockingQueue(1000),
             new ThreadPoolExecutor.CallerRunsPolicy());
 
@@ -92,7 +93,7 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
     @CustomRedissonLock(lockIndex = 1, leaseTime = 3)
     @Override
     public String askAQuestion(Long startTime, String question, String fromUser, String toUser) {
-        String messageId = ChatConstants.QUESTION_ID_PRE + MD5.create().digestHex16(question + fromUser + toUser).toUpperCase(Locale.ROOT);
+        String messageId = ChatConstants.QUESTION_ID_PRE + MD5.create().digestHex16( question + fromUser + toUser).toUpperCase(Locale.ROOT);
         //第几次进行answer
         Integer currentAnswerCount = 1;
         QuestionCache questionCache = questionCacheRepository.getQuestionByMessageId(messageId);
@@ -101,18 +102,22 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
             //请求次数+1
             questionCacheRepository.saveQuestion(messageId, question, fromUser, questionCache.getRequestEdTimes() + 1);
             //已经提问过了。
-            Long currentTimeSeconds = new BigDecimal(System.currentTimeMillis()).multiply(new BigDecimal(1000)).longValue();
+            Long currentTimeSeconds = new BigDecimal(System.currentTimeMillis()).divide(new BigDecimal(1000)).longValue();
             Long waitTimeSeconds = 1L;
-            if ((currentTimeSeconds - startTime) < 5) {
-                waitTimeSeconds = 5 - (currentTimeSeconds - startTime);
+            if ((currentTimeSeconds - startTime) < TIME_OUT_PERTCOUNT_SECONDS) {
+                waitTimeSeconds = TIME_OUT_PERTCOUNT_SECONDS - (currentTimeSeconds - startTime);
             } else {
-                waitTimeSeconds = 5 - (currentTimeSeconds - startTime) % 5;
+                waitTimeSeconds = TIME_OUT_PERTCOUNT_SECONDS - (currentTimeSeconds - startTime) % TIME_OUT_PERTCOUNT_SECONDS;
                 if (waitTimeSeconds == 0) {
                     waitTimeSeconds = 1L;
                 }
             }
             log.warn("from user:{},messageId:{},当前第{}次请求。开始寻找答案！,等待时间:{}秒", fromUser, messageId, currentAnswerCount, waitTimeSeconds);
             //阻塞查询是否有答案
+            if (waitTimeSeconds > 4) {
+                log.error("等待时间超过4秒异常，取4.");
+                waitTimeSeconds = TIME_OUT_PERTCOUNT_SECONDS;
+            }
             Future<Boolean> answered = hasAnswered(waitTimeSeconds, fromUser, messageId, question);
             String answerContent = null;
             try {
@@ -151,7 +156,7 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
                     .userCode(fromUser)
                     .build();
             //messagePublisher.publishMessage(questionDTO);
-            chat(questionDTO);
+            chat(questionDTO.getMessageId(), questionDTO);
             Long currentTime = new BigDecimal(System.currentTimeMillis()).multiply(new BigDecimal(1000)).longValue();
             if ((currentTime - startTime) < 3) {
                 //直接返回
@@ -209,21 +214,24 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
         Future<String> content = chatThreadPool.submit(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                ChatCompletion chatCompletion = new ChatCompletion();
-                chatCompletion.setMessages(makeChatMessages(questionDTO, associationRound));
-                userKeyStrategy.setUserCode(questionDTO.getUserCode());
-                ChatCompletionResponse response = openAiClient.chatCompletion(chatCompletion);
-                //试用次数+1
-                UserConfigCache userConfigCache = userConfigCacheRepository.getUserConfig(questionDTO.getUserCode());
-                if (userConfigCache == null || userConfigCache.getOpenAiApiKey() == null) {
-                    freeCountCacheRepository.incrUsedFreeCount(questionDTO.getUserCode());
+                try {
+                    userKeyStrategy.setUserCode(questionDTO.getUserCode());
+                    List<Message> springMessages = buildSpringAiMessages(questionDTO, associationRound);
+                    Prompt prompt = new Prompt(springMessages);
+                    ChatResponse response = dashScopeUserChatModelFactory.call(questionDTO.getUserCode(), prompt);
+                    //试用次数+1
+                    UserConfigCache userConfigCache = userConfigCacheRepository.getUserConfig(questionDTO.getUserCode());
+                    if (userConfigCache == null || userConfigCache.getOpenAiApiKey() == null) {
+                        freeCountCacheRepository.incrUsedFreeCount(questionDTO.getUserCode());
+                    }
+                    log.info("chat response:{}", response);
+                    AssistantMessage answerMessage = completionAnswer(response);
+                    saveChatMessageToCache(questionDTO, answerMessage);
+                    log.info("question {}, answered!", questionDTO.getMessageId());
+                    return answerMessage.getText();
+                } finally {
+                    userKeyStrategy.clearUserCode();
                 }
-                log.info("chat response:{}", response);
-                Message answerMessage = completionAnswer(response);
-                saveChatMessageToCache(questionDTO, answerMessage);
-                log.info("question {}, answered!", questionDTO.getMessageId());
-                return answerMessage.getContent();
-                //return answerAQuestion(questionDTO.getUserCode(), questionDTO.getMessageId());
             }
         });
         try {
@@ -231,25 +239,26 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
         } catch (InterruptedException e) {
             log.error("{}", e);
         } catch (ExecutionException e) {
-            if (e.getCause() != null && e.getCause() instanceof HttpException) {
-                int httpCode = ((HttpException) e.getCause()).code();
-                switch (httpCode) {
-                    case 400:
-                        log.warn("请求到openapi发生错误，可能是http 400,exception:{}", ((HttpException) e.getCause()).message());
-                        log.warn("上下文太多自动去掉一个重试！");
-                        if (openAiConfigSupport.getAssociationRound() > 1) {
-                            return chat(questionDTO, openAiConfigSupport.getAssociationRound() - 1);
-                        } else {
-                            saveAnswerMessageToCache(questionDTO, ChatConstants.ANSWER_ERROR);
-                            return ChatConstants.ANSWER_ERROR;
-                        }
-                    case 401:
-                        log.warn("请求到openapi发生错误，:{}", ((HttpException) e.getCause()).message());
-                        saveAnswerMessageToCache(questionDTO, ChatConstants.API_KEY_ERROR);
-                        return ChatConstants.API_KEY_ERROR;
-                    default:
-                        log.warn("请求到openapi发生错误:{}", ((HttpException) e.getCause()).message());
-                }
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
+            int httpCode = LlmHttpStatusUtil.resolveHttpStatus(cause);
+            switch (httpCode) {
+                case 400:
+                    log.warn("请求到 LLM 网关发生错误，可能是 http 400,exception:{}", cause.toString());
+                    log.warn("上下文太多自动去掉一个重试！");
+                    if (openAiConfigSupport.getAssociationRound() > 1) {
+                        return chat(questionDTO, openAiConfigSupport.getAssociationRound() - 1);
+                    } else {
+                        saveAnswerMessageToCache(questionDTO, ChatConstants.ANSWER_ERROR);
+                        return ChatConstants.ANSWER_ERROR;
+                    }
+                case 401:
+                    log.warn("请求到 LLM 网关发生错误，:{}", cause.toString());
+                    saveAnswerMessageToCache(questionDTO, ChatConstants.API_KEY_ERROR);
+                    return ChatConstants.API_KEY_ERROR;
+                default:
+                    if (httpCode > 0) {
+                        log.warn("请求到 LLM 网关发生错误:{}", cause.toString());
+                    }
             }
             log.error("{}", e);
         } catch (TimeoutException e) {
@@ -260,8 +269,11 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
         return ChatConstants.THINKING;
     }
 
-    @Override
-    public String chat(QuestionDTO questionDTO) {
+   //只能来一次
+   @Override
+    public String chat(String messageId, QuestionDTO questionDTO) {
+        Long askTimeMills = questionDTO.getAskTimeMills() == null ? System.currentTimeMillis() : questionDTO.getAskTimeMills();
+        questionDTO.setAskTimeMills(askTimeMills);
         OpenAiConfigSupport openAiConfigSupport = context.getBean(OpenAiConfigSupport.class);
         Long associationRound = openAiConfigSupport.getAssociationRound();
         return chat(questionDTO, associationRound);
@@ -276,62 +288,69 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
         return answerAQuestion(userCode, messageId);
     }
 
-    private Message completionAnswer(ChatCompletionResponse response) {
-        Message answerMessage = Message.builder()
-                .role(Message.Role.ASSISTANT)
-                .content(ChatConstants.THINKING)
-                .build();
-        if (response != null && response.getChoices() != null && response.getChoices().size() > 0) {
-            ChatChoice choice = response.getChoices().get(0);
-            log.info("choice != null");
-            if (choice.getMessage() != null) {
-                answerMessage = choice.getMessage();
-            } else {
-                log.warn("answer message is null");
-            }
-        } else {
-            log.info("choice is null");
+    private AssistantMessage completionAnswer(ChatResponse response) {
+        AssistantMessage fallback = new AssistantMessage(ChatConstants.THINKING);
+        if (response != null && response.getResult() != null && response.getResult().getOutput() != null) {
+            return response.getResult().getOutput();
         }
-        return answerMessage;
+        log.info("choice is null or empty");
+        return fallback;
     }
 
-    private List<Message> makeChatMessages(QuestionDTO questionDTO, Long associationRound) {
+    private List<Message> buildSpringAiMessages(QuestionDTO questionDTO, Long associationRound) {
         Set<ChatMessageCache> chatMessageCaches = chatMessageRepository.latest(questionDTO.getUserCode(), associationRound * 2);
         List<Message> messages = new ArrayList<>();
         List<Message> historyMessages = new ArrayList<>();
         for (ChatMessageCache chatMessageCache : chatMessageCaches) {
-            historyMessages.add(messageCacheToMessage(chatMessageCache));
+            historyMessages.add(chatMessageCacheToSpringMessage(chatMessageCache));
         }
-        Message currentMessage = Message.builder()
-                .content(questionDTO.getQuestion())
-                .name(questionDTO.getUserCode())
-                .role(Message.Role.USER)
-                .build();
+        UserMessage.Builder ub = UserMessage.builder().text(questionDTO.getQuestion());
+        if (StringUtil.isNotEmpty(questionDTO.getUserCode())) {
+            ub.metadata(Collections.singletonMap("name", questionDTO.getUserCode()));
+        }
+        Message currentMessage = ub.build();
         messages.addAll(historyMessages);
         messages.add(currentMessage);
         return messages;
     }
 
-    private Message messageCacheToMessage(ChatMessageCache messageCache) {
-/*        String content = "";
-        if (messageCache.getContent() != null && messageCache.getContent().length() > 100) {
-            content = messageCache.getContent().substring(0, 100);
-        }*/
-        return Message.builder()
-                .content(messageCache.getContent())
-                .name(messageCache.getName())
-                .role(messageCache.getRole() != null
-                        ? Message.Role.valueOf(messageCache.getRole().toUpperCase())
-                        : null)
-                .build();
+    private Message chatMessageCacheToSpringMessage(ChatMessageCache messageCache) {
+        String role = messageCache.getRole();
+        String content = messageCache.getContent();
+        String name = messageCache.getName();
+        if (StringUtil.isEmpty(role)) {
+            return UserMessage.builder().text(content).build();
+        }
+        try {
+            MessageType type = MessageType.fromValue(role.toLowerCase(Locale.ROOT));
+            if (type == MessageType.SYSTEM) {
+                return new SystemMessage(content);
+            }
+            if (type == MessageType.ASSISTANT) {
+                Map<String, Object> meta = StringUtil.isNotEmpty(name)
+                        ? Collections.singletonMap("name", name)
+                        : Collections.emptyMap();
+                return new AssistantMessage(content, meta);
+            }
+        } catch (IllegalArgumentException ignored) {
+            // fall through to user
+        }
+        UserMessage.Builder b = UserMessage.builder().text(content);
+        if (StringUtil.isNotEmpty(name)) {
+            b.metadata(Collections.singletonMap("name", name));
+        }
+        return b.build();
     }
 
-    private ChatMessageCache messageToMessageCache(Message message) {
+    private ChatMessageCache springMessageToMessageCache(Message message) {
+        String role = message.getMessageType() != null ? message.getMessageType().getValue() : MessageType.USER.getValue();
+        Map<String, Object> meta = message.getMetadata();
+        String name = meta != null && meta.get("name") != null ? meta.get("name").toString() : null;
         return ChatMessageCache.builder()
-                .content(message.getContent())
-                .name(message.getName())
+                .content(message.getText())
+                .name(name)
                 .createTimeMills(System.currentTimeMillis())
-                .role(message.getRole())
+                .role(role)
                 .build();
     }
 
@@ -359,23 +378,23 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
         return answerLists;
     }
 
-    private AnswerCache saveChatMessageToCache(QuestionDTO questionDTO, Message answerMessage) {
-        String answerContent = answerMessage.getContent();
+    private AnswerCache saveChatMessageToCache(QuestionDTO questionDTO, AssistantMessage answerMessage) {
+        String answerContent = answerMessage.getText();
         AnswerCache answerCache = AnswerCache.builder()
                 .answer(answerContent)
                 .messageId(questionDTO.getMessageId())
                 .question(questionDTO.getQuestion())
                 .askTimeMills(questionDTO.getAskTimeMills())
                 .answerTimeMills(System.currentTimeMillis())
-                .name(answerMessage.getName())
+                .name(extractNameFromMetadata(answerMessage))
                 .answerSegment(takeAnswerSegment(answerContent, questionDTO.getMessageId()))
                 .currentSegment(0)
                 .build();
-        ChatMessageCache answerMessageCache = messageToMessageCache(answerMessage);
+        ChatMessageCache answerMessageCache = springMessageToMessageCache(answerMessage);
         ChatMessageCache questionMessageCache = ChatMessageCache.builder()
                 .content(questionDTO.getQuestion())
                 .name(questionDTO.getUserCode())
-                .role(Message.Role.USER.name())
+                .role(MessageType.USER.getValue())
                 .createTimeMills(questionDTO.getAskTimeMills())
                 .build();
         answerCacheRepository.saveAnswer(answerCache);
@@ -383,6 +402,14 @@ public class ChatServiceImpl implements ChatService, ApplicationContextAware {
         chatMessageRepository.add(questionDTO.getUserCode(), answerMessageCache);
         currentAnswerQuestionRepository.setCurrentAnswerMessageId(questionDTO.getUserCode(), questionDTO.getMessageId());
         return answerCache;
+    }
+
+    private static String extractNameFromMetadata(AssistantMessage message) {
+        if (message.getMetadata() == null) {
+            return null;
+        }
+        Object n = message.getMetadata().get("name");
+        return n != null ? n.toString() : null;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.idaymay.dzt.service;
 
 import com.idaymay.dzt.bean.dto.QuestionDTO;
+import com.idaymay.dzt.bean.wechat.WeChatMessage;
 
 /**
  * TODO
@@ -44,12 +45,13 @@ public interface ChatService {
 
    /**
     * 默认上下文聊天方式
+    * @param messageId
     * @param questionDTO
     * @author littlehui
     * @date 2023/4/16 18:49
     * @return java.lang.String
     */
-   public String chat(QuestionDTO questionDTO);
+   public String chat(String messageId, QuestionDTO questionDTO);
 
    /**
     * 继续回答的实现
@@ -59,4 +61,5 @@ public interface ChatService {
     * @return java.lang.String
     */
    public String continueAnswer(String userCode);
+
 }

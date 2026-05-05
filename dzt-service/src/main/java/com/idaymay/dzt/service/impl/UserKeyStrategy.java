@@ -1,53 +1,26 @@
 package com.idaymay.dzt.service.impl;
 
-import cn.hutool.core.util.RandomUtil;
-import com.idaymay.dzt.common.servlet.WebContext;
-import com.idaymay.dzt.dao.redis.domain.UserConfigCache;
-import com.idaymay.dzt.dao.redis.repository.UserConfigCacheRepository;
-import com.unfbx.chatgpt.function.KeyStrategyFunction;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * TODO
- *
- * @author littlehui
- * @version 1.0
- * @date 2023/04/23 18:01
+ * 在对话线程上记录当前用户，供 {@link DashScopeUserChatModelFactory} 解析用户级 DashScope API Key。
  */
 @Component
 @Slf4j
-public class UserKeyStrategy implements KeyStrategyFunction<List<String>, String> {
+public class UserKeyStrategy {
 
-    @Autowired
-    UserConfigCacheRepository userConfigCacheRepository;
-
-    private static ThreadLocal<String> userThreadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<String> USER_CODE = new ThreadLocal<>();
 
     public void setUserCode(String userCode) {
-        userThreadLocal.set(userCode);
+        USER_CODE.set(userCode);
     }
 
-    private String getUserCode() {
-        return userThreadLocal.get();
+    public void clearUserCode() {
+        USER_CODE.remove();
     }
 
-    @Override
-    public String apply(List<String> strings) {
-        String userCode = getUserCode();
-        if (userCode != null) {
-            UserConfigCache userConfigCache = userConfigCacheRepository.getUserConfig(userCode);
-            if (userConfigCache != null) {
-                return userConfigCache.getOpenAiApiKey();
-            } else {
-                return RandomUtil.randomEle(strings);
-            }
-        } else {
-            log.warn("userCode为null。");
-        }
-        return RandomUtil.randomEle(strings);
+    public String getUserCode() {
+        return USER_CODE.get();
     }
 }

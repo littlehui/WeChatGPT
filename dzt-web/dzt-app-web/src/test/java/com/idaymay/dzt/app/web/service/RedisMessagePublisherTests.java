@@ -2,10 +2,10 @@ package com.idaymay.dzt.app.web.service;
 
 import com.idaymay.dzt.app.web.service.common.BaseTestService;
 import com.idaymay.dzt.service.impl.RedisMessagePublisher;
-import org.junit.Test;
+import jakarta.annotation.Resource;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.annotation.Resource;
 
 /**
  * TODO

@@ -2,10 +2,8 @@ package com.idaymay.dzt.app.web.mapper;
 
 import com.idaymay.dzt.app.web.DztApplication;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 /**
@@ -14,7 +12,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
  * @description TODO
  * @date 2022/7/26 10:59
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = DztApplication.class)
 @WebAppConfiguration
 @Slf4j

@@ -1,10 +1,10 @@
 package com.idaymay.dzt.dao.redis.optype;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 
-import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;

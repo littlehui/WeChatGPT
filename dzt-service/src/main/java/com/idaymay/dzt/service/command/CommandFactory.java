@@ -3,9 +3,9 @@ package com.idaymay.dzt.service.command;
 import com.idaymay.dzt.bean.constant.ChatConstants;
 import com.idaymay.dzt.bean.constant.SystemCommandConstant;
 import com.idaymay.dzt.dao.redis.repository.CurrentQuestionCheckRepository;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 

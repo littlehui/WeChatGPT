@@ -1,6 +1,6 @@
 package com.idaymay.dzt.app.web.controller.common;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -23,7 +23,7 @@ public class DztAppContextControllerAwareTest extends DztAppControllerTest imple
         this.applicationContext = applicationContext;
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         String actualBeanName = this.getClass().getSimpleName();
         actualBeanName = toLowerCaseFirstOne(actualBeanName);

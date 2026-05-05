@@ -13,8 +13,6 @@
 
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
         <sentinel.version>1.8.5</sentinel.version>
         <promethus.version>1.8.5</promethus.version>
     </properties>
@@ -34,11 +32,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -66,14 +59,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- 单元测试 -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
-        </dependency>
-
         <!-- Web Jars 静态资源文件 -->
         <dependency>
             <groupId>org.webjars</groupId>
@@ -96,20 +81,13 @@
         <!-- Druid 数据源 -->
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
+            <artifactId>druid-spring-boot-3-starter</artifactId>
         </dependency>
+
 
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-
-
-        <!-- 引入swagger2的依赖-->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>${springfox.version}</version>
         </dependency>
 
         <dependency>
@@ -136,12 +114,16 @@
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
-            <version>${reddision.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
-            <version>3.0.3</version>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>4.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-models-jakarta</artifactId>
+            <version>2.2.19</version>
         </dependency>
 
         <dependency>
@@ -159,17 +141,17 @@
 
         <!-- sentry -->
 
-        <dependency>
+    <!--    <dependency>
             <groupId>io.sentry</groupId>
             <artifactId>sentry-spring-boot-starter</artifactId>
             <version>1.7.30</version>
-        </dependency>
+        </dependency>-->
 
-        <dependency>
+<!--        <dependency>
             <groupId>io.sentry</groupId>
             <artifactId>sentry-logback</artifactId>
             <version>1.7.30</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
@@ -231,10 +213,6 @@
         </dependency>
         <!--添加数据库链接 -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.idaymay</groupId>
             <artifactId>dzt-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
@@ -255,6 +233,11 @@
             <artifactId>dzt-message</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>${jakarta-xml.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -270,7 +253,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.1.1.RELEASE</version>
+                <version>2.7.11</version>
                 <configuration>
                     <mainClass>com.idaymay.dzt.app.web.DztApplication</mainClass>
                 </configuration>

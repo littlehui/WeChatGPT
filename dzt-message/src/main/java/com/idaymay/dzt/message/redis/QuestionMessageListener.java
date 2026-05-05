@@ -5,13 +5,13 @@ import com.idaymay.dzt.bean.dto.QuestionDTO;
 import com.idaymay.dzt.common.utils.obj.GsonUtil;
 import com.idaymay.dzt.dao.redis.repository.AnswerCacheRepository;
 import com.idaymay.dzt.service.ChatService;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
 import org.redisson.api.listener.MessageListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 
 /**
  * TODO
@@ -41,6 +41,6 @@ public class QuestionMessageListener implements MessageListener<QuestionDTO> {
     @Override
     public void onMessage(CharSequence charSequence, QuestionDTO questionDTO) {
         log.info("receive message info : {}", GsonUtil.toJson(questionDTO));
-        chatService.chat(questionDTO);
+        chatService.chat(questionDTO.getMessageId(), questionDTO);
     }
 }

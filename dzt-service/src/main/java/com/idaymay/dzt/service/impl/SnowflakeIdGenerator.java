@@ -1,13 +1,13 @@
 package com.idaymay.dzt.service.impl;
 
 import com.idaymay.dzt.bean.constant.ChatConstants;
+import jakarta.annotation.PostConstruct;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 
 /**
  * @author longzhicheng

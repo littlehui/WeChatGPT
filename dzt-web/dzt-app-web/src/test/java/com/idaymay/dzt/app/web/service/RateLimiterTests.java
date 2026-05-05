@@ -3,7 +3,7 @@ package com.idaymay.dzt.app.web.service;
 import com.idaymay.dzt.app.web.interceptor.RateLimiterAspect;
 import com.idaymay.dzt.app.web.service.common.BaseTestService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.redisson.api.RRateLimiter;
 import org.redisson.api.RateIntervalUnit;
 import org.redisson.api.RateType;

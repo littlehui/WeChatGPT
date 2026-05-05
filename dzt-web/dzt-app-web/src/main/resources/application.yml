@@ -29,7 +29,16 @@ spring:
 logging:
   level:
     org.springframework.security: debug
-
+    # 将 NoResourceFoundException 的日志级别设为 WARN 或 ERROR
+    org.springframework.web.servlet.resource.NoResourceFoundException: WARN
+    # 或者完全关闭这个日志
+    # org.springframework.web.servlet.resource.NoResourceFoundException: OFF
+    # 方式1：针对整个 resource 包
+    org.springframework.web.servlet.resource: WARN
+    # 方式2：针对更具体的类
+    org.springframework.web.servlet.resource.ResourceHttpRequestHandler: WARN
+    # 方式3：针对 NoResourceFoundException 的日志记录器
+    org.springframework.web.servlet.PageNotFound: WARN
 mybatis:
   #type-aliases-package: tk.mybatis.springboot.model
   mapper-locations: classpath:mapper/*.xml
@@ -45,3 +54,4 @@ mybatis-plus:
   type-aliases-package: com.idaymay.dzt.dao.mysql.domain
 cache:
   prefix: 0.1.0
+

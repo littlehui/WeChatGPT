@@ -8,6 +8,8 @@ import com.idaymay.dzt.common.utils.string.SpELUtil;
 import com.idaymay.dzt.dao.redis.domain.UserConfigCache;
 import com.idaymay.dzt.dao.redis.repository.FreeCountCacheRepository;
 import com.idaymay.dzt.dao.redis.repository.UserConfigCacheRepository;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -21,8 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
