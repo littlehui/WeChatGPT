@@ -246,7 +246,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.1</version>
                 <configuration>
+                    <release>17</release>
+                    <!-- 保留方法参数名，供 DefaultParameterNameDiscoverer / SpEL #param 使用 -->
+                    <parameters>true</parameters>
                     <encoding>utf-8</encoding>
                 </configuration>
             </plugin>
